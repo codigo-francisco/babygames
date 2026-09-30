@@ -1,0 +1,48 @@
+/* Pintar (Kiddo Paint): herramientas en dos columnas para que en una tablet
+   quepan también los colores. */
+body {
+  overflow: hidden;
+}
+
+#toolbar {
+  width: 104px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  background: #f5f5f5;
+  height: 100vh;
+}
+
+#toolbar br {
+  display: none;
+}
+
+#toolbar > .tool {
+  width: 52px;
+  height: 52px;
+}
+
+#colorbar {
+  width: 104px;
+  margin-top: 8px;
+}
+
+#colorbar .currentColor {
+  width: 104px;
+  height: 44px;
+}
+
+#colorselector {
+  width: 104px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#colorselector .color {
+  width: 26px;
+  height: 26px;
+}
+
+#sliders {
+  width: 104px;
+}

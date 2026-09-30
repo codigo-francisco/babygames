@@ -1,0 +1,42 @@
+/* Puzle: quitar cabecera, textos promocionales y pie; tablero a pantalla completa. */
+.app-header,
+.seo-article-section,
+.app-footer,
+.modal-actions a {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Fredoka', system-ui, sans-serif;
+}
+
+.app-wrapper {
+  height: 100vh;
+  min-height: 0;
+}
+
+.game-container {
+  max-width: none;
+  margin: 0;
+  padding: 10px 12px 12px 96px;
+  gap: 10px;
+  min-height: 0;
+}
+
+.canvas-wrapper {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
+
+.select-input,
+.btn {
+  font-size: 1.1rem;
+  min-height: 48px;
+}

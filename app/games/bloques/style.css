@@ -1,0 +1,1995 @@
+/* =========================================
+   🎈 宝宝快乐方块乐园 - 纯键盘操作与超大方块
+   ========================================= */
+
+:root {
+  --bg-gradient: linear-gradient(145deg, #a1c4fd 0%, #c2e9fb 50%, #e0c3fc 100%);
+  --board-bg: #ffffff;
+  --board-border: #ffd166;
+  --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.09);
+  
+  /* 糖果晶莹色系 */
+  --candy-pink: #ff5277;
+  --candy-pink-top: #ff7597;
+  --candy-orange: #ff9f1a;
+  --candy-orange-top: #ffb84d;
+  --candy-yellow: #ffc048;
+  --candy-yellow-top: #ffdd59;
+  --candy-green: #2ed573;
+  --candy-green-top: #55e691;
+  --candy-cyan: #00d2d3;
+  --candy-cyan-top: #48dbfb;
+  --candy-purple: #9b59b6;
+  --candy-purple-top: #b677d0;
+  
+  /* 专属高定童趣与现代字系 */
+  --font-title: 'ZCOOL KuaiLe', 'Fredoka', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', cursive, sans-serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Noto Sans SC", Roboto, sans-serif;
+  --font-num: 'Fredoka', 'Nunito', -apple-system, sans-serif;
+}
+
+/* ================= 主题皮肤系统切换 ================= */
+/* 1. 🍬 糖果乐园 (默认) */
+body[data-theme="candy"] {
+  --bg-gradient: linear-gradient(145deg, #a1c4fd 0%, #c2e9fb 50%, #e0c3fc 100%);
+}
+
+/* 2. 🌌 梦幻星空 (Space Galaxy) */
+body[data-theme="space"] {
+  --bg-gradient: linear-gradient(145deg, #020617 0%, #0f172a 40%, #2e1065 100%);
+}
+body[data-theme="space"] .sky-background {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.5) 0%, transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.45) 0%, transparent 50%);
+}
+body[data-theme="space"] .arcade-console {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+body[data-theme="space"] .floating-fullscreen-btn {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(56, 189, 248, 0.6);
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+body[data-theme="space"] .game-board {
+  background: #090d16;
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(56, 189, 248, 0.2);
+}
+body[data-theme="space"] .cell-slot {
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+body[data-theme="space"] .wing-btn {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #38bdf8;
+  border-color: #0284c7;
+  box-shadow: 0 4px 0 #0284c7, 0 8px 12px rgba(2, 132, 199, 0.3);
+}
+body[data-theme="space"] .score-label { color: #facc15; }
+body[data-theme="space"] .score-val { color: #fde047; text-shadow: 0 0 18px rgba(250, 204, 21, 0.8); }
+
+/* 🌌 梦幻星空方块配色 (16款霓虹星际发光晶体) */
+body[data-theme="space"] .cell.color-1, body[data-theme="space"] .preview-cell.color-1, body[data-theme="space"] .shape-preview-cell.color-1 {
+  background: radial-gradient(circle at 50% 25%, #f472b6, #db2777);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 0 16px rgba(219, 39, 119, 0.55);
+}
+body[data-theme="space"] .cell.color-2, body[data-theme="space"] .preview-cell.color-2, body[data-theme="space"] .shape-preview-cell.color-2 {
+  background: radial-gradient(circle at 50% 25%, #fbbf24, #d97706);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 0 16px rgba(217, 119, 6, 0.55);
+}
+body[data-theme="space"] .cell.color-3, body[data-theme="space"] .preview-cell.color-3, body[data-theme="space"] .shape-preview-cell.color-3 {
+  background: radial-gradient(circle at 50% 25%, #fef08a, #eab308);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.8), 0 0 18px rgba(234, 179, 8, 0.65);
+}
+body[data-theme="space"] .cell.color-4, body[data-theme="space"] .preview-cell.color-4, body[data-theme="space"] .shape-preview-cell.color-4 {
+  background: radial-gradient(circle at 50% 25%, #4ade80, #16a34a);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 0 16px rgba(22, 163, 74, 0.55);
+}
+body[data-theme="space"] .cell.color-5, body[data-theme="space"] .preview-cell.color-5, body[data-theme="space"] .shape-preview-cell.color-5 {
+  background: radial-gradient(circle at 50% 25%, #38bdf8, #0284c7);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(2, 132, 199, 0.6);
+}
+body[data-theme="space"] .cell.color-6, body[data-theme="space"] .preview-cell.color-6, body[data-theme="space"] .shape-preview-cell.color-6 {
+  background: radial-gradient(circle at 50% 25%, #c084fc, #9333ea);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 0 16px rgba(147, 51, 234, 0.55);
+}
+body[data-theme="space"] .cell.color-7, body[data-theme="space"] .preview-cell.color-7, body[data-theme="space"] .shape-preview-cell.color-7 {
+  background: radial-gradient(circle at 50% 25%, #f1f5f9, #94a3b8);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.8), 0 0 16px rgba(148, 163, 184, 0.55);
+}
+body[data-theme="space"] .cell.color-8, body[data-theme="space"] .preview-cell.color-8, body[data-theme="space"] .shape-preview-cell.color-8 {
+  background: linear-gradient(180deg, #f43f5e 0%, #be123c 76%, #06b6d4 78%, #0891b2 100%);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 0 16px rgba(244, 63, 94, 0.55);
+}
+body[data-theme="space"] .cell.color-9, body[data-theme="space"] .preview-cell.color-9, body[data-theme="space"] .shape-preview-cell.color-9 {
+  background: radial-gradient(circle at 50% 25%, #a3e635, #65a30d);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(163, 230, 53, 0.55);
+}
+body[data-theme="space"] .cell.color-10, body[data-theme="space"] .preview-cell.color-10, body[data-theme="space"] .shape-preview-cell.color-10 {
+  background: radial-gradient(circle at 50% 25%, #22d3ee, #0891b2);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(34, 211, 238, 0.6);
+}
+body[data-theme="space"] .cell.color-11, body[data-theme="space"] .preview-cell.color-11, body[data-theme="space"] .shape-preview-cell.color-11 {
+  background: radial-gradient(circle at 50% 25%, #fde047, #ca8a04);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.8), 0 0 18px rgba(253, 224, 71, 0.65);
+}
+body[data-theme="space"] .cell.color-12, body[data-theme="space"] .preview-cell.color-12, body[data-theme="space"] .shape-preview-cell.color-12 {
+  background: radial-gradient(circle at 50% 25%, #e879f9, #c026d3);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(232, 121, 249, 0.55);
+}
+body[data-theme="space"] .cell.color-13, body[data-theme="space"] .preview-cell.color-13, body[data-theme="space"] .shape-preview-cell.color-13 {
+  background: radial-gradient(circle at 50% 25%, #818cf8, #4f46e5);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(129, 140, 248, 0.6);
+}
+body[data-theme="space"] .cell.color-14, body[data-theme="space"] .preview-cell.color-14, body[data-theme="space"] .shape-preview-cell.color-14 {
+  background: radial-gradient(circle at 50% 25%, #e2e8f0, #64748b);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.8), 0 0 16px rgba(226, 232, 240, 0.6);
+}
+body[data-theme="space"] .cell.color-15, body[data-theme="space"] .preview-cell.color-15, body[data-theme="space"] .shape-preview-cell.color-15 {
+  background: radial-gradient(circle at 50% 25%, #fb7185, #e11d48);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(251, 113, 133, 0.6);
+}
+body[data-theme="space"] .cell.color-16, body[data-theme="space"] .preview-cell.color-16, body[data-theme="space"] .shape-preview-cell.color-16 {
+  background: radial-gradient(circle at 50% 25%, #2dd4bf, #0d9488);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.7), 0 0 16px rgba(45, 212, 191, 0.6);
+}
+
+/* 3. 🌲 萌宠森林 (Forest Orchard) */
+body[data-theme="forest"] {
+  --bg-gradient: linear-gradient(145deg, #dcfce7 0%, #bbf7d0 40%, #fed7aa 100%);
+}
+body[data-theme="forest"] .sky-background {
+  background: 
+    radial-gradient(circle at 15% 40%, rgba(34, 197, 94, 0.5) 0%, transparent 60%),
+    radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.45) 0%, transparent 50%);
+}
+body[data-theme="forest"] .arcade-console {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+body[data-theme="forest"] .floating-fullscreen-btn {
+  background: rgba(240, 253, 244, 0.9);
+  border: 1.5px solid #86efac;
+  color: #15803d;
+  box-shadow: 0 4px 10px rgba(22, 101, 52, 0.12);
+}
+body[data-theme="forest"] .game-board {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+  box-shadow: inset 0 10px 24px rgba(20, 83, 45, 0.12), 0 4px 12px rgba(22, 101, 52, 0.08);
+}
+body[data-theme="forest"] .cell-slot {
+  background: #bbf7d0;
+  border: 1px solid #86efac;
+  box-shadow: inset 0 3px 6px rgba(20, 83, 45, 0.1);
+}
+body[data-theme="forest"] .wing-btn {
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+  color: #15803d;
+  border-color: #22c55e;
+  box-shadow: 0 4px 0 #16a34a, 0 6px 10px rgba(22, 163, 74, 0.2);
+}
+
+/* 🌲 萌宠森林方块配色 (16款森林鲜果与自然萌宠配色) */
+body[data-theme="forest"] .cell.color-1, body[data-theme="forest"] .preview-cell.color-1, body[data-theme="forest"] .shape-preview-cell.color-1 {
+  background: radial-gradient(circle at 50% 30%, #fb7185, #e11d48);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(136, 19, 55, 0.3), 0 6px 12px rgba(225, 29, 72, 0.25);
+}
+body[data-theme="forest"] .cell.color-2, body[data-theme="forest"] .preview-cell.color-2, body[data-theme="forest"] .shape-preview-cell.color-2 {
+  background: radial-gradient(circle at 50% 30%, #fdba74, #ea580c);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(154, 52, 18, 0.3), 0 6px 12px rgba(234, 88, 12, 0.25);
+}
+body[data-theme="forest"] .cell.color-3, body[data-theme="forest"] .preview-cell.color-3, body[data-theme="forest"] .shape-preview-cell.color-3 {
+  background: radial-gradient(circle at 50% 30%, #fde047, #ca8a04);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.5), inset 0 -6px 0 rgba(133, 77, 14, 0.3), 0 6px 12px rgba(202, 138, 4, 0.25);
+}
+body[data-theme="forest"] .cell.color-4, body[data-theme="forest"] .preview-cell.color-4, body[data-theme="forest"] .shape-preview-cell.color-4 {
+  background: radial-gradient(circle at 50% 30%, #86efac, #15803d);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 0 rgba(20, 83, 45, 0.3), 0 6px 12px rgba(21, 128, 61, 0.25);
+}
+body[data-theme="forest"] .cell.color-5, body[data-theme="forest"] .preview-cell.color-5, body[data-theme="forest"] .shape-preview-cell.color-5 {
+  background: radial-gradient(circle at 50% 30%, #67e8f9, #0891b2);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 0 rgba(22, 78, 99, 0.3), 0 6px 12px rgba(8, 145, 178, 0.25);
+}
+body[data-theme="forest"] .cell.color-6, body[data-theme="forest"] .preview-cell.color-6, body[data-theme="forest"] .shape-preview-cell.color-6 {
+  background: radial-gradient(circle at 50% 30%, #d8b4fe, #7e22ce);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(88, 28, 135, 0.3), 0 6px 12px rgba(126, 34, 206, 0.25);
+}
+body[data-theme="forest"] .cell.color-7, body[data-theme="forest"] .preview-cell.color-7, body[data-theme="forest"] .shape-preview-cell.color-7 {
+  background: radial-gradient(circle at 50% 30%, #d6a27e, #854d0e);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(69, 26, 3, 0.3), 0 6px 12px rgba(133, 77, 14, 0.25);
+}
+body[data-theme="forest"] .cell.color-8, body[data-theme="forest"] .preview-cell.color-8, body[data-theme="forest"] .shape-preview-cell.color-8 {
+  background: linear-gradient(180deg, #bef264 0%, #65a30d 76%, #713f12 78%, #451a03 100%);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(69, 26, 3, 0.3), 0 6px 12px rgba(101, 163, 13, 0.25);
+}
+body[data-theme="forest"] .cell.color-9, body[data-theme="forest"] .preview-cell.color-9, body[data-theme="forest"] .shape-preview-cell.color-9 {
+  background: radial-gradient(circle at 50% 30%, #fed7aa, #c2410c);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(154, 52, 18, 0.3), 0 6px 12px rgba(194, 65, 12, 0.25);
+}
+body[data-theme="forest"] .cell.color-10, body[data-theme="forest"] .preview-cell.color-10, body[data-theme="forest"] .shape-preview-cell.color-10 {
+  background: radial-gradient(circle at 50% 30%, #fde68a, #b45309);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(120, 53, 15, 0.3), 0 6px 12px rgba(180, 83, 9, 0.25);
+}
+body[data-theme="forest"] .cell.color-11, body[data-theme="forest"] .preview-cell.color-11, body[data-theme="forest"] .shape-preview-cell.color-11 {
+  background: radial-gradient(circle at 50% 30%, #c7d2fe, #4338ca);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(49, 46, 129, 0.3), 0 6px 12px rgba(67, 56, 202, 0.25);
+}
+body[data-theme="forest"] .cell.color-12, body[data-theme="forest"] .preview-cell.color-12, body[data-theme="forest"] .shape-preview-cell.color-12 {
+  background: radial-gradient(circle at 50% 30%, #fbcfe8, #db2777);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 0 rgba(157, 23, 77, 0.3), 0 6px 12px rgba(219, 39, 119, 0.25);
+}
+body[data-theme="forest"] .cell.color-13, body[data-theme="forest"] .preview-cell.color-13, body[data-theme="forest"] .shape-preview-cell.color-13 {
+  background: radial-gradient(circle at 50% 30%, #fef08a, #eab308);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.5), inset 0 -6px 0 rgba(161, 98, 7, 0.3), 0 6px 12px rgba(234, 179, 8, 0.25);
+}
+body[data-theme="forest"] .cell.color-14, body[data-theme="forest"] .preview-cell.color-14, body[data-theme="forest"] .shape-preview-cell.color-14 {
+  background: radial-gradient(circle at 50% 30%, #bae6fd, #0284c7);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 0 rgba(3, 105, 161, 0.3), 0 6px 12px rgba(2, 132, 199, 0.25);
+}
+body[data-theme="forest"] .cell.color-15, body[data-theme="forest"] .preview-cell.color-15, body[data-theme="forest"] .shape-preview-cell.color-15 {
+  background: radial-gradient(circle at 50% 30%, #a5b4fc, #6366f1);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.4), inset 0 -6px 0 rgba(67, 56, 202, 0.3), 0 6px 12px rgba(99, 102, 241, 0.25);
+}
+body[data-theme="forest"] .cell.color-16, body[data-theme="forest"] .preview-cell.color-16, body[data-theme="forest"] .shape-preview-cell.color-16 {
+  background: radial-gradient(circle at 50% 30%, #a7f3d0, #059669);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 0 rgba(6, 95, 70, 0.3), 0 6px 12px rgba(5, 150, 105, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-gradient);
+  color: #2f3542;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* ================= 梦幻极光背景与毛玻璃气泡 ================= */
+.sky-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(255, 161, 246, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(132, 250, 176, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(143, 211, 244, 0.5) 0%, transparent 50%);
+}
+
+/* 用 opacity 动画代替 background-position，只触发 composite 不触发 paint */
+.sky-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 80% 60%, rgba(255, 200, 246, 0.35) 0%, transparent 55%),
+    radial-gradient(circle at 20% 20%, rgba(180, 240, 200, 0.35) 0%, transparent 50%);
+  animation: auroraBreath 15s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+@keyframes auroraBreath {
+  0%   { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+/* 动态毛玻璃气泡 */
+.glass-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  /* 去掉 backdrop-filter blur —性能杀手，改为简单半透明白色 */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+  animation: floatBubble linear infinite;
+  /* GPU 合成层提升 */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.gb-1 {
+  width: 120px; height: 120px;
+  top: 15%; left: -150px;
+  animation-duration: 25s;
+}
+
+.gb-2 {
+  width: 180px; height: 180px;
+  top: 45%; right: -200px;
+  animation-name: floatBubbleReverse;
+  animation-duration: 32s;
+}
+
+.gb-3 {
+  width: 80px; height: 80px;
+  top: 75%; left: -100px;
+  animation-duration: 18s;
+  animation-delay: 2s;
+}
+
+.gb-4 {
+  width: 250px; height: 250px;
+  top: -50px; right: 20%;
+  animation-name: floatBubbleSlow;
+  animation-duration: 40s;
+}
+
+@keyframes floatBubble {
+  0% { transform: translateX(-15vw) translateY(0) rotate(0deg); }
+  50% { transform: translateX(50vw) translateY(-20px) rotate(180deg); }
+  100% { transform: translateX(115vw) translateY(0) rotate(360deg); }
+}
+
+@keyframes floatBubbleReverse {
+  0% { transform: translateX(15vw) translateY(0) rotate(0deg); }
+  50% { transform: translateX(-50vw) translateY(30px) rotate(-180deg); }
+  100% { transform: translateX(-115vw) translateY(0) rotate(-360deg); }
+}
+
+@keyframes floatBubbleSlow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(40px) translateX(20px); }
+}
+
+.floating-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.bg-star {
+  position: absolute;
+  color: #fff200;
+  font-size: 1.5rem;
+  opacity: 0.65;
+  animation: twinkle 2.5s ease-in-out infinite alternate;
+  /* transform 和 opacity 均为纯合成属性，提升到 GPU 层 */
+  will-change: transform, opacity;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  100% { opacity: 1;   transform: scale(1.25) rotate(35deg); }
+}
+
+/* ================= 游戏主布局容器 (居中奢华糖果游戏机) ================= */
+.game-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  max-height: 100dvh;
+  padding: 2px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 一体化豪华糖果游戏机外壳 (Nintendo/Arcade Console) */
+.arcade-console {
+  position: relative;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: fit-content;
+  max-width: 98vw;
+  height: fit-content;
+  max-height: 98vh;
+  box-sizing: border-box;
+}
+
+/* 独立悬浮全屏按钮 (移至屏幕绝对右上角，绝不遮挡任何面板) */
+.floating-fullscreen-btn {
+  position: fixed;
+  top: 16px;
+  right: 18px;
+  z-index: 99;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: #334155;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-fullscreen-btn:hover {
+  border-color: #ff6b81;
+  color: #ff4757;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(255, 107, 129, 0.3);
+}
+
+.floating-fullscreen-btn:active {
+  transform: scale(0.94);
+}
+
+/* 游戏机主体内容区 (左翼 + 巨幕棋盘 + 右翼 - 严丝合缝紧贴布局) */
+.console-body {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* 两侧控制机翼 (紧贴棋盘两侧) */
+.console-wing {
+  width: 108px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.console-wing-left {
+  align-items: stretch;
+}
+
+.console-wing-right {
+  align-items: stretch;
+}
+
+/* 机翼小卡片 */
+.wing-card {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.wing-card-title {
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #64748b;
+  margin-bottom: 3px;
+}
+
+/* 吉祥物 */
+.mascot-card {
+  position: relative;
+  cursor: pointer;
+  padding: 8px 6px 4px;
+  background: transparent;
+  border-color: transparent;
+}
+
+.mascot-face {
+  font-size: 2.8rem;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mascot-card:active .mascot-face {
+  transform: scale(1.25) rotate(12deg);
+}
+
+.mascot-bubble {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff4757;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(255, 71, 87, 0.35);
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* 键盘紧凑十字键 */
+.keys-compact-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+}
+
+.key-row-lr {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+  justify-content: center;
+}
+
+.key-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #ffffff;
+  border-radius: 7px;
+  padding: 2px 5px;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 1.5px 0 #cbd5e1;
+  transition: all 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  outline: none;
+}
+
+.key-badge:hover {
+  transform: translateY(-1px);
+  border-color: #94a3b8;
+  box-shadow: 0 2.5px 0 #94a3b8;
+}
+
+.key-badge:focus-visible {
+  border-color: #ff7675;
+  box-shadow: 0 0 0 3px rgba(255, 118, 117, 0.35);
+}
+
+.key-badge.badge-up, .key-badge.badge-down {
+  width: 94%;
+  justify-content: center;
+}
+
+.key-badge.badge-left, .key-badge.badge-right {
+  flex: 1;
+  justify-content: center;
+}
+
+.key-cap {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 900;
+  background: #f1f5f9;
+  color: #1e293b;
+  border-radius: 4px;
+  padding: 1px 4px;
+  box-shadow: 0 1px 0 #94a3b8;
+  display: inline-block;
+  line-height: 1.1;
+}
+
+.key-desc {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #475569;
+}
+
+.key-badge.active-press, .key-badge:active {
+  transform: scale(1.08) translateY(1px);
+  background: #ffeaa7;
+  border-color: #fdcb6e;
+  box-shadow: 0 1px 4px rgba(253, 203, 110, 0.5);
+}
+
+.key-badge.active-press .key-desc, .key-badge:active .key-desc { color: #d35400; }
+.key-badge.active-press .key-cap, .key-badge:active .key-cap { background: #ff7675; color: #fff; box-shadow: 0 1px 0 #d63031; }
+
+/* 下一个方块预览卡片 */
+.next-card {
+  padding: 5px 6px;
+}
+
+.next-preview-box {
+  width: 64px;
+  height: 64px;
+  background: transparent;
+  border-radius: 14px;
+  border: none;
+  box-shadow: none;
+  display: grid;
+  gap: 2.5px;
+  padding: 3px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+}
+
+.preview-pop {
+  animation: previewBounce 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes previewBounce {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.preview-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -1.5px 0 rgba(0, 0, 0, 0.15);
+}
+
+.preview-cell.filled {
+  border-radius: 6px;
+  box-shadow: inset 0 2.5px 0 rgba(255, 255, 255, 0.6), 
+              inset 0 -2.5px 0 rgba(0, 0, 0, 0.2), 
+              0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 预览方块的精致小表情 */
+.preview-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.preview-eye {
+  width: 3.5px;
+  height: 5px;
+  background: #2d3436;
+  border-radius: 50%;
+  position: relative;
+}
+
+.preview-eye::after {
+  content: '';
+  position: absolute;
+  top: 0.8px;
+  right: 0.8px;
+  width: 1.5px;
+  height: 1.5px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/* 星星总分卡片 */
+.score-card {
+  padding: 5px 6px;
+  background: transparent;
+  border: none;
+}
+
+.score-label {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #d35400;
+}
+
+.score-val {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #f39c12;
+  text-shadow: 1.5px 1.5px 0 rgba(255, 234, 167, 0.8);
+  line-height: 1.1;
+}
+
+/* 功能按钮 */
+.controls-card {
+  gap: 4px;
+  padding: 5px 6px;
+}
+
+.wing-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 6px 5px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #334155;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #94a3b8, 0 8px 10px rgba(0,0,0,0.08), inset 0 -2px 0 rgba(0,0,0,0.05);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wing-btn:hover {
+  border-color: #ff6b81;
+  color: #ff4757;
+  background: linear-gradient(180deg, #fff0f3 0%, #ffe0e6 100%);
+  box-shadow: 0 4px 0 #ff4757, 0 8px 12px rgba(255,107,129,0.2), inset 0 -2px 0 rgba(255,71,87,0.2);
+  transform: translateY(-2px);
+}
+
+.wing-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #ff4757, 0 2px 4px rgba(255,107,129,0.2), inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.wing-btn .btn-icon {
+  font-size: 1.6rem;
+}
+
+/* ================= 核心大棋盘区 (像素级正方形) ================= */
+.game-board-section {
+  flex: 0 1 auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.board-outer-card {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  width: max-content;
+  height: max-content;
+  max-width: 100%;
+  max-height: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 超大糖果网格 (物理锁定每个单元格严格 1:1 正方形) */
+.game-board {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  background: #e2e8f0;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 10px 24px rgba(0, 0, 0, 0.15),
+    inset 0 3px 6px rgba(0, 0, 0, 0.1),
+    0 2px 2px rgba(255, 255, 255, 0.9);
+  width: max-content;
+  height: max-content;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 单个超大正方形格子的固定底槽 */
+.cell-slot {
+  width: var(--cell-size, 68px);
+  height: var(--cell-size, 68px);
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  background: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 实际会移动/变色的方块本体 */
+.cell {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+  overflow: hidden;
+  /* will-change 提示浏览器提前分配 GPU 合成层，比 translateZ(0) 更安全 */
+  will-change: transform;
+}
+
+/* 填充的立体糖果方块 */
+.cell.filled {
+  border-radius: 18px;
+  box-shadow: 
+    inset 0 3px 0 rgba(255, 255, 255, 0.45), 
+    inset 0 -4px 0 rgba(0, 0, 0, 0.22),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 16 种童趣生动的卡通动物与水果糖果配色 */
+/* 1. 🍓 草莓兔兔 */
+.cell.color-1, .preview-cell.color-1, .shape-preview-cell.color-1 {
+  background: radial-gradient(circle at 50% 30%, #ff7597, #ff5277);
+}
+/* 2. 🍊 香橙小狐狸 */
+.cell.color-2, .preview-cell.color-2, .shape-preview-cell.color-2 {
+  background: radial-gradient(circle at 50% 30%, #ffb84d, #ff9f1a);
+}
+/* 3. 🍋 阳光小鸭鸭 */
+.cell.color-3, .preview-cell.color-3, .shape-preview-cell.color-3 {
+  background: radial-gradient(circle at 50% 30%, #ffdd59, #ffc048);
+}
+/* 4. 🐸 抹茶青蛙王子 */
+.cell.color-4, .preview-cell.color-4, .shape-preview-cell.color-4 {
+  background: radial-gradient(circle at 50% 30%, #55e691, #2ed573);
+}
+/* 5. 🌊 苏打小企鹅 */
+.cell.color-5, .preview-cell.color-5, .shape-preview-cell.color-5 {
+  background: radial-gradient(circle at 50% 30%, #48dbfb, #00d2d3);
+}
+/* 6. 🍇 葡萄小喵喵 */
+.cell.color-6, .preview-cell.color-6, .shape-preview-cell.color-6 {
+  background: radial-gradient(circle at 50% 30%, #b677d0, #9b59b6);
+}
+/* 7. 🍪 焦糖小熊熊 */
+.cell.color-7, .preview-cell.color-7, .shape-preview-cell.color-7 {
+  background: radial-gradient(circle at 50% 30%, #fab1a0, #e17055);
+}
+/* 8. 🍉 西瓜冰棒 */
+.cell.color-8, .preview-cell.color-8, .shape-preview-cell.color-8 {
+  background: linear-gradient(180deg, #ff6b81 0%, #ff4757 76%, #2ed573 78%, #26af5f 100%);
+}
+/* 9. 🦄 彩虹小马 */
+.cell.color-9, .preview-cell.color-9, .shape-preview-cell.color-9 {
+  background: radial-gradient(circle at 50% 30%, #e056fd, #be2edd);
+}
+/* 10. 🐼 薄荷熊猫 */
+.cell.color-10, .preview-cell.color-10, .shape-preview-cell.color-10 {
+  background: radial-gradient(circle at 50% 30%, #48dbfb, #10ac84);
+}
+/* 11. 🍩 巧克甜圈 */
+.cell.color-11, .preview-cell.color-11, .shape-preview-cell.color-11 {
+  background: radial-gradient(circle at 50% 30%, #e67e22, #d35400);
+}
+/* 12. 🍭 波波彩糖 */
+.cell.color-12, .preview-cell.color-12, .shape-preview-cell.color-12 {
+  background: radial-gradient(circle at 50% 30%, #ff9ff3, #f368e0);
+}
+/* 13. 🫐 蓝莓奶昔 */
+.cell.color-13, .preview-cell.color-13, .shape-preview-cell.color-13 {
+  background: radial-gradient(circle at 50% 30%, #54a0ff, #2e86de);
+}
+/* 14. 🍦 香草冰淇 */
+.cell.color-14, .preview-cell.color-14, .shape-preview-cell.color-14 {
+  background: radial-gradient(circle at 50% 30%, #feca57, #ff9f43);
+}
+/* 15. 🍬 果汁软糖 */
+.cell.color-15, .preview-cell.color-15, .shape-preview-cell.color-15 {
+  background: radial-gradient(circle at 50% 30%, #1dd1a1, #10ac84);
+}
+/* 16. 🧁 樱桃小堡 */
+.cell.color-16, .preview-cell.color-16, .shape-preview-cell.color-16 {
+  background: radial-gradient(circle at 50% 30%, #ee5253, #c0392b);
+}
+
+/* ================= 落点幽灵虚影样式 (Ghost Piece) ================= */
+.cell.ghost {
+  border-radius: 14px;
+  border: 2.5px dashed rgba(255, 255, 255, 0.85);
+  box-sizing: border-box;
+  opacity: 0.38;
+  animation: ghostBreathe 1.8s ease-in-out infinite alternate;
+  z-index: 3;
+  /* transform + opacity 均为合成属性，提升到 GPU 层 */
+  will-change: transform, opacity;
+}
+
+@keyframes ghostBreathe {
+  0%   { opacity: 0.28; transform: translateZ(0) scale(0.96); }
+  100% { opacity: 0.48; transform: translateZ(0) scale(1); }
+}
+
+.cell.ghost.ghost-color-1 { background: radial-gradient(circle, #ff7597, #ff5277); }
+.cell.ghost.ghost-color-2 { background: radial-gradient(circle, #ffb84d, #ff9f1a); }
+.cell.ghost.ghost-color-3 { background: radial-gradient(circle, #ffdd59, #ffc048); }
+.cell.ghost.ghost-color-4 { background: radial-gradient(circle, #55e691, #2ed573); }
+.cell.ghost.ghost-color-5 { background: radial-gradient(circle, #48dbfb, #00d2d3); }
+.cell.ghost.ghost-color-6 { background: radial-gradient(circle, #b677d0, #9b59b6); }
+.cell.ghost.ghost-color-7 { background: radial-gradient(circle, #fab1a0, #e17055); }
+.cell.ghost.ghost-color-8 { background: radial-gradient(circle, #ff6b81, #ff4757); }
+.cell.ghost.ghost-color-9 { background: radial-gradient(circle, #e056fd, #be2edd); }
+.cell.ghost.ghost-color-10 { background: radial-gradient(circle, #48dbfb, #10ac84); }
+.cell.ghost.ghost-color-11 { background: radial-gradient(circle, #e67e22, #d35400); }
+.cell.ghost.ghost-color-12 { background: radial-gradient(circle, #ff9ff3, #f368e0); }
+.cell.ghost.ghost-color-13 { background: radial-gradient(circle, #54a0ff, #2e86de); }
+.cell.ghost.ghost-color-14 { background: radial-gradient(circle, #feca57, #ff9f43); }
+.cell.ghost.ghost-color-15 { background: radial-gradient(circle, #1dd1a1, #10ac84); }
+.cell.ghost.ghost-color-16 { background: radial-gradient(circle, #ee5253, #c0392b); }
+
+/* ================= 巨幅 3D 卡通角色与主题专属标识 ================= */
+.block-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* 巨幅核心 3D 角色形象 - 移除文字后居中放大 */
+.block-char-main {
+  font-size: calc(var(--cell-size, 68px) * 0.65);
+  line-height: 1;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.22);
+  transform: scale(1);
+  animation: charHoverBreathe 2.4s ease-in-out infinite alternate;
+  user-select: none;
+  will-change: transform;
+}
+
+@keyframes charHoverBreathe {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.block-char-name {
+  display: none;
+}
+
+/* ================= 整行消除炫酷动画与激光横扫 ================= */
+/* 整行极光激光横扫光束 (强视觉冲击力) */
+.row-clear-beam {
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  border-radius: 18px;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 235, 59, 0.85) 20%, 
+    rgba(255, 255, 255, 1) 50%, 
+    rgba(255, 107, 129, 0.85) 80%, 
+    rgba(255, 255, 255, 0) 100%);
+  box-shadow: 
+    0 0 25px rgba(255, 235, 59, 0.95), 
+    0 0 50px rgba(255, 71, 87, 0.85),
+    inset 0 0 15px rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  z-index: 28;
+  animation: rowLaserSweep 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rowLaserSweep {
+  0% {
+    transform: scaleX(0.05) scaleY(0.3);
+    opacity: 0;
+    filter: brightness(3);
+  }
+  30% {
+    transform: scaleX(1.05) scaleY(1.25);
+    opacity: 1;
+    filter: brightness(2.5);
+  }
+  65% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 0.9;
+    filter: brightness(2);
+  }
+  100% {
+    transform: scaleX(1.02) scaleY(0.08);
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+/* 消除方块炫光爆破：高亮发光、Q弹放大、四射飞散 */
+.line-clear-anim {
+  animation: clearExplode 0.46s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  z-index: 20;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes clearExplode {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1) drop-shadow(0 0 0 rgba(255,255,255,0));
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.3) rotate(5deg);
+    filter: brightness(2.5) drop-shadow(0 0 22px #ffffff);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(1.15) rotate(-3deg);
+    filter: brightness(2) drop-shadow(0 0 16px #ffd700);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(0.08) rotate(12deg);
+    filter: brightness(3) drop-shadow(0 0 25px #ffffff);
+    opacity: 0;
+  }
+}
+
+/* 上方方块丝滑下落过程动画 (带卡通弹性 overshoot) */
+.cell.falling-drop {
+  transition: transform 0.38s cubic-bezier(0.34, 1.35, 0.64, 1) !important;
+  z-index: 8;
+  will-change: transform;
+}
+
+/* 掉落到位的单个方块 Q 弹着陆动效 */
+.cell.drop-land-squish {
+  animation: cellLandSquish 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+}
+
+@keyframes cellLandSquish {
+  0%   { transform: scale(1, 1); }
+  40%  { transform: scale(1.18, 0.82); }
+  75%  { transform: scale(0.94, 1.07); }
+  100% { transform: scale(1, 1); }
+}
+
+/* 酷炫粒子动画 Canvas 渲染层 */
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+  border-radius: 28px;
+  /* 不加 translateZ/will-change：空 Canvas GPU 层在多数浏览器显示为实心黑色 */
+}
+
+/* 彩虹魔法清屏 (保持背景平稳，仅色彩微光变化) */
+.rainbow-magic-anim {
+  animation: rainbowWave 1.2s ease-in-out forwards;
+}
+
+@keyframes rainbowWave {
+  0% { filter: hue-rotate(0deg) brightness(1.2); }
+  50% { filter: hue-rotate(180deg) brightness(1.5); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* 撒花庆祝层 */
+.celebration-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  font-size: 2rem;
+  animation: confettiFall 1.3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }
+  50% { transform: translate(var(--tx), var(--ty)) scale(1.4) rotate(180deg); opacity: 1; }
+  100% { transform: translate(var(--tx2), var(--ty2)) scale(0.8) rotate(360deg); opacity: 0; }
+}
+
+.cheer-toast {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-title);
+  background: linear-gradient(135deg, #ff4757, #ff6b81);
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 12px 32px;
+  border-radius: 35px;
+  border: 4px solid #fff;
+  box-shadow: 0 12px 35px rgba(255, 71, 87, 0.55);
+  animation: cheerPopup 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 35;
+}
+
+@keyframes cheerPopup {
+  0% { transform: translate(-50%, -10%) scale(0.3); opacity: 0; }
+  20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  45% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  80% { transform: translate(-50%, -60%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -85%) scale(0.8); opacity: 0; }
+}
+
+/* ================= 响应式适配 (手机竖屏与平板小屏自适应) ================= */
+@media (max-width: 768px) {
+  .game-wrapper {
+    padding: 2px 4px;
+    gap: 4px;
+  }
+  .arcade-console {
+    padding: 2px;
+    max-width: 100vw;
+    max-height: 100dvh;
+  }
+  .console-body {
+    gap: 6px;
+  }
+  .console-wing {
+    width: 82px;
+    gap: 4px;
+  }
+  .wing-card {
+    padding: 3px;
+  }
+  .mascot-face {
+    font-size: 2.2rem;
+  }
+  .mascot-bubble {
+    font-size: 0.62rem;
+    padding: 1px 5px;
+    top: -8px;
+  }
+  .next-preview-box {
+    width: 52px;
+    height: 52px;
+  }
+  .score-val {
+    font-size: 1.3rem;
+  }
+  .wing-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  .key-badge {
+    padding: 2px 4px;
+  }
+  .key-cap {
+    font-size: 0.76rem;
+    padding: 1px 3px;
+  }
+  .key-desc {
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .console-wing {
+    width: 68px;
+  }
+  .mascot-face {
+    font-size: 1.8rem;
+  }
+  .wing-card-title {
+    font-size: 0.65rem;
+  }
+  .key-desc {
+    display: none;
+  }
+  .key-badge {
+    padding: 3px;
+    justify-content: center;
+  }
+  .key-cap {
+    font-size: 0.95rem;
+    padding: 2px 6px;
+  }
+}
+
+/* ================= 设置面板 & 结算弹窗 Modal 样式 ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(45, 52, 54, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 6px solid #ffd166;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22), 0 0 0 10px rgba(255, 209, 102, 0.3);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 18px 22px 22px;
+  position: relative;
+  animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-sizing: border-box;
+}
+
+/* 优雅圆润的自定义滚动条，带上下边距，绝不遮挡或破坏圆角 */
+.modal-card::-webkit-scrollbar {
+  width: 7px;
+}
+
+.modal-card::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 20px 0;
+}
+
+.modal-card::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.modal-card::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@keyframes modalPopIn {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.modal-title {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #2f3542;
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: #f1f2f6;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #747d8c;
+  transition: transform 0.15s ease, background-color 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: #dfe4ea;
+  color: #2f3542;
+}
+
+.modal-close-btn:active {
+  transform: scale(0.88);
+}
+
+.modal-subtitle {
+  font-size: 0.84rem;
+  color: #747d8c;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+}
+
+/* 设置模块分块 */
+.settings-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.settings-section-title {
+  font-size: 0.86rem;
+  font-weight: 900;
+  color: #2f3542;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 主题皮肤选择器 */
+.theme-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.theme-btn {
+  background: #f8fafc;
+  border: 2.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.theme-btn:hover {
+  transform: translateY(-2px);
+  border-color: #ff6b81;
+}
+
+.theme-btn.active {
+  background: linear-gradient(135deg, #fff0f3, #ffe0e6);
+  border-color: #ff4757;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.25);
+  transform: scale(1.03);
+}
+
+.theme-btn-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.theme-btn-name {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #334155;
+}
+
+.theme-btn.active .theme-btn-name {
+  color: #ff4757;
+}
+
+/* 智能辅助与亲子语音开关行 */
+.assist-switches-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.assist-toggle-btn {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.assist-toggle-btn:hover {
+  transform: translateY(-2px);
+  border-color: #2ed573;
+}
+
+.assist-toggle-btn.active {
+  background: linear-gradient(135deg, #e8faf0, #d1f7e0);
+  border-color: #2ed573;
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.25);
+}
+
+.assist-icon {
+  font-size: 1.2rem;
+}
+
+.assist-title {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #334155;
+  flex: 1;
+  text-align: left;
+}
+
+.assist-status {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.assist-toggle-btn.active .assist-status {
+  color: #10ac84;
+  border-color: #2ed573;
+}
+
+/* 棋盘尺寸规格选择按钮组 */
+.grid-size-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.grid-size-btn {
+  background: #f8fafc;
+  border: 2.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.grid-size-btn:hover {
+  border-color: #ffd166;
+  background: #fffdf5;
+  transform: translateY(-2px);
+}
+
+.grid-size-btn.active {
+  background: linear-gradient(135deg, #fff9e6, #ffeaa7);
+  border-color: #f39c12;
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+  transform: scale(1.03);
+}
+
+.grid-btn-tag {
+  font-size: 0.96rem;
+  font-weight: 900;
+  color: #2d3436;
+}
+
+.grid-size-btn.active .grid-btn-tag {
+  color: #d35400;
+}
+
+.grid-btn-desc {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #747d8c;
+}
+
+.grid-size-btn.active .grid-btn-desc {
+  color: #e67e22;
+}
+
+/* 自定义 a*b 规格面板 */
+.custom-grid-size-box {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.custom-grid-title {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #334155;
+}
+
+.custom-grid-range {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.custom-grid-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.custom-dim-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-dim-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.stepper-box {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stepper-box:focus-within {
+  border-color: #f39c12;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+}
+
+.stepper-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 28px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.stepper-btn:hover {
+  background: #e2e8f0;
+  color: #d35400;
+}
+
+.stepper-btn:active {
+  transform: scale(0.92);
+  background: #cbd5e1;
+}
+
+.custom-dim-input {
+  width: 44px;
+  height: 30px;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  font-family: var(--font-num);
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1e293b;
+  -moz-appearance: textfield;
+}
+
+.custom-dim-input::-webkit-outer-spin-button,
+.custom-dim-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-dim-times {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #94a3b8;
+  user-select: none;
+}
+
+.custom-dim-badge {
+  margin-left: auto;
+  background: linear-gradient(135deg, #fff9e6, #ffeaa7);
+  border: 2px solid #ffd166;
+  border-radius: 12px;
+  padding: 4px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.15);
+  min-width: 60px;
+}
+
+.custom-badge-tag {
+  font-family: var(--font-num);
+  font-size: 0.96rem;
+  font-weight: 900;
+  color: #d35400;
+  line-height: 1.1;
+}
+
+.custom-badge-sub {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #e67e22;
+}
+
+.modal-quick-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-btn:hover {
+  background: #edf2f7;
+  border-color: #cbd5e1;
+}
+
+.preset-btn:active {
+  transform: scale(0.94);
+}
+
+/* 方块开关网格 */
+.shapes-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  padding: 4px 2px;
+  margin-bottom: 12px;
+}
+
+.shape-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.shape-card.enabled {
+  background: #fff9e6;
+  border-color: #ffd166;
+  box-shadow: 0 4px 10px rgba(255, 209, 102, 0.25);
+}
+
+.shape-card-preview {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1.5px solid #f1f2f6;
+  padding: 2px;
+}
+
+.shape-preview-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.5), inset 0 -1.5px 0 rgba(0, 0, 0, 0.15);
+}
+
+.shape-card-info {
+  text-align: center;
+}
+
+.shape-card-name {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #2f3542;
+  margin-bottom: 1px;
+}
+
+.shape-card-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #747d8c;
+}
+
+/* 萌趣开关 Switch */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: #cbd5e1;
+  border-radius: 11px;
+  transition: background-color 0.2s ease;
+}
+
+.shape-card.enabled .toggle-switch {
+  background: #2ed573;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shape-card.enabled .toggle-slider {
+  transform: translateX(18px);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-save-btn {
+  background: linear-gradient(135deg, #2ed573, #10ac84);
+  color: #ffffff;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.35);
+  transition: transform 0.15s ease;
+  width: 100%;
+}
+
+.modal-save-btn:active {
+  transform: scale(0.96);
+}
+
+/* ================= 游戏结束结算面板样式 ================= */
+.game-over-card {
+  text-align: center;
+  max-width: 420px;
+  align-items: center;
+  border-color: #ff9ff3;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22), 0 0 0 10px rgba(255, 159, 243, 0.3);
+}
+
+.game-over-mascot {
+  font-size: 3.2rem;
+  margin-bottom: 6px;
+  animation: mascotCheerJump 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes mascotCheerJump {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-8px) scale(1.1); }
+}
+
+.game-over-title {
+  font-family: var(--font-title);
+  font-size: 1.65rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ff4757;
+  margin: 0 0 6px 0;
+}
+
+.game-over-desc {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #57606f;
+  margin: 0 0 16px 0;
+}
+
+.settlement-score-box {
+  background: #fff9e6;
+  border: 3px solid #ffd166;
+  border-radius: 20px;
+  padding: 12px 24px;
+  margin-bottom: 20px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.settlement-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #d35400;
+}
+
+.settlement-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settlement-star-icon {
+  font-size: 2rem;
+  animation: starSpin 3s infinite linear;
+}
+
+@keyframes starSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.settlement-score-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #d35400;
+  line-height: 1;
+}
+
+.game-over-btn-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.play-again-btn {
+  flex: 2;
+  background: linear-gradient(135deg, #ff6b81, #ff4757);
+  color: #ffffff;
+  border: none;
+  border-radius: 18px;
+  padding: 12px 18px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 71, 87, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.play-again-btn:active {
+  transform: scale(0.95);
+}
+
+.settings-secondary-btn {
+  flex: 1;
+  background: #f1f2f6;
+  color: #2f3542;
+  border: 2px solid #ced6e0;
+  border-radius: 18px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.settings-secondary-btn:active {
+  transform: scale(0.95);
+}
+
+.game-over-keyboard-hint {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #747d8c;
+  margin-top: 10px;
+  background: #f8fafc;
+  padding: 5px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+}
+
+/* ================= 全屏模式专用优化 ================= */
+:fullscreen, :-webkit-full-screen {
+  background: var(--bg-gradient);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+:fullscreen .game-wrapper, :-webkit-full-screen .game-wrapper {
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+:fullscreen .arcade-console, :-webkit-full-screen .arcade-console {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  padding: 6px 16px;
+}
+
+:fullscreen .console-header, :-webkit-full-screen .console-header {
+  border-radius: 14px;
+  padding: 4px 18px;
+}
+
+

@@ -1,0 +1,19 @@
+/* Colores: el tablero (640x480) se escala para llenar la pantalla. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #fce4ec;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#viewport {
+  width: min(100vw, 133.33vh);
+  height: min(75vw, 100vh);
+}

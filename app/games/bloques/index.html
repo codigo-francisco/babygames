@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#a1c4fd">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>🎈 Bloques felices</title>
+  <meta name="description" content="Juego de bloques grandes y de colores para peques.">
+  
+  <link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="../../shared/game-inject.css"><link rel="stylesheet" href="../../overrides/bloques.css"></head>
+<body>
+  <!-- 梦幻极光背景与动态毛玻璃气泡 -->
+  <div class="sky-background">
+    <div class="glass-bubble gb-1"></div>
+    <div class="glass-bubble gb-2"></div>
+    <div class="glass-bubble gb-3"></div>
+    <div class="glass-bubble gb-4"></div>
+    <div class="floating-stars" id="starBg"></div>
+  </div>
+
+  <div class="game-wrapper">
+    <!-- 统一一体化豪华糖果游戏机外壳 (Unified Arcade Console) -->
+    <div class="arcade-console">
+
+      <!-- 游戏机主体内容区 (左翼面板 + 中央巨幕棋盘 + 右翼面板) -->
+      <div class="console-body">
+        
+        <!-- 左侧翼：萌宠互动与紧凑按键操作 -->
+        <aside class="console-wing console-wing-left" aria-label="Controles y mascota">
+          <!-- 吉祥物卡片 -->
+          <div class="wing-card mascot-card" id="mascot" title="¡Toca al osito!" role="button" tabindex="0" aria-label="Mascota">
+            <div class="mascot-face">🐻</div>
+            <div class="mascot-bubble" id="mascotBubble">¡Juega con las flechas!</div>
+          </div>
+
+          <!-- 键盘与触控提示 (紧凑十字键布局) -->
+          <div class="wing-card keys-card" aria-label="Controles">
+            <div class="wing-card-title">🎮 Controles</div>
+            <div class="keys-compact-grid">
+              <div class="key-badge badge-up" id="keyBadgeUp" role="button" tabindex="0" aria-label="Caer directo (↑ o toca)">
+                <kbd class="key-cap">↑</kbd>
+                <span class="key-desc">¡Abajo!</span>
+              </div>
+              <div class="key-row-lr">
+                <div class="key-badge badge-left" id="keyBadgeLeft" role="button" tabindex="0" aria-label="Izquierda (← o toca)">
+                  <kbd class="key-cap">←</kbd>
+                  <span class="key-desc">Izq.</span>
+                </div>
+                <div class="key-badge badge-right" id="keyBadgeRight" role="button" tabindex="0" aria-label="Derecha (→ o toca)">
+                  <kbd class="key-cap">→</kbd>
+                  <span class="key-desc">Der.</span>
+                </div>
+              </div>
+              <div class="key-badge badge-down" id="keyBadgeDown" role="button" tabindex="0" aria-label="Más rápido (↓ o toca)">
+                <kbd class="key-cap">↓</kbd>
+                <span class="key-desc">Rápido</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 中央超大核心棋盘区 -->
+        <main class="game-board-section">
+          <div class="board-outer-card" id="boardCard">
+            <div id="gameBoard" class="game-board" role="grid" aria-label="Tablero">
+              <!-- 棋盘网格由JS动态生成 -->
+            </div>
+
+            <!-- 酷炫全屏 60FPS 粒子与冲击波 Canvas 渲染层 -->
+            <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
+            <!-- 欢呼特效应渲染层 -->
+            <div id="celebrationOverlay" class="celebration-overlay"></div>
+          </div>
+        </main>
+
+        <!-- 右侧翼：Siguiente预览、星星与控制sí/no -->
+        <aside class="console-wing console-wing-right" aria-label="Estado y ajustes">
+          <!-- Siguiente方块预览 -->
+          <div class="wing-card next-card">
+            <div class="wing-card-title">🎁 Siguiente</div>
+            <div class="next-preview-box" id="nextPreview"></div>
+          </div>
+
+          <!-- 星星总分卡片 -->
+          <div class="wing-card score-card">
+            <div class="score-label">⭐ Estrellas</div>
+            <div class="score-val" id="scoreVal">0</div>
+          </div>
+
+          <!-- 侧边功能按钮 -->
+          <div class="wing-card controls-card">
+            <button id="fullscreenToggleBtn" class="wing-btn" title="Pantalla completa (F)" aria-label="Pantalla completa">
+              <span class="btn-icon" id="fullscreenIcon">⛶</span>
+            </button>
+            <button id="soundToggleBtn" class="wing-btn" title="Música" aria-label="Música">
+              <span class="btn-icon">🔊</span>
+            </button>
+            <button id="settingsBtn" class="wing-btn" title="Ajustes de piezas" aria-label="Ajustes de piezas">
+              <span class="btn-icon">⚙️</span>
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 方块组合独立启用sí/no与棋盘规格设置面板 Modal -->
+  <div id="settingsModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modalTitle" class="modal-title">⚙️ Ajustes del juego</h2>
+        <button id="closeSettingsBtn" class="modal-close-btn" title="Cerrar" aria-label="Cerrar ajustes">✕</button>
+      </div>
+      
+      <p class="modal-subtitle">Elige el tamaño del tablero y las piezas. ¡Se guarda solo!</p>
+      
+      <!-- 1. 梦幻主题皮肤选择 -->
+      <div class="settings-section">
+        <div class="settings-section-title">🎨 Tema</div>
+        <div class="theme-selector" id="themeSelector">
+          <button type="button" class="theme-btn active" data-theme="candy">
+            <span class="theme-btn-icon">🍬</span>
+            <span class="theme-btn-name">Dulces</span>
+          </button>
+          <button type="button" class="theme-btn" data-theme="space">
+            <span class="theme-btn-icon">🌌</span>
+            <span class="theme-btn-name">Espacio</span>
+          </button>
+          <button type="button" class="theme-btn" data-theme="forest">
+            <span class="theme-btn-icon">🌲</span>
+            <span class="theme-btn-name">Bosque</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. 辅助功能sí/no (虚影 & 语音夸奖) -->
+      <div class="settings-section">
+        <div class="settings-section-title">✨ Ayudas y voz</div>
+        <div class="assist-switches-row">
+          <button type="button" class="assist-toggle-btn active" id="toggleGhostBtn">
+            <span class="assist-icon">🎯</span>
+            <span class="assist-title">Sombra de caída</span>
+            <span class="assist-status" id="ghostStatusText">Sí</span>
+          </button>
+          <button type="button" class="assist-toggle-btn active" id="toggleVoiceBtn">
+            <span class="assist-icon">🗣️</span>
+            <span class="assist-title">Voz que felicita</span>
+            <span class="assist-status" id="voiceStatusText">Sí</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. 棋盘格子规格设置区 -->
+      <div class="settings-section">
+        <div class="settings-section-title">📐 Tamaño del tablero (columnas a × filas b)</div>
+        <div class="grid-size-selector" id="gridSizeSelector">
+          <button type="button" class="grid-size-btn" data-cols="5" data-rows="7">
+            <span class="grid-btn-tag">5 × 7</span>
+            <span class="grid-btn-desc">Pequeño</span>
+          </button>
+          <button type="button" class="grid-size-btn" data-cols="6" data-rows="8">
+            <span class="grid-btn-tag">6 × 8</span>
+            <span class="grid-btn-desc">Recomendado</span>
+          </button>
+          <button type="button" class="grid-size-btn" data-cols="7" data-rows="9">
+            <span class="grid-btn-tag">7 × 9</span>
+            <span class="grid-btn-desc">Ancho</span>
+          </button>
+          <button type="button" class="grid-size-btn" data-cols="8" data-rows="10">
+            <span class="grid-btn-tag">8 × 10</span>
+            <span class="grid-btn-desc">Gigante</span>
+          </button>
+        </div>
+
+        <!-- 自定义 a*b 规格面板 -->
+        <div class="custom-grid-size-box">
+          <div class="custom-grid-header">
+            <span class="custom-grid-title">✏️ Tamaño a medida a × b</span>
+            <span class="custom-grid-range">(3–16 columnas, 4–24 filas)</span>
+          </div>
+          <div class="custom-grid-controls-row">
+            <div class="custom-dim-item">
+              <span class="custom-dim-label">Columnas (a)</span>
+              <div class="stepper-box">
+                <button type="button" class="stepper-btn" id="customColsMinus" aria-label="Menos columnas">－</button>
+                <input type="number" id="customColsInput" class="custom-dim-input" min="3" max="16" value="6" aria-label="Columnas a">
+                <button type="button" class="stepper-btn" id="customColsPlus" aria-label="Más columnas">＋</button>
+              </div>
+            </div>
+
+            <div class="custom-dim-times">✕</div>
+
+            <div class="custom-dim-item">
+              <span class="custom-dim-label">Filas (b)</span>
+              <div class="stepper-box">
+                <button type="button" class="stepper-btn" id="customRowsMinus" aria-label="Menos filas">－</button>
+                <input type="number" id="customRowsInput" class="custom-dim-input" min="4" max="24" value="8" aria-label="Filas b">
+                <button type="button" class="stepper-btn" id="customRowsPlus" aria-label="Más filas">＋</button>
+              </div>
+            </div>
+
+            <div class="custom-dim-badge" id="customDimBadge">
+              <span class="custom-badge-tag" id="customDimText">6 × 8</span>
+              <span class="custom-badge-sub">Actual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 方块种类sí/no设置区 -->
+      <div class="settings-section">
+        <div class="settings-section-title">🧩 Piezas (toca para activar o quitar; 25 en total)</div>
+        <div class="modal-quick-actions">
+          <button id="btnPresetAll" class="preset-btn">🌟 Todas</button>
+          <button id="btnPresetSimple" class="preset-btn">🍼 Muy fácil (1–2)</button>
+          <button id="btnPresetMedium" class="preset-btn">🍭 Fácil (1–3 + cuadrado)</button>
+          <button id="btnPresetTetris" class="preset-btn">👑 Clásico (4)</button>
+          <button id="btnPresetReset" class="preset-btn">🔄 Por defecto</button>
+        </div>
+
+        <div class="shapes-toggle-grid" id="shapesToggleContainer">
+          <!-- 动态渲染每个方块的sí/no卡片 -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="saveSettingsBtn" class="modal-save-btn">🎉 Guardar y jugar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 游戏结束结算面板 (不自动重新开始，等待宝宝或家长点击) -->
+  <div id="gameOverModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+    <div class="modal-card game-over-card">
+      <div class="game-over-mascot">🎉🥳🎈</div>
+      <h2 id="gameOverTitle" class="game-over-title">¡Genial! ¡Ronda terminada!</h2>
+      <p class="game-over-desc">¡Se llenó de bloques! ¡Lo hiciste súper bien!✨</p>
+
+      <div class="settlement-score-box">
+        <span class="settlement-label">Estrellas de esta ronda</span>
+        <div class="settlement-stars">
+          <span class="settlement-star-icon">⭐</span>
+          <span class="settlement-score-num" id="finalScoreVal">0</span>
+        </div>
+      </div>
+
+      <div class="game-over-btn-row">
+        <button id="playAgainBtn" class="play-again-btn">🔄 Jugar otra vez</button>
+        <button id="openSettingsFromGameOverBtn" class="settings-secondary-btn">⚙️ Ajustes</button>
+      </div>
+
+      <div class="game-over-keyboard-hint">⌨️ Pulsa una tecla o toca el botón para jugar otra vez</div>
+    </div>
+  </div>
+
+  <script src="script.js?v=16"></script>
+<script src="../../overrides/bloques.js"></script></body>
+</html>

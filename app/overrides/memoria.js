@@ -1,0 +1,1 @@
+// Memoria: sin ajustes.

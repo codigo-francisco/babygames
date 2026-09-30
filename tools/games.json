@@ -1,0 +1,191 @@
+{
+  "comment": "Juegos que se descargan de GitHub. 'include' = archivos/carpetas a copiar; 'patches' = reemplazos de texto aplicados tras copiar (si un 'find' no aparece, el script falla para avisar de cambios en el repo).",
+  "games": [
+    {
+      "id": "memoria",
+      "entry": "index.html",
+      "repo": "bence-toth/daniel-memory-game",
+      "branch": "master",
+      "commit": "374eda83f4c743aa7d18e57ad78b4271e7ebafab",
+      "license": "MIT (iconos de game-icons.net: CC BY 3.0)",
+      "include": ["index.html", "game.js", "pointer.js", "styles.css", "assets", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "find": "<html lang=\"en\">", "replace": "<html lang=\"es\">" }
+      ]
+    },
+    {
+      "id": "pintar",
+      "entry": "index.html",
+      "repo": "vikrum/kiddopaint",
+      "branch": "main",
+      "commit": "140ca297683db82daedccae321b519f10f3fde0d",
+      "license": "MIT",
+      "include": ["index.html", "css", "img", "snd", "js", "LICENSE", "NOTICE", "README.md"],
+      "build": "kiddopaint",
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<!-- Global site tag[^>]*-->\\s*", "replace": "" },
+        { "file": "index.html", "regex": true, "find": "<script[^>]*googletagmanager[^>]*></script>\\s*<script>[\\s\\S]*?</script>", "replace": "" },
+        { "file": "index.html", "regex": true, "find": "<div class=\"github\">[\\s\\S]*?</div>", "replace": "" },
+        { "file": "js/util/display.js", "find": "img.src = \"static/kiddopaint.jpg\";", "replace": "KiddoPaint.Display.clearMain();" }
+      ]
+    },
+    {
+      "id": "piano",
+      "entry": "index.html",
+      "repo": "eagnespuerto/librepiano",
+      "branch": "main",
+      "commit": "4098ef1028f48730a1e8f088a20dddf65972db91",
+      "license": "MIT",
+      "include": ["index.html", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<script src=\"https://cdnjs[^\"]*pdf\\.min\\.js\"></script>", "replace": "" },
+        { "file": "index.html", "find": "<html lang=\"en\">", "replace": "<html lang=\"es\">" }
+      ]
+    },
+    {
+      "id": "topos",
+      "entry": "index.html",
+      "repo": "JivkoJelev91/Whack-A-Mole",
+      "branch": "master",
+      "commit": "20536267bf34e040f03b3847097fb59fdcff3dae",
+      "license": "MIT",
+      "include": ["index.html", "app.js", "style.css", "pictures", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<link href='https://fonts\\.googleapis\\.com[^>]*>", "replace": "" },
+        { "file": "index.html", "find": "Whack-a-mole! <span", "replace": "¡Topos! <span" },
+        { "file": "app.js", "find": "this.randomTime(300, 1300)", "replace": "this.randomTime(1000, 2200)" },
+        { "file": "app.js", "find": "}, 15000);", "replace": "}, 30000);" },
+        { "file": "app.js", "find": "<span>Highest score -</span>", "replace": "<span>Récord:</span>" }
+      ]
+    },
+    {
+      "id": "torre",
+      "entry": "index.html",
+      "repo": "iamkun/tower_game",
+      "branch": "master",
+      "commit": "c6fa84afe179b661fa71cf7cc8788d0c47ca2875",
+      "license": "MIT",
+      "include": ["index.html", "dist", "assets", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<script[^>]*googletagmanager[^>]*></script>\\s*<script>[\\s\\S]*?</script>", "replace": "" },
+        { "file": "index.html", "find": "<p>Try Again!</p>", "replace": "<p>¡Otra vez!</p>" },
+        { "file": "index.html", "find": "alert('Network error... Please try again.')", "replace": "console.warn('No se pudieron cargar los recursos')" }
+      ]
+    },
+    {
+      "id": "bloques",
+      "entry": "index.html",
+      "repo": "kidseek/tiny-tetris-land",
+      "branch": "main",
+      "commit": "acbe68a6edf79e603192a57a52cdd3e4671128de",
+      "license": "MIT",
+      "include": ["index.html", "script.js", "style.css", "LICENSE", "README.md"],
+      "translate": { "files": ["index.html", "script.js"], "map": "patches/bloques.es.json" },
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<link rel=\"preconnect\"[^>]*>\\s*", "replace": "", "all": true },
+        { "file": "index.html", "regex": true, "find": "<link href=\"https://fonts\\.googleapis\\.com[^>]*>", "replace": "" },
+        { "file": "index.html", "find": "<html lang=\"zh-CN\">", "replace": "<html lang=\"es\">" },
+        { "file": "script.js", "find": "(v.lang === 'zh-CN' || v.lang === 'zh_CN')", "replace": "(v.lang === 'es-ES' || v.lang === 'es_ES' || v.lang === 'es-MX')", "all": true },
+        { "file": "script.js", "find": "v.lang.startsWith('zh')", "replace": "v.lang.startsWith('es')" },
+        { "file": "script.js", "find": "utter.lang = 'zh-CN';", "replace": "utter.lang = 'es-ES';" }
+      ]
+    },
+    {
+      "id": "puzle",
+      "entry": "index.html",
+      "repo": "playjigsaw/play-jigsaw-puzzles-online",
+      "branch": "main",
+      "commit": "ec79bb5533534eb597bbd5c02d1d64c4a1503fe1",
+      "license": "MIT",
+      "include": ["index.html", "assets", "src", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<link rel=\"preconnect\"[^>]*>\\s*", "replace": "", "all": true },
+        { "file": "index.html", "regex": true, "find": "<link href=\"https://fonts\\.googleapis\\.com[^>]*>", "replace": "" },
+        { "file": "index.html", "find": "<html lang=\"en\">", "replace": "<html lang=\"es\">" },
+        { "file": "index.html", "find": ">Theme:</label>", "replace": ">Dibujo:</label>" },
+        { "file": "index.html", "find": "🏔️ Alpine Mountain Lake", "replace": "🏔️ Montaña" },
+        { "file": "index.html", "find": "🌅 Golden Sunset Beach", "replace": "🌅 Playa" },
+        { "file": "index.html", "find": "🌌 Northern Lights", "replace": "🌌 Cielo de noche" },
+        { "file": "index.html", "find": "🏰 Fairytale Castle", "replace": "🏰 Castillo" },
+        { "file": "index.html", "find": "<option value=\"cats\">🐱 Playful Kittens", "replace": "<option value=\"cats\" selected>🐱 Gatitos" },
+        { "file": "index.html", "regex": true, "find": "\\s*<option value=\"custom\">[^<]*</option>", "replace": "" },
+        { "file": "index.html", "find": ">Pieces:</label>", "replace": ">Piezas:</label>" },
+        { "file": "index.html", "find": "<option value=\"6\">6 pieces (Easy 2×3)", "replace": "<option value=\"6\" selected>6 piezas (fácil)" },
+        { "file": "index.html", "find": "<option value=\"12\" selected>12 pieces (Casual 3×4)", "replace": "<option value=\"12\">12 piezas" },
+        { "file": "index.html", "find": "24 pieces (Medium 4×6)", "replace": "24 piezas" },
+        { "file": "index.html", "find": "48 pieces (Hard 6×8)", "replace": "48 piezas" },
+        { "file": "index.html", "find": "<span>New Game</span>", "replace": "<span>Mezclar</span>" },
+        { "file": "index.html", "find": "<span>Preview</span>", "replace": "<span>Ver</span>" },
+        { "file": "index.html", "find": "<span>Ghost</span>", "replace": "<span>Guía</span>" },
+        { "file": "index.html", "find": "<span>Hint</span>", "replace": "<span>Pista</span>" },
+        { "file": "index.html", "find": ">Time:</span>", "replace": ">Tiempo:</span>" },
+        { "file": "index.html", "find": ">Progress:</span>", "replace": ">Piezas:</span>" },
+        { "file": "index.html", "find": ">Moves:</span>", "replace": ">Movimientos:</span>" },
+        { "file": "index.html", "find": "<span>Reference Image</span>", "replace": "<span>Dibujo</span>" },
+        { "file": "index.html", "find": "<h2>Puzzle Completed!</h2>", "replace": "<h2>¡Puzle terminado!</h2>" },
+        { "file": "index.html", "find": "Outstanding job! You solved the puzzle with great precision.", "replace": "¡Muy bien! ¡Lo has conseguido!" },
+        { "file": "index.html", "find": ">Completion Time</span>", "replace": ">Tiempo</span>" },
+        { "file": "index.html", "find": ">Total Moves</span>", "replace": ">Movimientos</span>" },
+        { "file": "index.html", "find": ">Pieces Assembled</span>", "replace": ">Piezas</span>" },
+        { "file": "index.html", "find": ">Play Another Puzzle</button>", "replace": ">¡Otra vez!</button>" },
+        { "file": "src/main.js", "find": "this.loadTheme('nature');", "replace": "this.board.setDimensions(2, 3);\n    this.loadTheme('cats');" }
+      ]
+    },
+    {
+      "id": "burbujas",
+      "entry": "bubble-shooter.html",
+      "repo": "rembound/Bubble-Shooter-HTML5",
+      "branch": "master",
+      "commit": "2e62806ef5d7471f77566bc1cf6f2ac17a584c4d",
+      "license": "MIT",
+      "include": ["bubble-shooter.html", "bubble-shooter-example.js", "bubble-sprites.png", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "bubble-shooter.html", "find": "<title>Rembound.com Example</title>", "replace": "<title>Burbujas</title>" },
+        { "file": "bubble-shooter-example.js", "find": "\"Bubble Shooter Example - Rembound.com\"", "replace": "\"¡Burbujas!\"" },
+        { "file": "bubble-shooter-example.js", "find": "\"Fps: \" + fps", "replace": "\"\"" },
+        { "file": "bubble-shooter-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
+        { "file": "bubble-shooter-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
+        { "file": "bubble-shooter-example.js", "find": "\"Click to start\"", "replace": "\"Toca para jugar\"" }
+      ]
+    },
+    {
+      "id": "colores",
+      "entry": "match3.html",
+      "repo": "rembound/Match-3-Game-HTML5",
+      "branch": "master",
+      "commit": "be7df47403668623ed40073fa87d39d9b4c7da2d",
+      "license": "MIT",
+      "include": ["match3.html", "match3-example.js", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "match3.html", "find": "<title>Rembound.com Example</title>", "replace": "<title>Colores</title>" },
+        { "file": "match3-example.js", "find": "\"Match3 Example - Rembound.com\"", "replace": "\"¡Colores!\"" },
+        { "file": "match3-example.js", "find": "\"Fps: \" + fps", "replace": "\"\"" },
+        { "file": "match3-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
+        { "file": "match3-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
+        { "file": "match3-example.js", "find": "text: \"New Game\"", "replace": "text: \"Nuevo juego\"" },
+        { "file": "match3-example.js", "find": "text: \"Show Moves\"", "replace": "text: \"Ver pistas\"" },
+        { "file": "match3-example.js", "find": "text: \"Enable AI Bot\"", "replace": "text: \"Robot: no\"" },
+        { "file": "match3-example.js", "find": "(showmoves?\"Hide\":\"Show\") + \" Moves\"", "replace": "(showmoves?\"Sin\":\"Ver\") + \" pistas\"" },
+        { "file": "match3-example.js", "find": "(aibot?\"Disable\":\"Enable\") + \" AI Bot\"", "replace": "\"Robot: \" + (aibot?\"sí\":\"no\")" }
+      ]
+    },
+    {
+      "id": "dino",
+      "entry": "index.html",
+      "repo": "wayou/t-rex-runner",
+      "branch": "gh-pages",
+      "commit": "5455bfa408ec6b707c7300ff194b7390733a766d",
+      "license": "BSD-3-Clause (The Chromium Authors)",
+      "include": ["index.html", "index.css", "index.js", "assets/default_100_percent", "assets/default_200_percent", "LICENSE", "README.md"],
+      "patches": [
+        { "file": "index.html", "regex": true, "find": "<link href=\"https://fonts\\.googleapis\\.com[^>]*>", "replace": "" },
+        { "file": "index.html", "find": "<title >chrome easter egg: t-rex runner</title>", "replace": "<title>Dino</title>" },
+        { "file": "index.html", "find": ">Press Space to start</h1>", "replace": ">¡Toca para saltar!</h1>" },
+        { "file": "index.js", "find": "e.type == Runner.events.TOUCHSTART)) {", "replace": "e.type == Runner.events.TOUCHSTART || e.type == Runner.events.MOUSEDOWN)) {" },
+        { "file": "index.js", "find": "ACCELERATION: 0.001,", "replace": "ACCELERATION: 0.0004," },
+        { "file": "index.js", "find": "MAX_SPEED: 13,", "replace": "MAX_SPEED: 9," },
+        { "file": "index.js", "find": "        SPEED: 6,", "replace": "        SPEED: 4.5," }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+/* Burbujas: el tablero (628x628) se escala para llenar la pantalla. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #cfd8dc;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#viewport {
+  width: min(100vw, 100vh);
+  height: min(100vw, 100vh);
+}

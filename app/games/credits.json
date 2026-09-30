@@ -1,0 +1,62 @@
+[
+    {
+        "id":  "memoria",
+        "repo":  "bence-toth/daniel-memory-game",
+        "commit":  "374eda83f4c743aa7d18e57ad78b4271e7ebafab",
+        "license":  "MIT (iconos de game-icons.net: CC BY 3.0)"
+    },
+    {
+        "id":  "pintar",
+        "repo":  "vikrum/kiddopaint",
+        "commit":  "140ca297683db82daedccae321b519f10f3fde0d",
+        "license":  "MIT"
+    },
+    {
+        "id":  "piano",
+        "repo":  "eagnespuerto/librepiano",
+        "commit":  "4098ef1028f48730a1e8f088a20dddf65972db91",
+        "license":  "MIT"
+    },
+    {
+        "id":  "topos",
+        "repo":  "JivkoJelev91/Whack-A-Mole",
+        "commit":  "20536267bf34e040f03b3847097fb59fdcff3dae",
+        "license":  "MIT"
+    },
+    {
+        "id":  "torre",
+        "repo":  "iamkun/tower_game",
+        "commit":  "c6fa84afe179b661fa71cf7cc8788d0c47ca2875",
+        "license":  "MIT"
+    },
+    {
+        "id":  "bloques",
+        "repo":  "kidseek/tiny-tetris-land",
+        "commit":  "acbe68a6edf79e603192a57a52cdd3e4671128de",
+        "license":  "MIT"
+    },
+    {
+        "id":  "puzle",
+        "repo":  "playjigsaw/play-jigsaw-puzzles-online",
+        "commit":  "ec79bb5533534eb597bbd5c02d1d64c4a1503fe1",
+        "license":  "MIT"
+    },
+    {
+        "id":  "burbujas",
+        "repo":  "rembound/Bubble-Shooter-HTML5",
+        "commit":  "2e62806ef5d7471f77566bc1cf6f2ac17a584c4d",
+        "license":  "MIT"
+    },
+    {
+        "id":  "colores",
+        "repo":  "rembound/Match-3-Game-HTML5",
+        "commit":  "be7df47403668623ed40073fa87d39d9b4c7da2d",
+        "license":  "MIT"
+    },
+    {
+        "id":  "dino",
+        "repo":  "wayou/t-rex-runner",
+        "commit":  "5455bfa408ec6b707c7300ff194b7390733a766d",
+        "license":  "BSD-3-Clause (The Chromium Authors)"
+    }
+]

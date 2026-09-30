@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>BabyGames</title>
+  <link rel="icon" href="img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/host.css">
+</head>
+<body>
+  <!-- Pantalla de inicio -->
+  <section id="screen-start" class="screen active" aria-label="Inicio">
+    <div class="sky" aria-hidden="true">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
+    <h1 class="logo" aria-label="BabyGames"></h1>
+    <div class="mascot mascot-big" data-mascot aria-hidden="true"></div>
+    <button id="btn-play" class="play-button" type="button">
+      <span class="play-icon" aria-hidden="true">▶</span> ¡A jugar!
+    </button>
+  </section>
+
+  <!-- Menú en cuadrícula -->
+  <section id="screen-menu" class="screen" aria-label="Elige un juego">
+    <header class="topbar">
+      <button id="menu-mascot" class="mascot mascot-small" data-mascot type="button" aria-label="Bubu"></button>
+      <div class="star-counter" aria-label="Estrellas">
+        <span class="star-icon" aria-hidden="true">⭐</span>
+        <span id="star-count">0</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <button id="btn-album" class="round-btn" type="button" aria-label="Mis pegatinas">📒</button>
+      <button id="btn-adult" class="round-btn hold-btn" type="button" aria-label="Mayores (mantén pulsado)">
+        <svg class="hold-ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" /></svg>
+        <span aria-hidden="true">🔒</span>
+      </button>
+    </header>
+    <main id="grid" class="grid"></main>
+    <div id="balloons" class="balloons" aria-hidden="true"></div>
+  </section>
+
+  <!-- Álbum de pegatinas -->
+  <section id="screen-album" class="screen" aria-label="Mis pegatinas">
+    <header class="topbar">
+      <button id="btn-album-back" class="round-btn" type="button" aria-label="Volver">⬅</button>
+      <h2 class="album-title">Mis pegatinas</h2>
+      <div class="topbar-spacer"></div>
+      <div class="star-counter"><span class="star-icon" aria-hidden="true">⭐</span><span id="album-count">0 / 10</span></div>
+    </header>
+    <div id="album" class="album"></div>
+  </section>
+
+  <!-- Juego abierto -->
+  <section id="screen-game" class="screen" aria-label="Jugando">
+    <iframe id="game-frame" title="Juego" allow="autoplay; fullscreen"></iframe>
+    <div id="game-loading" class="game-loading" aria-hidden="true">
+      <div class="loading-emoji"></div>
+    </div>
+    <button id="btn-home" class="home-btn hold-btn" type="button" aria-label="Volver al menú (mantén pulsado)">
+      <svg class="hold-ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" /></svg>
+      <span aria-hidden="true">🏠</span>
+    </button>
+    <div id="home-hint" class="home-hint" aria-hidden="true">Mantén pulsado</div>
+  </section>
+
+  <!-- Celebración (pegatina nueva / estrella) -->
+  <div id="celebration" class="overlay celebration" hidden>
+    <div class="celebration-card">
+      <div id="celebration-sticker" class="sticker big"></div>
+      <p id="celebration-text"></p>
+    </div>
+  </div>
+
+  <!-- Rincón de mayores -->
+  <div id="adult-panel" class="overlay" hidden>
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+      <header class="panel-header">
+        <h2 id="panel-title">Rincón de mayores</h2>
+        <button id="panel-close" class="round-btn small" type="button" aria-label="Cerrar">✕</button>
+      </header>
+
+      <label class="panel-row">
+        <span>🔊 Volumen</span>
+        <input id="set-volume" type="range" min="0" max="100" step="5">
+      </label>
+      <label class="panel-row">
+        <span>🗣️ Voz de Bubu <small id="voice-note"></small></span>
+        <input id="set-voice" type="checkbox" class="switch">
+      </label>
+      <label class="panel-row">
+        <span>🎈 Globos en el menú</span>
+        <input id="set-balloons" type="checkbox" class="switch">
+      </label>
+
+      <div class="panel-actions">
+        <button id="btn-fullscreen" class="pill" type="button">⛶ Pantalla completa</button>
+        <button id="btn-credits" class="pill" type="button">📜 Créditos y licencias</button>
+        <button id="btn-reset" class="pill" type="button">♻️ Borrar progreso</button>
+        <button id="btn-exit" class="pill danger" type="button">🚪 Salir de BabyGames</button>
+      </div>
+
+      <div id="credits" class="credits" hidden></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/host.js"></script>
+</body>
+</html>

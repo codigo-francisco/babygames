@@ -1,0 +1,45 @@
+# ---- Resultados de compilación (se regeneran con tools/build.ps1) ----
+dist/
+[Bb]in/
+[Oo]bj/
+*.pdb
+
+# ---- Caché de repos clonados por tools/fetch-games.ps1 ----
+tools/.cache/
+
+# Los juegos ya parcheados en app/games/ SÍ se versionan: así el proyecto
+# compila sin internet aunque algún repo original desaparezca. Si prefieres
+# regenerarlos siempre con fetch-games.ps1, descomenta la línea siguiente:
+# app/games/
+
+# ---- Visual Studio / Rider / VS Code ----
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+.vscode/*
+!.vscode/extensions.json
+
+# ---- NuGet ----
+*.nupkg
+packages/
+
+# ---- Python (tools/dev-server.py) ----
+__pycache__/
+*.py[cod]
+
+# ---- Claude Code: se comparte launch.json, no los ajustes personales ----
+.claude/settings.local.json
+
+# ---- Sistema operativo ----
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# ---- Temporales ----
+*.log
+*.tmp
+~$*

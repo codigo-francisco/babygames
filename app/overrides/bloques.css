@@ -1,0 +1,4 @@
+/* Bloques: la pantalla completa la gestiona BabyGames. */
+#fullscreenToggleBtn {
+  display: none !important;
+}

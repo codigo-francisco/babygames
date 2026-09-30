@@ -1,0 +1,38 @@
+/* Topos: fuente local, fondo a pantalla completa y botones más grandes. */
+html {
+  background: #ffc600;
+}
+
+body {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 6rem;
+  font-weight: 700;
+  color: #5d4037;
+}
+
+#btnContainer {
+  align-items: center;
+}
+
+.start {
+  max-width: 80%;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+#bestResult ul {
+  list-style: none;
+  padding: 0;
+}
+
+.scores {
+  font-size: 3em;
+}
+
+.mole {
+  cursor: pointer;
+}

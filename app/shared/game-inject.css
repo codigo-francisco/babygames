@@ -1,0 +1,28 @@
+/* Ajustes comunes para todos los juegos dentro de BabyGames (modo tablet). */
+@font-face {
+  font-family: 'Fredoka';
+  src: url('../fonts/Fredoka.ttf') format('truetype');
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+canvas {
+  touch-action: none;
+}
+
+img {
+  -webkit-user-drag: none;
+}

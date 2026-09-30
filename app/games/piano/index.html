@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LibrePiano</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #eee;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 2em;
+    background: linear-gradient(90deg, #f5d76e, #e8b923);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+  }
+  .tagline { color: #aaa; font-size: 0.9em; margin-top: 4px; }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  label { font-size: 0.9em; color: #ccc; }
+  select, button {
+    background: #2a3a5e;
+    color: #eee;
+    border: 1px solid #3a4a6e;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+  button:hover, select:hover { background: #3a4a6e; }
+  button:active { background: #1a2a4e; }
+  .piano-wrap {
+    overflow-x: auto;
+    background: #0a0a1a;
+    padding: 20px 12px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+  }
+  .piano {
+    position: relative;
+    margin: 0 auto;
+    width: max-content;
+    user-select: none;
+    height: 200px;
+  }
+  .white-row {
+    display: flex;
+    height: 100%;
+  }
+  .key {
+    position: relative;
+    cursor: pointer;
+    transition: background 0.05s;
+    touch-action: none;
+  }
+  .key.white {
+    width: 48px;
+    height: 200px;
+    background: linear-gradient(180deg, #fafafa 0%, #e0e0e0 100%);
+    border: 1px solid #888;
+    border-radius: 0 0 5px 5px;
+    margin-right: -1px;
+    z-index: 1;
+  }
+  .key.white.active {
+    background: linear-gradient(180deg, #f5d76e 0%, #e8b923 100%);
+  }
+  .key.black {
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 125px;
+    background: linear-gradient(180deg, #333 0%, #000 100%);
+    border: 1px solid #000;
+    border-radius: 0 0 4px 4px;
+    z-index: 2;
+  }
+  .key.black.active {
+    background: linear-gradient(180deg, #8a6510 0%, #5a4510 100%);
+  }
+  .label {
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    pointer-events: none;
+  }
+  .key.white .label { color: #555; }
+  .key.black .label { color: #ccc; }
+  .key .kb {
+    position: absolute;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9px;
+    font-weight: bold;
+    pointer-events: none;
+  }
+  .key.white .kb { color: #888; }
+  .key.black .kb { color: #aaa; }
+  .pdf-section {
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 8px;
+  }
+  .pdf-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  #pdf-container {
+    max-height: 600px;
+    overflow-y: auto;
+    background: #333;
+    border-radius: 4px;
+    text-align: center;
+    padding: 10px;
+    display: none;
+  }
+  #pdf-container canvas {
+    display: block;
+    margin: 0 auto 10px;
+    max-width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .hint {
+    text-align: center;
+    color: #888;
+    font-size: 0.85em;
+    margin-top: 8px;
+  }
+  @media (max-width: 600px) {
+    h1 { font-size: 1.5em; }
+    .key.white { width: 38px; height: 160px; }
+    .key.black { width: 22px; height: 100px; }
+    .piano { height: 160px; }
+  }
+</style>
+<link rel="stylesheet" href="../../shared/game-inject.css"><link rel="stylesheet" href="../../overrides/piano.css"></head>
+<body>
+<header>
+  <h1>LibrePiano</h1>
+  <div class="tagline">Free virtual piano — play with your keyboard or touch</div>
+</header>
+
+<div class="controls">
+  <div class="control-group">
+    <label for="instrument">Sound:</label>
+    <select id="instrument">
+      <option value="piano">Piano</option>
+      <option value="organ">Organ</option>
+      <option value="harpsichord">Harpsichord</option>
+      <option value="electric">Electric Piano</option>
+      <option value="strings">Strings</option>
+      <option value="sine">Sine</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>Octave shift:</label>
+    <button id="oct-down" aria-label="Shift octave down">−</button>
+    <span id="oct-display" style="min-width:24px;text-align:center;">0</span>
+    <button id="oct-up" aria-label="Shift octave up">+</button>
+  </div>
+  <div class="control-group">
+    <label for="show-labels">Labels:</label>
+    <select id="show-labels">
+      <option value="both">Notes + Keys</option>
+      <option value="notes">Notes only</option>
+      <option value="keys">Keys only</option>
+      <option value="none">None</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label for="row-order">Bottom row plays:</label>
+    <select id="row-order">
+      <option value="low">Lower octave</option>
+      <option value="high">Higher octave</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label for="volume">Volume:</label>
+    <input type="range" id="volume" min="0" max="100" value="50">
+  </div>
+</div>
+
+<div class="piano-wrap">
+  <div class="piano" id="piano"></div>
+</div>
+<div class="hint">Three keyboard rows span three octaves (Z, Q, I rows). Use ← / → to shift octaves. Use ↑ / ↓ to swap whether the bottom row plays the low or high octave.</div>
+
+<div class="pdf-section">
+  <div class="pdf-header">
+    <label>Sheet music (PDF):</label>
+    <input type="file" id="pdf-input" accept="application/pdf">
+    <button id="pdf-clear">Clear</button>
+    <span id="pdf-status" style="color:#aaa;font-size:0.85em;"></span>
+  </div>
+  <div id="pdf-container"></div>
+</div>
+
+
+<script>
+(() => {
+  const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const WHITE_PATTERN = [0,2,4,5,7,9,11];
+  const BLACK_OFFSETS = {0:1, 1:3, 3:6, 4:8, 5:10};
+
+  // Same-column pairs across the top letter row (Q W E R T Y U I O P) and
+  // the bottom letter row (Z X C V B N M , . /), plus their flanking black
+  // keys on the number / home rows. When the bottom row is toggled to play
+  // high, each pair swaps note assignments so the entire top region (Q-to-{)
+  // trades with the entire bottom region (Z-to-/).
+  const SWAP_PAIRS = [
+    ['KeyZ', 'KeyQ'],  ['KeyS', 'Digit2'],
+    ['KeyX', 'KeyW'],  ['KeyD', 'Digit3'],
+    ['KeyC', 'KeyE'],
+    ['KeyV', 'KeyR'],
+    ['KeyB', 'KeyT'],  ['KeyH', 'Digit6'],
+    ['KeyN', 'KeyY'],  ['KeyJ', 'Digit7'],
+    ['KeyM', 'KeyU'],
+    ['Comma', 'KeyI'], ['KeyL', 'Digit9'],
+    ['Period', 'KeyO'],['Semicolon', 'Digit0'],
+    ['Slash', 'KeyP'],
+  ];
+
+  // Keyboard rows: 3 octaves of keys. Third entry per key is the row group
+  // ('bot' = bottom Z row, 'mid' = Q row, 'bridge' = bottom-right bridge keys,
+  // 'top' = I row).
+  const KEY_MAP = [
+    // Bottom row (Z row)
+    ['KeyZ','C','bot'],['KeyS','C#','bot'],['KeyX','D','bot'],['KeyD','D#','bot'],['KeyC','E','bot'],
+    ['KeyV','F','bot'],['KeyG','F#','bot'],['KeyB','G','bot'],['KeyH','G#','bot'],['KeyN','A','bot'],['KeyJ','A#','bot'],['KeyM','B','bot'],
+    // Bridge keys at the bottom-right: extend the bottom row up by C-E so the
+    // user can reach C/C#/D/D#/E from the bottom row. Letter/punct on the
+    // bottom row = white; home-row key above each gap = black. These follow
+    // the bottom-row swap: they play one octave above the bot group, so
+    // bottom-low → middle's C-E, bottom-high → high-side gap stays covered.
+    ['Comma','C','bridge'],['KeyL','C#','bridge'],['Period','D','bridge'],['Semicolon','D#','bridge'],['Slash','E','bridge'],
+    // Middle row (Q row) — F4 through E5. Letters = white keys, numbers above
+    // each gap = black keys. T Y U cross into the next octave (delta=1).
+    ['KeyQ','F','mid',0],['Digit2','F#','mid',0],['KeyW','G','mid',0],['Digit3','G#','mid',0],
+    ['KeyE','A','mid',0],['Digit4','A#','mid',0],['KeyR','B','mid',0],
+    ['KeyT','C','mid',1],['Digit6','C#','mid',1],['KeyY','D','mid',1],['Digit7','D#','mid',1],['KeyU','E','mid',1],
+    // Top row (I row) — starts at F5 so T Y U (C5 D5 E5 on the Q row) and
+    // I O P (F5 G5 A5) play different notes. Continues into octave 6 via delta.
+    ['KeyI','F','top',0],['Digit9','F#','top',0],['KeyO','G','top',0],['Digit0','G#','top',0],
+    ['KeyP','A','top',0],['Minus','A#','top',0],['BracketLeft','B','top',0],
+    ['BracketRight','C','top',1],['Equal','C#','top',1],['Backslash','D','top',1]
+  ];
+
+  let baseOctave = 4; // middle row starts at C4
+  let octaveShift = 0;
+  let instrument = 'piano';
+  let volume = 0.5;
+  let labelMode = 'both';
+  let bottomRowLow = true; // true: Z row = lower; false: Z row = higher
+
+  // Build mapping with octaves. First assign each key its default note as
+  // if bottomRowLow=true. Then, if the user has flipped the bottom row to
+  // play high, swap paired entries so the entire top and bottom physical
+  // regions trade notes (whites and blacks together).
+  function buildKeyMap() {
+    const map = {};
+    KEY_MAP.forEach(([code, note, group, octDelta = 0]) => {
+      let row;
+      if (group === 'bot') row = -1;
+      else if (group === 'top') row = 1;
+      else row = 0;
+      const noteIdx = NOTE_NAMES.indexOf(note);
+      const midi = (baseOctave + row + octaveShift + octDelta) * 12 + noteIdx + 12;
+      map[code] = { note, midi, row };
+    });
+    if (!bottomRowLow) {
+      SWAP_PAIRS.forEach(([bot, top]) => {
+        if (map[bot] && map[top]) {
+          const tmp = map[bot];
+          map[bot] = map[top];
+          map[top] = tmp;
+        }
+      });
+    }
+    return map;
+  }
+  let keyMap = buildKeyMap();
+
+  // Audio
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+  const masterGain = audioCtx.createGain();
+  masterGain.gain.value = volume;
+  masterGain.connect(audioCtx.destination);
+
+  const activeVoices = new Map(); // midi -> {oscs, gain, stop}
+
+  function midiToFreq(midi) {
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  function playNote(midi) {
+    if (activeVoices.has(midi)) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const freq = midiToFreq(midi);
+    const now = audioCtx.currentTime;
+    const gain = audioCtx.createGain();
+    gain.connect(masterGain);
+
+    const oscs = [];
+    let attack = 0.005, decay = 0.3, sustain = 0.3, release = 0.4;
+
+    if (instrument === 'piano') {
+      const o1 = audioCtx.createOscillator(); o1.type = 'triangle'; o1.frequency.value = freq;
+      const o2 = audioCtx.createOscillator(); o2.type = 'sine'; o2.frequency.value = freq * 2;
+      const g2 = audioCtx.createGain(); g2.gain.value = 0.15;
+      o1.connect(gain); o2.connect(g2); g2.connect(gain);
+      oscs.push(o1, o2);
+      attack = 0.005; decay = 0.5; sustain = 0.25; release = 0.5;
+    } else if (instrument === 'organ') {
+      [1, 2, 3, 4].forEach((mult, i) => {
+        const o = audioCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq * mult;
+        const g = audioCtx.createGain(); g.gain.value = 0.25 / (i + 1);
+        o.connect(g); g.connect(gain);
+        oscs.push(o);
+      });
+      attack = 0.02; decay = 0.05; sustain = 0.8; release = 0.1;
+    } else if (instrument === 'harpsichord') {
+      const o1 = audioCtx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = freq;
+      const o2 = audioCtx.createOscillator(); o2.type = 'square'; o2.frequency.value = freq * 2;
+      const g2 = audioCtx.createGain(); g2.gain.value = 0.2;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 4000; filter.Q.value = 2;
+      o1.connect(filter); o2.connect(g2); g2.connect(filter); filter.connect(gain);
+      oscs.push(o1, o2);
+      attack = 0.001; decay = 0.8; sustain = 0.0; release = 0.3;
+    } else if (instrument === 'electric') {
+      const o1 = audioCtx.createOscillator(); o1.type = 'sine'; o1.frequency.value = freq;
+      const o2 = audioCtx.createOscillator(); o2.type = 'sine'; o2.frequency.value = freq * 3;
+      const g2 = audioCtx.createGain(); g2.gain.value = 0.1;
+      o1.connect(gain); o2.connect(g2); g2.connect(gain);
+      oscs.push(o1, o2);
+      attack = 0.003; decay = 0.4; sustain = 0.3; release = 0.6;
+    } else if (instrument === 'strings') {
+      const o1 = audioCtx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = freq;
+      const o2 = audioCtx.createOscillator(); o2.type = 'sawtooth'; o2.frequency.value = freq * 1.005;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 2500;
+      o1.connect(filter); o2.connect(filter); filter.connect(gain);
+      oscs.push(o1, o2);
+      attack = 0.15; decay = 0.1; sustain = 0.7; release = 0.5;
+    } else {
+      const o = audioCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
+      o.connect(gain);
+      oscs.push(o);
+    }
+
+    const peakGain = 0.35;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(peakGain, now + attack);
+    gain.gain.linearRampToValueAtTime(peakGain * sustain, now + attack + decay);
+
+    oscs.forEach(o => o.start(now));
+
+    const voice = {
+      oscs, gain, release,
+      stop() {
+        const t = audioCtx.currentTime;
+        gain.gain.cancelScheduledValues(t);
+        gain.gain.setValueAtTime(gain.gain.value, t);
+        gain.gain.linearRampToValueAtTime(0, t + release);
+        oscs.forEach(o => o.stop(t + release + 0.05));
+      }
+    };
+    activeVoices.set(midi, voice);
+  }
+
+  function stopNote(midi) {
+    const voice = activeVoices.get(midi);
+    if (!voice) return;
+    voice.stop();
+    activeVoices.delete(midi);
+  }
+
+  // Build piano UI - 3 octaves visible based on baseOctave
+  const piano = document.getElementById('piano');
+  const keyEls = {}; // midi -> element
+
+  function buildPiano() {
+    piano.innerHTML = '';
+    Object.keys(keyEls).forEach(k => delete keyEls[k]);
+    const startOct = baseOctave + octaveShift - 1;
+
+    const whiteRow = document.createElement('div');
+    whiteRow.className = 'white-row';
+    piano.appendChild(whiteRow);
+
+    // Read actual white key width (responsive)
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+    const whiteW = isMobile ? 38 : 48;
+    const blackW = isMobile ? 22 : 28;
+
+    // Standard offsets: black key left edge relative to the boundary between
+    // the two flanking white keys. Negative = shifted toward the left white.
+    // Order within octave: C#, D#, F#, G#, A#
+    const blackBias = {
+      1: -0.30,   // C# leans toward C
+      3:  0.30,   // D# leans toward D
+      6: -0.35,   // F# leans toward F
+      8:  0.0,    // G# centered
+     10:  0.35    // A# leans toward B
+    };
+    // boundary index after white note (C=after 0, D=after 1, F=after 3, G=after 4, A=after 5)
+    const whiteIdxBefore = {1:0, 3:1, 6:3, 8:4, 10:5};
+
+    let whiteCount = 0;
+    for (let o = 0; o < 3; o++) {
+      const oct = startOct + o;
+      for (let w = 0; w < 7; w++) {
+        const noteIdx = WHITE_PATTERN[w];
+        const midi = (oct + 1) * 12 + noteIdx;
+        const el = document.createElement('div');
+        el.className = 'key white';
+        el.dataset.midi = midi;
+        const noteName = NOTE_NAMES[noteIdx] + oct;
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = noteName;
+        el.appendChild(label);
+        const kb = document.createElement('div');
+        kb.className = 'kb';
+        el.appendChild(kb);
+        attachKey(el, midi);
+        whiteRow.appendChild(el);
+        keyEls[midi] = el;
+        whiteCount++;
+      }
+    }
+
+    // Place black keys absolutely over the white row
+    for (let o = 0; o < 3; o++) {
+      const oct = startOct + o;
+      const octaveWhiteStart = o * 7; // white index of C in this octave
+      Object.keys(blackBias).forEach(k => {
+        const noteIdx = +k;
+        const wi = octaveWhiteStart + whiteIdxBefore[noteIdx];
+        const boundaryX = (wi + 1) * whiteW - wi; // account for -1px margin overlap
+        const bias = blackBias[noteIdx];
+        const leftX = boundaryX - blackW / 2 + bias * blackW;
+        const midi = (oct + 1) * 12 + noteIdx;
+        const bEl = document.createElement('div');
+        bEl.className = 'key black';
+        bEl.dataset.midi = midi;
+        bEl.style.left = leftX + 'px';
+        const bName = NOTE_NAMES[noteIdx] + oct;
+        const bLabel = document.createElement('div');
+        bLabel.className = 'label';
+        bLabel.textContent = bName;
+        bEl.appendChild(bLabel);
+        const bKb = document.createElement('div');
+        bKb.className = 'kb';
+        bEl.appendChild(bKb);
+        attachKey(bEl, midi);
+        piano.appendChild(bEl);
+        keyEls[midi] = bEl;
+      });
+    }
+
+    updateLabels();
+  }
+  window.addEventListener('resize', () => buildPiano());
+
+  function attachKey(el, midi) {
+    const down = (e) => {
+      e.preventDefault();
+      playNote(midi);
+      el.classList.add('active');
+    };
+    const up = (e) => {
+      e.preventDefault();
+      stopNote(midi);
+      el.classList.remove('active');
+    };
+    el.addEventListener('mousedown', down);
+    el.addEventListener('mouseup', up);
+    el.addEventListener('mouseleave', (e) => {
+      if (activeVoices.has(midi)) { stopNote(midi); el.classList.remove('active'); }
+    });
+    el.addEventListener('touchstart', down, { passive: false });
+    el.addEventListener('touchend', up, { passive: false });
+    el.addEventListener('touchcancel', up, { passive: false });
+  }
+
+  function updateLabels() {
+    // Map keyboard codes to midis
+    keyMap = buildKeyMap();
+    const codeByMidi = {};
+    Object.entries(keyMap).forEach(([code, info]) => {
+      if (!(info.midi in codeByMidi)) codeByMidi[info.midi] = code;
+    });
+    document.querySelectorAll('.key').forEach(el => {
+      const midi = +el.dataset.midi;
+      const label = el.querySelector('.label');
+      const kb = el.querySelector('.kb');
+      const showNote = labelMode === 'both' || labelMode === 'notes';
+      const showKey = labelMode === 'both' || labelMode === 'keys';
+      label.style.display = showNote ? '' : 'none';
+      const code = codeByMidi[midi];
+      let kbText = '';
+      if (code) {
+        if (code.startsWith('Key')) kbText = code.slice(3);
+        else if (code.startsWith('Digit')) kbText = code.slice(5);
+        else if (code === 'BracketLeft') kbText = '[';
+        else if (code === 'BracketRight') kbText = ']';
+        else if (code === 'Equal') kbText = '+';
+        else if (code === 'Minus') kbText = '-';
+        else if (code === 'Comma') kbText = ',';
+        else if (code === 'Period') kbText = '.';
+        else if (code === 'Slash') kbText = '/';
+        else if (code === 'Quote') kbText = "'";
+        else if (code === 'Semicolon') kbText = ';';
+        else if (code === 'Backslash') kbText = '\\';
+      }
+      kb.textContent = kbText;
+      kb.style.display = (showKey && kbText) ? '' : 'none';
+    });
+  }
+
+  // Keyboard handlers
+  const pressed = new Set();
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      if (e.repeat) return;
+      if (octaveShift < 3) { octaveShift++; octDisplay.textContent = octaveShift; buildPiano(); }
+      return;
+    }
+    if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      if (e.repeat) return;
+      if (octaveShift > -3) { octaveShift--; octDisplay.textContent = octaveShift; buildPiano(); }
+      return;
+    }
+    if (e.code === 'ArrowDown' || e.code === 'ArrowUp') {
+      e.preventDefault();
+      if (e.repeat) return;
+      const wantLow = e.code === 'ArrowDown';
+      if (wantLow === bottomRowLow) return;
+      bottomRowLow = wantLow;
+      const sel = document.getElementById('row-order');
+      sel.value = bottomRowLow ? 'low' : 'high';
+      updateLabels();
+      return;
+    }
+    if (e.repeat) return;
+    const info = keyMap[e.code];
+    if (!info) return;
+    e.preventDefault();
+    if (pressed.has(e.code)) return;
+    pressed.add(e.code);
+    playNote(info.midi);
+    const el = keyEls[info.midi];
+    if (el) el.classList.add('active');
+  });
+  document.addEventListener('keyup', (e) => {
+    const info = keyMap[e.code];
+    if (!info) return;
+    pressed.delete(e.code);
+    stopNote(info.midi);
+    const el = keyEls[info.midi];
+    if (el) el.classList.remove('active');
+  });
+
+  // Controls
+  document.getElementById('instrument').addEventListener('change', (e) => {
+    instrument = e.target.value;
+  });
+  document.getElementById('volume').addEventListener('input', (e) => {
+    volume = e.target.value / 100;
+    masterGain.gain.value = volume;
+  });
+  document.getElementById('show-labels').addEventListener('change', (e) => {
+    labelMode = e.target.value;
+    updateLabels();
+  });
+  document.getElementById('row-order').addEventListener('change', (e) => {
+    bottomRowLow = e.target.value === 'low';
+    updateLabels();
+  });
+  const octDisplay = document.getElementById('oct-display');
+  document.getElementById('oct-down').addEventListener('click', () => {
+    if (octaveShift > -3) { octaveShift--; octDisplay.textContent = octaveShift; buildPiano(); }
+  });
+  document.getElementById('oct-up').addEventListener('click', () => {
+    if (octaveShift < 3) { octaveShift++; octDisplay.textContent = octaveShift; buildPiano(); }
+  });
+
+  buildPiano();
+
+  // PDF viewer
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  const pdfInput = document.getElementById('pdf-input');
+  const pdfContainer = document.getElementById('pdf-container');
+  const pdfStatus = document.getElementById('pdf-status');
+  document.getElementById('pdf-clear').addEventListener('click', () => {
+    pdfContainer.innerHTML = '';
+    pdfContainer.style.display = 'none';
+    pdfInput.value = '';
+    pdfStatus.textContent = '';
+  });
+  pdfInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file || !window.pdfjsLib) return;
+    pdfStatus.textContent = 'Loading...';
+    pdfContainer.innerHTML = '';
+    pdfContainer.style.display = 'block';
+    try {
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      pdfStatus.textContent = `${file.name} (${pdf.numPages} pages)`;
+      for (let p = 1; p <= pdf.numPages; p++) {
+        const page = await pdf.getPage(p);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        pdfContainer.appendChild(canvas);
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+      }
+    } catch (err) {
+      pdfStatus.textContent = 'Error: ' + err.message;
+    }
+  });
+})();
+</script>
+<script src="../../overrides/piano.js"></script></body>
+</html>

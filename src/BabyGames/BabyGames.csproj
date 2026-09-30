@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- .NET Framework 4.8 viene incluido en Windows 10/11: no hay que instalar nada. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>BabyGames</RootNamespace>
+    <AssemblyName>BabyGames</AssemblyName>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.0.0</Version>
+    <Product>BabyGames</Product>
+    <Description>Juegos para peques de 2 a 5 años</Description>
+    <Copyright>BabyGames</Copyright>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="app.ico" LogicalName="BabyGames.app.ico" />
+    <!-- El juego web (app\) se copia junto al .exe. -->
+    <Content Include="..\..\app\**\*" LinkBase="app" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
