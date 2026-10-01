@@ -9,7 +9,7 @@ export const GAMES = [
   },
   {
     id: 'pintar', name: 'Pintar', emoji: '🎨', say: '¡A pintar!',
-    colors: ['#ffd54f', '#ff9f1c'], entry: 'games/pintar/index.html', home: 'right',
+    colors: ['#ffd54f', '#ff9f1c'], entry: 'games/pintar/index.html',
     author: 'Vikrum Nijjar', repo: 'vikrum/kiddopaint',
   },
   {

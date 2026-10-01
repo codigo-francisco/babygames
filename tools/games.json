@@ -69,7 +69,11 @@
       "patches": [
         { "file": "index.html", "regex": true, "find": "<script[^>]*googletagmanager[^>]*></script>\\s*<script>[\\s\\S]*?</script>", "replace": "" },
         { "file": "index.html", "find": "<p>Try Again!</p>", "replace": "<p>¡Otra vez!</p>" },
-        { "file": "index.html", "find": "alert('Network error... Please try again.')", "replace": "console.warn('No se pudieron cargar los recursos')" }
+        { "file": "index.html", "find": "alert('Network error... Please try again.')", "replace": "console.warn('No se pudieron cargar los recursos')" },
+        { "file": "index.html", "find": "<!DOCTYPE html><html><head>", "replace": "<!DOCTYPE html><html lang=\"es\"><head>" },
+        { "file": "index.html", "find": "<title>Tower Building</title>", "replace": "<title>Torre</title>" },
+        { "file": "index.html", "find": "<div class=\"text\">Loading...</div>", "replace": "<div class=\"text\">Cargando…</div>" },
+        { "file": "dist/main.js", "find": "string:\"floor\"", "replace": "string:\"pisos\"" }
       ]
     },
     {
@@ -85,6 +89,7 @@
         { "file": "index.html", "regex": true, "find": "<link rel=\"preconnect\"[^>]*>\\s*", "replace": "", "all": true },
         { "file": "index.html", "regex": true, "find": "<link href=\"https://fonts\\.googleapis\\.com[^>]*>", "replace": "" },
         { "file": "index.html", "find": "<html lang=\"zh-CN\">", "replace": "<html lang=\"es\">" },
+        { "file": "index.html", "find": "⌨️ ", "replace": "🔄 " },
         { "file": "script.js", "find": "(v.lang === 'zh-CN' || v.lang === 'zh_CN')", "replace": "(v.lang === 'es-ES' || v.lang === 'es_ES' || v.lang === 'es-MX')", "all": true },
         { "file": "script.js", "find": "v.lang.startsWith('zh')", "replace": "v.lang.startsWith('es')" },
         { "file": "script.js", "find": "utter.lang = 'zh-CN';", "replace": "utter.lang = 'es-ES';" }
@@ -145,7 +150,8 @@
         { "file": "bubble-shooter-example.js", "find": "\"Fps: \" + fps", "replace": "\"\"" },
         { "file": "bubble-shooter-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
         { "file": "bubble-shooter-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
-        { "file": "bubble-shooter-example.js", "find": "\"Click to start\"", "replace": "\"Toca para jugar\"" }
+        { "file": "bubble-shooter-example.js", "find": "\"Click to start\"", "replace": "\"Toca para jugar\"" },
+        { "file": "bubble-shooter-example.js", "find": "context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);", "replace": "// BabyGames: burbujas vectoriales, nítidas a cualquier resolución.\n        if (window.drawBabyBubble) { window.drawBabyBubble(context, x, y, level.tilewidth, index); return; }\n        context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);" }
       ]
     },
     {
@@ -162,11 +168,8 @@
         { "file": "match3-example.js", "find": "\"Fps: \" + fps", "replace": "\"\"" },
         { "file": "match3-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
         { "file": "match3-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
-        { "file": "match3-example.js", "find": "text: \"New Game\"", "replace": "text: \"Nuevo juego\"" },
-        { "file": "match3-example.js", "find": "text: \"Show Moves\"", "replace": "text: \"Ver pistas\"" },
-        { "file": "match3-example.js", "find": "text: \"Enable AI Bot\"", "replace": "text: \"Robot: no\"" },
-        { "file": "match3-example.js", "find": "(showmoves?\"Hide\":\"Show\") + \" Moves\"", "replace": "(showmoves?\"Sin\":\"Ver\") + \" pistas\"" },
-        { "file": "match3-example.js", "find": "(aibot?\"Disable\":\"Enable\") + \" AI Bot\"", "replace": "\"Robot: \" + (aibot?\"sí\":\"no\")" }
+        { "file": "match3-example.js", "regex": true, "find": "var buttons = \\[[\\s\\S]*?\\];", "replace": "var buttons = [];" },
+        { "file": "match3-example.js", "find": "function onMouseDown(e) {", "replace": "function onMouseDown(e) {\n        // BabyGames: sin botones; al acabar, un toque empieza otra partida.\n        if (gameover) { newGame(); return; }" }
       ]
     },
     {

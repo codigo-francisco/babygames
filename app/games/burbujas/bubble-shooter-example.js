@@ -884,6 +884,8 @@ window.onload = function() {
             return;
         
         // Draw the bubble sprite
+        // BabyGames: burbujas vectoriales, nítidas a cualquier resolución.
+        if (window.drawBabyBubble) { window.drawBabyBubble(context, x, y, level.tilewidth, index); return; }
         context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);
     }
     

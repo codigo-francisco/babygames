@@ -18,16 +18,22 @@ adapta a tablet y a español mediante pequeños parches.
 
 | Menú | Proyecto original | Licencia | Ajustes de BabyGames |
 |---|---|---|---|
-| 🃏 Memoria | [bence-toth/daniel-memory-game](https://github.com/bence-toth/daniel-memory-game) | MIT (iconos CC BY 3.0) | — (ya estaba pensado para un niño de 2 años) |
-| 🎨 Pintar | [vikrum/kiddopaint](https://github.com/vikrum/kiddopaint) | MIT | Dibujo con el dedo (el original no funcionaba en táctil), herramientas en 2 columnas, lienzo en blanco |
-| 🎹 Piano | [eagnespuerto/librepiano](https://github.com/eagnespuerto/librepiano) | MIT | Teclas de colores gigantes, instrumentos con emojis, sin menús |
-| 🐹 Topos | [JivkoJelev91/Whack-A-Mole](https://github.com/JivkoJelev91/Whack-A-Mole) | MIT | Topos más lentos, partida de 30 s, tablero escalado |
-| 🏢 Torre | [iamkun/tower_game](https://github.com/iamkun/tower_game) | MIT | Título en español, sin botón de compartir en WeChat |
-| 🧱 Bloques | [kidseek/tiny-tetris-land](https://github.com/kidseek/tiny-tetris-land) | MIT | Traducido del chino (textos y voz) |
-| 🧩 Puzle | [playjigsaw/play-jigsaw-puzzles-online](https://github.com/playjigsaw/play-jigsaw-puzzles-online) | MIT | 6 piezas y gatitos por defecto, sin publicidad |
-| 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Pantalla completa, textos en español |
-| 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Pantalla completa, textos en español |
-| 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Toque para saltar, más lento |
+| 🃏 Memoria | [bence-toth/daniel-memory-game](https://github.com/bence-toth/daniel-memory-game) | MIT (iconos CC BY 3.0) | Sin la mano fotográfica que seguía al puntero |
+| 🎨 Pintar | [vikrum/kiddopaint](https://github.com/vikrum/kiddopaint) | MIT | Barra sencilla con botones grandes que escalan con la pantalla (lápiz, brocha, sellos, cubo, deshacer, 💣) y 10 colores; se pinta con el dedo (el original no funcionaba en táctil); trazo continuo y sellos grandes; lienzo nuevo en cada partida |
+| 🎹 Piano | [eagnespuerto/librepiano](https://github.com/eagnespuerto/librepiano) | MIT | Solo teclas de colores gigantes; deslizar el dedo toca las teclas seguidas |
+| 🐹 Topos | [JivkoJelev91/Whack-A-Mole](https://github.com/JivkoJelev91/Whack-A-Mole) | MIT | Empieza solo tras una cuenta atrás; el topo tocado se esconde con sonido y ⭐; al acabar (30 s) se anuncia el resultado con un botón 🔄 ¡Otra vez!; topos más lentos |
+| 🏢 Torre | [iamkun/tower_game](https://github.com/iamkun/tower_game) | MIT | Empieza sola tras una cuenta atrás; sin botones (al perder, un toque reinicia); textos en español |
+| 🧱 Bloques | [kidseek/tiny-tetris-land](https://github.com/kidseek/tiny-tetris-land) | MIT | Sin botones ni ajustes: arrastrar mueve la pieza y tocar la gira (el original no giraba); letra grande; traducido del chino (textos y voz) |
+| 🧩 Puzle | [playjigsaw/play-jigsaw-puzzles-online](https://github.com/playjigsaw/play-jigsaw-puzzles-online) | MIT | Solo el tablero y las piezas colocadas, 6 piezas; ventana final grande con iconos; al terminar, un toque carga otro dibujo; sin publicidad |
+| 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Apuntar arrastrando el dedo y disparar al soltar; pantalla completa y nítida en alta resolución (burbujas vectoriales) |
+| 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Sin botones: tocar o arrastrar intercambia; al acabar, un toque reinicia; nítido en alta resolución |
+| 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Empieza solo tras una cuenta atrás; tocar en cualquier sitio salta al instante o reinicia; más lento |
+
+**Todos los juegos son 100 % táctiles**: no necesitan teclado. Se juega tocando o
+arrastrando directamente sobre el juego (solo *Pintar* tiene botones, grandes).
+*Topos*, *Torre* y *Dino* empiezan solos tras una cuenta atrás 3-2-1-¡Ya!, y cuando hay
+que volver a jugar aparece el cartel *"¡Toca para jugar!"*: vale tocar en cualquier sitio.
+Los textos y controles escalan con la resolución de la pantalla.
 
 ## Instalar y jugar
 
@@ -45,7 +51,7 @@ adapta a tablet y a español mediante pequeños parches.
 |---|---|
 | Empezar | Tocar **¡A jugar!** |
 | Abrir un juego | Tocar su ficha |
-| Volver al menú | **Mantener pulsada la 🏠** 1 segundo (así los toques sin querer no sacan del juego) |
+| Volver al menú | **Mantener pulsada la 🏠** medio segundo (así los toques sin querer no sacan del juego) |
 | Ver las pegatinas | Tocar 📒 |
 | Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
@@ -55,7 +61,6 @@ adapta a tablet y a español mediante pequeños parches.
 | Qué | Dónde |
 |---|---|
 | Progreso (estrellas, pegatinas, ajustes) | `%LOCALAPPDATA%\BabyGames` (se borra al desinstalar) |
-| Dibujos guardados en *Pintar* | `Imágenes\BabyGames` |
 
 ## Requisitos
 
@@ -73,7 +78,7 @@ BabyGames.exe (C#, WinForms)
      └─ https://babygames.local/  →  carpeta app\ (sin servidor, sin puertos)
          ├─ index.html            menú, globos, álbum, rincón de mayores
          └─ <iframe> games/<id>/  el juego elegido
-              + shared/game-inject.css   ajustes comunes (sin zoom, sin selección…)
+              + shared/game-inject.css|js ajustes comunes (táctil, sin zoom, sin selección…)
               + overrides/<id>.css/.js   ajustes propios de ese juego
 ```
 
@@ -98,7 +103,8 @@ app/                     Juego web (lo que se ve)
   js/rewards.js          Estrellas, pegatinas y ajustes (localStorage)
   js/confetti.js         Confeti de las celebraciones
   js/bridge.js           Mensajes hacia BabyGames.exe
-  shared/                CSS común inyectado en todos los juegos
+  shared/                CSS y JS comunes inyectados en todos los juegos (táctil, "¡Toca para jugar!",
+                         cuenta atrás, pantalla de fin, canvas nítido, voz y sonidos del menú)
   overrides/<id>.css|js  Ajustes de cada juego
   fonts/                 Fuente Fredoka (SIL OFL 1.1)
   games/<id>/            Juegos ya parcheados (los genera fetch-games.ps1)

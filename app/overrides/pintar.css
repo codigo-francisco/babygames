@@ -1,48 +1,176 @@
-/* Pintar (Kiddo Paint): herramientas en dos columnas para que en una tablet
-   quepan también los colores. */
-body {
-  overflow: hidden;
+/* Pintar: barra sencilla con pocas herramientas y colores, todo grande y
+   escalado con la pantalla. Herramientas a la izquierda; a la derecha, arriba
+   las opciones de la herramienta (tamaños, brochas, sellos), en medio el lienzo
+   y abajo los colores. */
+:root {
+  --tool: clamp(64px, 13vmin, 200px);
+  --gap: clamp(4px, 0.8vmin, 12px);
+  --bar: #eef3f8;
 }
 
-#toolbar {
-  width: 104px;
+html,
+body {
+  overflow: hidden;
+  background: #fff;
+}
+
+#container {
   display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  background: #f5f5f5;
   height: 100vh;
 }
 
-#toolbar br {
+/* ---- Herramientas ---- */
+#toolbar {
+  float: none;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  width: auto;
+  height: 100vh;
+  padding: var(--gap);
+  box-sizing: border-box;
+  background: var(--bar);
+}
+
+#toolbar br,
+#save,
+#pen,
+#line,
+#square,
+#circle,
+#jumble,
+#alphabet,
+#truck,
+#colorbar,
+#sliders,
+#br22 {
+  display: none !important;
+}
+
+.tool {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--tool);
+  height: var(--tool);
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  background: #fff;
+  border: 0.06em solid #cfd8dc;
+  border-radius: 22%;
+  box-shadow: 0 0.35vmin 0 rgba(0, 0, 0, 0.12);
+  font-size: var(--tool);
+  cursor: pointer;
+}
+
+.tool emj {
+  height: auto;
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+  font-size: 0.55em;
+  line-height: 1;
+}
+
+.tool h1 {
+  margin: 0;
+  font-size: 0.45em;
+}
+
+/* Algunas imágenes de las opciones llevan también la clase .tool. */
+.tool img {
+  display: block;
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#toolbar .tool.bg-active {
+  background: #fff3c4;
+  border-color: #ffb300;
+  box-shadow: 0 0 0 0.05em #ffb300;
+}
+
+/* ---- Derecha: opciones, lienzo y colores ---- */
+#hcontainer {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#subtoolbars {
+  flex: none;
+  height: calc(var(--tool) + var(--gap) * 2);
+  padding: var(--gap);
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  background: var(--bar);
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+
+#subtoolbars > div {
+  height: var(--tool);
+}
+
+#subtoolbars > .hidden {
   display: none;
 }
 
-#toolbar > .tool {
-  width: 52px;
-  height: 52px;
+#subtoolbars .tool {
+  margin-right: var(--gap);
 }
 
-#colorbar {
-  width: 104px;
-  margin-top: 8px;
+#paint {
+  flex: 1 1 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
 }
 
-#colorbar .currentColor {
-  width: 104px;
-  height: 44px;
+#kiddopaint {
+  width: auto;
+  height: auto;
+  border: 0;
 }
 
-#colorselector {
-  width: 104px;
+#tmpCanvas,
+#previewCanvas {
+  top: 0;
+  left: 0;
+}
+
+#bg-colors {
+  flex: none;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+  padding: var(--gap);
+  background: var(--bar);
 }
 
-#colorselector .color {
-  width: 26px;
-  height: 26px;
+.bg-color {
+  flex: none;
+  width: calc(var(--tool) * 0.85);
+  height: calc(var(--tool) * 0.85);
+  padding: 0;
+  border: 0.5vmin solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.25vmin #b0bec5;
+  cursor: pointer;
 }
 
-#sliders {
-  width: 104px;
+.bg-color.bg-active {
+  box-shadow: 0 0 0 0.9vmin #37474f;
+  transform: scale(1.08);
 }

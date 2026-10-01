@@ -1,4 +1,48 @@
-/* Bloques: la pantalla completa la gestiona BabyGames. */
-#fullscreenToggleBtn {
+/* Bloques 100 % táctil: sin paneles de botones ni ajustes. Se juega en el
+   tablero: arrastrar mueve la pieza y tocar la gira. */
+#fullscreenToggleBtn,
+.keys-card,
+.controls-card,
+.game-over-btn-row,
+#settingsModal {
   display: none !important;
+}
+
+#boardCard {
+  touch-action: none;
+}
+
+/* Alas laterales: solo mascota, "Siguiente" y estrellas, con letra grande
+   (además, bloques.js las amplía con el alto de la pantalla). */
+.console-wing .wing-card-title,
+.console-wing .score-label {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.console-wing .score-val {
+  font-size: 2.6rem;
+}
+
+.console-wing .mascot-face {
+  font-size: 3.6rem;
+}
+
+.console-wing .mascot-bubble {
+  font-size: 0.8rem;
+}
+
+/* Fin de ronda sencillo: emoji, título, estrellas y "toca para jugar". */
+.game-over-desc,
+.settlement-label {
+  display: none;
+}
+
+#gameOverModal {
+  cursor: pointer;
+}
+
+.game-over-keyboard-hint {
+  font-size: 1.1rem;
+  font-weight: 700;
 }

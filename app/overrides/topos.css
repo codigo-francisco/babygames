@@ -1,4 +1,5 @@
-/* Topos: fuente local, fondo a pantalla completa y botones más grandes. */
+/* Topos: sin botón START (empieza solo tras una cuenta atrás), fuente local y
+   fondo a pantalla completa. */
 html {
   background: #ffc600;
 }
@@ -14,14 +15,16 @@ body {
   color: #5d4037;
 }
 
-#btnContainer {
-  align-items: center;
+#btnStart {
+  display: none !important;
 }
 
-.start {
-  max-width: 80%;
-  border-radius: 12px;
-  cursor: pointer;
+#btnContainer {
+  justify-content: center;
+}
+
+#bestResult {
+  width: auto;
 }
 
 #bestResult ul {
@@ -35,4 +38,25 @@ body {
 
 .mole {
   cursor: pointer;
+  touch-action: none;
+}
+
+/* Topo atrapado: una estrella que salta del agujero. */
+.hole.bonked::before {
+  content: '⭐';
+  position: absolute;
+  left: 50%;
+  bottom: 20%;
+  z-index: 3;
+  font-size: 56px;
+  line-height: 1;
+  translate: -50% 0;
+  pointer-events: none;
+  animation: topo-star 0.6s ease-out forwards;
+}
+
+@keyframes topo-star {
+  0% { opacity: 1; scale: 0.4; transform: translateY(0); }
+  40% { opacity: 1; scale: 1.2; }
+  100% { opacity: 0; scale: 1; transform: translateY(-60px); }
 }

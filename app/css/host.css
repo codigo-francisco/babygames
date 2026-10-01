@@ -12,7 +12,9 @@
   --accent: #ff5277;
   --gold: #ffc233;
   --radius: 4vmin;
-  --touch: clamp(60px, 11vmin, 104px);
+  --touch: clamp(60px, 11vmin, 170px);
+  --home: clamp(64px, 9vmin, 128px);
+  --home-gap: clamp(10px, 1.5vmin, 24px);
 }
 
 * {
@@ -317,6 +319,12 @@ button:focus-visible {
   opacity: var(--ring-opacity, 0);
 }
 
+.hold-btn {
+  /* Si el navegador pudiera desplazar, un dedo que se mueve un poco lanzaría
+     pointercancel y cancelaría el "mantener pulsado". */
+  touch-action: none;
+}
+
 .hold-btn.holding {
   --ring-opacity: 1;
 }
@@ -598,42 +606,42 @@ button:focus-visible {
 
 .home-btn {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: var(--home-gap);
+  left: var(--home-gap);
   z-index: 10;
   display: grid;
   place-items: center;
-  width: 72px;
-  height: 72px;
-  font-size: 38px;
+  width: var(--home);
+  height: var(--home);
+  font-size: calc(var(--home) * 0.52);
   background: rgba(255, 255, 255, 0.85);
   border-radius: 50%;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15), 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.35vmin 0 rgba(0, 0, 0, 0.15), 0 0.4vmin 1.4vmin rgba(0, 0, 0, 0.2);
 }
 
 .home-right .home-btn {
   left: auto;
-  right: 12px;
+  right: var(--home-gap);
 }
 
 .home-right .home-hint {
   left: auto;
-  right: 96px;
+  right: calc(var(--home) + var(--home-gap) * 2);
 }
 
 .home-btn .hold-ring {
-  inset: -6px;
-  width: calc(100% + 12px);
-  height: calc(100% + 12px);
+  inset: calc(var(--home) * -0.08);
+  width: calc(100% + var(--home) * 0.16);
+  height: calc(100% + var(--home) * 0.16);
 }
 
 .home-hint {
   position: absolute;
-  top: 26px;
-  left: 96px;
+  top: calc(var(--home-gap) + var(--home) * 0.2);
+  left: calc(var(--home) + var(--home-gap) * 2);
   z-index: 10;
-  padding: 8px 16px;
-  font-size: 22px;
+  padding: 0.35em 0.75em;
+  font-size: calc(var(--home) * 0.3);
   font-weight: 600;
   color: #fff;
   background: var(--accent);
@@ -692,59 +700,64 @@ button:focus-visible {
   pointer-events: none;
 }
 
-/* ---- Rincón de mayores (pensado para adultos: tamaños normales) ------- */
+/* ---- Rincón de mayores (para adultos). Todo en em: escala con la pantalla. */
 
 .panel {
-  width: min(92vw, 620px);
+  width: min(92vw, 34em);
   max-height: 90vh;
   overflow: auto;
-  padding: 20px 24px 24px;
-  font-size: 18px;
+  padding: 1.1em 1.3em 1.3em;
+  font-size: clamp(16px, 2.3vmin, 30px);
   background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 1.3em;
+  box-shadow: 0 1em 3em rgba(0, 0, 0, 0.3);
   -webkit-user-select: text;
   user-select: text;
+}
+
+.panel .round-btn.small {
+  --touch: 2.6em;
 }
 
 .panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 0.4em;
 }
 
 .panel-header h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: 1.35em;
 }
 
 .panel-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 14px 0;
+  gap: 0.9em;
+  padding: 0.75em 0;
   border-bottom: 1px solid #eceff1;
 }
 
 .panel-row small {
   display: block;
   color: #78909c;
-  font-size: 14px;
+  font-size: 0.78em;
 }
 
 .panel-row input[type='range'] {
   width: 45%;
+  height: 1.4em;
   accent-color: var(--accent);
 }
 
 .switch {
   appearance: none;
-  width: 56px;
-  height: 32px;
+  width: 3.1em;
+  height: 1.8em;
   flex: none;
-  border-radius: 16px;
+  border-radius: 0.9em;
   background: #cfd8dc;
   position: relative;
   cursor: pointer;
@@ -754,10 +767,10 @@ button:focus-visible {
 .switch::after {
   content: '';
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 26px;
-  height: 26px;
+  top: 0.17em;
+  left: 0.17em;
+  width: 1.46em;
+  height: 1.46em;
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -769,7 +782,7 @@ button:focus-visible {
 }
 
 .switch:checked::after {
-  left: 27px;
+  left: 1.47em;
 }
 
 .switch:disabled {
@@ -779,16 +792,16 @@ button:focus-visible {
 .panel-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 0.65em;
+  margin-top: 1em;
 }
 
 .pill {
-  padding: 14px 16px;
-  font-size: 17px;
+  padding: 0.8em 0.9em;
+  font-size: 0.95em;
   font-weight: 600;
   background: #f1f5f9;
-  border-radius: 14px;
+  border-radius: 0.8em;
   text-align: left;
 }
 
@@ -806,25 +819,25 @@ button:focus-visible {
 }
 
 .credits {
-  margin-top: 18px;
-  font-size: 14px;
+  margin-top: 1em;
+  font-size: 0.78em;
   line-height: 1.5;
   color: #455a64;
 }
 
 .credits h3 {
-  margin: 12px 0 6px;
-  font-size: 16px;
+  margin: 0.8em 0 0.4em;
+  font-size: 1.15em;
   color: var(--ink);
 }
 
 .credits ul {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 1.2em;
 }
 
 .credits code {
-  font-size: 12px;
+  font-size: 0.85em;
   color: #78909c;
 }
 

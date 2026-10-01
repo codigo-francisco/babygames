@@ -1,1 +1,10 @@
-/* Memoria: sin ajustes de diseño; ya está pensado para peques. */
+/* Memoria: sin la mano fotográfica que sigue al puntero (se veía rara); se usa
+   el cursor normal. */
+#pointer {
+  display: none !important;
+}
+
+body.customCursor,
+body.customCursor * {
+  cursor: auto;
+}

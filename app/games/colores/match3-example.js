@@ -83,9 +83,7 @@ window.onload = function() {
     var gameover = false;
     
     // Gui buttons
-    var buttons = [ { x: 30, y: 240, width: 150, height: 50, text: "Nuevo juego"},
-                    { x: 30, y: 300, width: 150, height: 50, text: "Ver pistas"},
-                    { x: 30, y: 360, width: 150, height: 50, text: "Robot: no"}];
+    var buttons = [];
     
     // Initialize the game
     function init() {
@@ -783,6 +781,8 @@ window.onload = function() {
     
     // On mouse button click
     function onMouseDown(e) {
+        // BabyGames: sin botones; al acabar, un toque empieza otra partida.
+        if (gameover) { newGame(); return; }
         // Get the mouse position
         var pos = getMousePos(canvas, e);
         
@@ -834,11 +834,11 @@ window.onload = function() {
                 } else if (i == 1) {
                     // Show Moves
                     showmoves = !showmoves;
-                    buttons[i].text = (showmoves?"Sin":"Ver") + " pistas";
+                    buttons[i].text = (showmoves?"Hide":"Show") + " Moves";
                 } else if (i == 2) {
                     // AI Bot
                     aibot = !aibot;
-                    buttons[i].text = "Robot: " + (aibot?"sí":"no");
+                    buttons[i].text = (aibot?"Disable":"Enable") + " AI Bot";
                 }
             }
         }

@@ -1,9 +1,9 @@
-/* Piano para peques: teclas de colores que llenan la pantalla, sin menús. */
+/* Piano para peques: solo teclas de colores que llenan la pantalla. */
 body {
   background: linear-gradient(160deg, #b388ff 0%, #7c4dff 60%, #651fff 100%);
-  padding: 12px 12px 12px 96px;
+  padding: 12px;
+  padding-top: calc(clamp(64px, 9vmin, 128px) + 24px);
   overflow: hidden;
-  font-family: 'Fredoka', system-ui, sans-serif;
 }
 
 header,
@@ -13,30 +13,6 @@ header,
 .label,
 .kb {
   display: none !important;
-}
-
-.kid-bar {
-  display: flex;
-  justify-content: center;
-  gap: 2vmin;
-  margin: 0 0 3vmin;
-}
-
-.kid-bar button {
-  width: 12vmin;
-  height: 12vmin;
-  font-size: 6.5vmin;
-  line-height: 1;
-  border-radius: 50%;
-  border: 0.7vmin solid rgba(255, 255, 255, 0.55);
-  background: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: transform 0.15s, background 0.15s;
-}
-
-.kid-bar button.on {
-  background: #fff;
-  transform: scale(1.12);
 }
 
 .piano-wrap {

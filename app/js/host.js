@@ -7,10 +7,14 @@ import { exitApp, toggleFullscreen } from './bridge.js';
 
 // Segundos de juego para ganar una estrella (y la pegatina del juego).
 const PLAY_SECONDS = 20;
-const HOLD_HOME_MS = 1000;
+const HOLD_HOME_MS = 500;
 const HOLD_ADULT_MS = 2500;
 
 const $ = (sel) => document.querySelector(sel);
+
+// Los juegos (iframes del mismo origen) usan la voz y los sonidos del anfitrión:
+// así respetan el volumen y la voz del Rincón de mayores (ver shared/game-inject.js).
+window.BabyGamesHost = { say, sfx };
 
 // ---- Bubu, la mascota ------------------------------------------------------
 

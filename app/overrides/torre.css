@@ -1,4 +1,7 @@
-/* Torre: quitar botón de invitar (WeChat) y su capa. */
+/* Torre: sin botones (START, "Otra vez", invitar): empieza sola y se toca la
+   pantalla. Textos en español en lugar de las imágenes en chino e inglés. */
+#start,
+.over-button-b,
 .js-invite,
 .wxShare {
   display: none !important;
@@ -21,4 +24,39 @@
   -webkit-text-stroke: 0.06rem #c62828;
   paint-order: stroke fill;
   text-shadow: 0 0.04rem 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Fin de partida: "GAME OVER / score" es una imagen en inglés. */
+.modal .over-img {
+  display: none;
+}
+
+#over-modal::before {
+  content: '¡Fin!';
+  display: block;
+  margin-top: 0.75rem;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #ffb74d;
+  -webkit-text-stroke: 0.07rem #fff;
+  paint-order: stroke fill;
+  text-shadow: 0 0.04rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal .over-score {
+  margin-top: 0.1rem;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.modal .over-score::before {
+  content: '⭐ ';
+}
+
+.modal .tip {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 0.22rem;
+  font-weight: 700;
 }

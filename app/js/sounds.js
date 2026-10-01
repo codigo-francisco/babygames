@@ -83,6 +83,18 @@ export const sfx = {
     [0, 2, 4, 7, 4, 7].forEach((n, i) => tone({ freq: PENTA[n] / 2, type: 'triangle', dur: 0.2, gain: 0.15, delay: i * 0.12 }));
   },
   tick() { tone({ freq: 1200, type: 'sine', dur: 0.04, gain: 0.08 }); },
+  // Cuenta atrás de los juegos: 3, 2, 1… ¡Ya!
+  count() { tone({ freq: PENTA[2], type: 'triangle', dur: 0.18, gain: 0.25 }); },
+  go() {
+    tone({ freq: PENTA[5], type: 'triangle', dur: 0.4, gain: 0.25 });
+    tone({ freq: PENTA[7], type: 'sine', dur: 0.4, gain: 0.15, delay: 0.05 });
+  },
+  // Topo atrapado: golpe blandito y un "boing" hacia arriba.
+  bonk() {
+    noise({ dur: 0.08, gain: 0.35, from: 900, to: 200 });
+    tone({ freq: 260, to: 820, type: 'triangle', dur: 0.22, gain: 0.25, delay: 0.03 });
+    tone({ freq: PENTA[Math.floor(Math.random() * PENTA.length)], type: 'sine', dur: 0.25, gain: 0.12, delay: 0.12 });
+  },
 };
 
 // ---- Voz ----------------------------------------------------------------

@@ -1,6 +1,6 @@
-/* Dino: mensaje de inicio más grande y amable. */
+/* Dino: mensaje de inicio grande, escalado con la pantalla. */
 #messageBox h1 {
   font-family: 'Fredoka', system-ui, sans-serif !important;
-  font-size: 2.4rem;
+  font-size: clamp(28px, 7vmin, 96px);
   color: #535353;
 }

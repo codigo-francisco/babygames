@@ -106,14 +106,14 @@ function Build-KiddoPaint([string]$dest) {
 }
 
 # Enlaza en el HTML del juego los ajustes comunes y los propios del juego
-# (app\shared\game-inject.css y app\overrides\<id>.css|.js). Se enlazan desde el
+# (app\shared\game-inject.css|.js y app\overrides\<id>.css|.js). Se enlazan desde el
 # propio HTML para que se apliquen antes de que el juego calcule su tamaño.
 function Add-HostHooks($game, [string]$dest) {
     $path = Join-Path $dest $game.entry
     $html = Read-Text $path
     $id = $game.id
     $css = "<link rel=`"stylesheet`" href=`"../../shared/game-inject.css`"><link rel=`"stylesheet`" href=`"../../overrides/$id.css`">"
-    $js  = "<script src=`"../../overrides/$id.js`"></script>"
+    $js  = "<script src=`"../../shared/game-inject.js`"></script><script src=`"../../overrides/$id.js`"></script>"
     $h = $html.IndexOf('</head>', [System.StringComparison]::OrdinalIgnoreCase)
     if ($h -lt 0) { throw "[$id] no hay </head> en $($game.entry)" }
     $html = $html.Insert($h, $css)

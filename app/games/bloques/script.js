@@ -775,7 +775,7 @@ const CHEER_MESSAGES = [
 // 各主题专属萌宠互动台词素材库
 const THEME_MASCOT_TALKS = {
   candy: [
-    "¡Juega con las flechas!🐻",
+    "¡Toca y desliza!🐻",
     "¡Qué dulces tan bonitos!🍬",
     "¡Lo haces genial!🎉",
     "¡Bloque a bloque!🍭",
@@ -898,7 +898,7 @@ class ToddlerTetris {
       if (this.mascotBubbleEl) this.mascotBubbleEl.innerText = '¡Frutas del bosque!🌲';
     } else {
       if (mascotFace) mascotFace.innerText = '🐻';
-      if (this.mascotBubbleEl) this.mascotBubbleEl.innerText = '¡Juega con las flechas!🎈';
+      if (this.mascotBubbleEl) this.mascotBubbleEl.innerText = '¡Toca y desliza!🎈';
     }
 
     this.updateStarsBackground(this.currentTheme);
