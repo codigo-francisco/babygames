@@ -22,10 +22,12 @@ export function setVolume(v) {
   if (master) master.gain.value = volume;
 }
 
-function tone({ freq = 440, to = null, type = 'sine', dur = 0.15, gain = 0.3, delay = 0 }) {
+// `at` (opcional) es un instante absoluto del reloj de WebAudio; `out`, la
+// salida (por defecto, el volumen general).
+function tone({ freq = 440, to = null, type = 'sine', dur = 0.15, gain = 0.3, delay = 0, at = null, out = null }) {
   const ac = audio();
   if (!ac) return;
-  const t0 = ac.currentTime + delay;
+  const t0 = at ?? ac.currentTime + delay;
   const osc = ac.createOscillator();
   const g = ac.createGain();
   osc.type = type;
@@ -34,7 +36,7 @@ function tone({ freq = 440, to = null, type = 'sine', dur = 0.15, gain = 0.3, de
   g.gain.setValueAtTime(0.0001, t0);
   g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  osc.connect(g).connect(master);
+  osc.connect(g).connect(out || master);
   osc.start(t0);
   osc.stop(t0 + dur + 0.05);
 }
@@ -95,7 +97,108 @@ export const sfx = {
     tone({ freq: 260, to: 820, type: 'triangle', dur: 0.22, gain: 0.25, delay: 0.03 });
     tone({ freq: PENTA[Math.floor(Math.random() * PENTA.length)], type: 'sine', dur: 0.25, gain: 0.12, delay: 0.12 });
   },
+  // Burbujas: disparo y burbuja que se pega.
+  shoot() {
+    tone({ freq: 420, to: 1100, type: 'sine', dur: 0.14, gain: 0.22 });
+    noise({ dur: 0.1, gain: 0.08, from: 1500, to: 4000 });
+  },
+  tock() { tone({ freq: 330, to: 260, type: 'triangle', dur: 0.08, gain: 0.25 }); },
+  // Colores: intercambio y cambio que no vale.
+  swap() { noise({ dur: 0.16, gain: 0.12, from: 600, to: 2400 }); },
+  wrong() { tone({ freq: 420, to: 180, type: 'triangle', dur: 0.3, gain: 0.22 }); },
+  // Fin de partida sin ganar: tres notas que bajan, sin dramatismo.
+  sad() {
+    [4, 2, 0].forEach((n, i) => tone({ freq: PENTA[n], type: 'triangle', dur: 0.3, gain: 0.2, delay: i * 0.22 }));
+  },
 };
+
+// ---- Música de los juegos ------------------------------------------------
+// Melodías cortas en bucle (pentatónica de Do), en corcheas. Las notas se
+// programan con un poco de antelación sobre el reloj de WebAudio para que el
+// ritmo no dependa de los saltos del temporizador. null = silencio.
+
+const NOTE = (semitones) => 261.63 * Math.pow(2, semitones / 12); // desde Do4
+
+const TUNES = {
+  burbujas: {
+    bpm: 96,
+    wave: 'sine',
+    melody: [
+      12, null, 16, null, 19, 16, 14, null,
+      12, null, 9, null, 7, null, null, null,
+      9, null, 12, null, 14, 12, 9, null,
+      7, 9, 12, null, 12, null, null, null,
+    ],
+    bass: [-12, -15, -20, -17],
+  },
+  colores: {
+    bpm: 112,
+    wave: 'triangle',
+    melody: [
+      16, 19, 21, 19, 16, null, 14, null,
+      12, 14, 16, null, 19, null, null, null,
+      21, 19, 16, 14, 12, null, 14, null,
+      16, null, 14, null, 12, null, null, null,
+    ],
+    bass: [-12, -20, -15, -17],
+  },
+};
+
+const MUSIC_GAIN = 0.35;
+let musicOn = true;
+let musicGain = null;
+let musicTimer = 0;
+let tune = null;
+let step = 0;
+let nextTime = 0;
+
+function scheduleMusic() {
+  const stepDur = 60 / tune.bpm / 2;
+  while (nextTime < ctx.currentTime + 0.15) {
+    const i = step % tune.melody.length;
+    const n = tune.melody[i];
+    if (n !== null) {
+      tone({ freq: NOTE(n), type: tune.wave, dur: stepDur * 1.6, gain: 0.22, at: nextTime, out: musicGain });
+    }
+    if (i % 4 === 0) {
+      const bass = tune.bass[Math.floor(i / 8) % tune.bass.length];
+      tone({ freq: NOTE(bass), type: 'triangle', dur: stepDur * 3, gain: 0.16, at: nextTime, out: musicGain });
+    }
+    nextTime += stepDur;
+    step++;
+  }
+}
+
+export const music = {
+  play(name) {
+    music.stop();
+    if (!musicOn || !TUNES[name]) return;
+    const ac = audio();
+    if (!ac) return;
+    if (!musicGain) {
+      musicGain = ac.createGain();
+      musicGain.connect(master);
+    }
+    musicGain.gain.setValueAtTime(MUSIC_GAIN, ac.currentTime);
+    tune = TUNES[name];
+    step = 0;
+    nextTime = ac.currentTime + 0.1;
+    scheduleMusic();
+    musicTimer = setInterval(scheduleMusic, 25);
+  },
+  stop() {
+    if (!musicTimer) return;
+    clearInterval(musicTimer);
+    musicTimer = 0;
+    // Silencia también las notas que ya estaban programadas.
+    musicGain.gain.setValueAtTime(0, ctx.currentTime);
+  },
+};
+
+export function setMusic(on) {
+  musicOn = !!on;
+  if (!musicOn) music.stop();
+}
 
 // ---- Voz ----------------------------------------------------------------
 

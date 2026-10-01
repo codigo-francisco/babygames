@@ -41,6 +41,30 @@ body {
   touch-action: none;
 }
 
+/* Reloj de cuenta atrás junto al marcador. */
+.bg-clock {
+  display: inline-block;
+  min-width: 2.6em;
+  margin-left: 0.25em;
+  padding: 0 0.25em;
+  line-height: 1;
+  text-align: center;
+  color: #5d4037;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1rem;
+}
+
+.bg-clock.hurry {
+  color: #fff;
+  background: #e53935;
+  animation: topo-hurry 1s ease-in-out infinite;
+}
+
+@keyframes topo-hurry {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.12; }
+}
+
 /* Topo atrapado: una estrella que salta del agujero. */
 .hole.bonked::before {
   content: '⭐';

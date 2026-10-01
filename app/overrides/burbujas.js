@@ -2,7 +2,41 @@
 // levantarlo se dispara. Al terminar, un toque empieza otra partida.
 // Nítido en pantallas de alta resolución: el canvas se dibuja a su tamaño real
 // y las burbujas son vectoriales (el sprite original es de 40 px).
+// Con música y efectos de sonido (sintetizados por el menú de BabyGames).
 (function () {
+  function pops(count, delay) {
+    for (var i = 0; i < Math.min(count, 6); i++) {
+      setTimeout(BabyGames.sound.bind(null, 'pop', i), (delay || 0) + i * 70);
+    }
+  }
+
+  // Llamada desde setGameState (parche de games.json) en cada cambio de estado.
+  window.babyBubbles = function (from, to, s, cluster, floating) {
+    if (to === s.shootbubble) {
+      BabyGames.sound('shoot');
+    } else if (to === s.removecluster) {
+      pops(cluster.length);
+    } else if (to === s.gameover) {
+      BabyGames.musicStop();
+      if (from === s.removecluster) {
+        // Tablero limpio: ¡ganado!
+        BabyGames.sound('fanfare');
+        BabyGames.say('¡Muy bien!');
+      } else {
+        BabyGames.sound('sad');
+      }
+    } else if (to === s.ready) {
+      if (from === s.shootbubble) {
+        BabyGames.sound('tock');
+      } else if (from === s.removecluster) {
+        var dropped = floating.reduce(function (n, group) { return n + group.length; }, 0);
+        if (dropped) pops(dropped, 100);
+      } else if (from === s.init || from === s.gameover) {
+        BabyGames.music('burbujas'); // partida nueva
+      }
+    }
+  };
+
   var viewport = document.getElementById('viewport');
   if (viewport) BabyGames.sharpCanvas(viewport);
 

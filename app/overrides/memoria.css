@@ -8,3 +8,19 @@ body.customCursor,
 body.customCursor * {
   cursor: auto;
 }
+
+/* Transiciones mucho más rápidas (los tiempos del juego se acortan también en
+   tools/games.json). Originales: aparecer y girar 0,8 s; salir volando 5 s. */
+.card {
+  animation-duration: 0.3s;
+  transition: transform 1.2s;
+}
+
+.card[data-transition=fadingOut] {
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.card > .front,
+.card > .back {
+  transition: transform 0.3s, outline-color 0.2s, box-shadow 0.2s;
+}

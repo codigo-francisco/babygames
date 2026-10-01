@@ -133,6 +133,7 @@ window.onload = function() {
             // Check for game over
             if (moves.length <= 0) {
                 gameover = true;
+                if (window.babyColors) window.babyColors('gameover'); // BabyGames: sonido
             }
             
             // Let the AI bot make a move, if enabled
@@ -172,6 +173,7 @@ window.onload = function() {
                             score += 100 * (clusters[i].length - 2);;
                         }
                     
+                        if (window.babyColors) window.babyColors('match', clusters.length); // BabyGames: sonido
                         // Clusters found, remove them
                         removeClusters();
                         
@@ -215,6 +217,7 @@ window.onload = function() {
                         animationtime = 0;
                         gamestate = gamestates.resolve;
                     } else {
+                        if (window.babyColors) window.babyColors('wrong'); // BabyGames: sonido
                         // Invalid swap, Rewind swapping animation
                         animationstate = 3;
                         animationtime = 0;
@@ -453,6 +456,7 @@ window.onload = function() {
     
     // Start a new game
     function newGame() {
+        if (window.babyColors) window.babyColors('new'); // BabyGames: música
         // Reset score
         score = 0;
         
@@ -746,6 +750,7 @@ window.onload = function() {
     
     // Swap two tiles as a player action
     function mouseSwap(c1, r1, c2, r2) {
+        if (window.babyColors) window.babyColors('swap'); // BabyGames: sonido
         // Save the current move
         currentmove = {column1: c1, row1: r1, column2: c2, row2: r2};
     

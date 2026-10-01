@@ -83,9 +83,20 @@
     if (h) h.say(text);
   }
 
-  function sound(name) {
+  function sound(name, arg) {
     var h = host();
-    if (h && h.sfx[name]) h.sfx[name]();
+    if (h && h.sfx[name]) h.sfx[name](arg);
+  }
+
+  // Música en bucle del anfitrión (se para sola al volver al menú).
+  function music(name) {
+    var h = host();
+    if (h && h.music) h.music.play(name);
+  }
+
+  function musicStop() {
+    var h = host();
+    if (h && h.music) h.music.stop();
   }
 
   // Capa a pantalla completa que se traga los toques (el juego no los recibe).
@@ -198,6 +209,8 @@
     tapHint: tapHint,
     say: say,
     sound: sound,
+    music: music,
+    musicStop: musicStop,
     countdown: countdown,
     endScreen: endScreen,
     sharpCanvas: sharpCanvas,

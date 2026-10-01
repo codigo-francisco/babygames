@@ -45,7 +45,7 @@ const handleDeckSelection = selectedDeckIndex => {
   })
   setTimeout(() => {
     setupBoard(selectedDeckIndex)
-  }, 815)
+  }, 280)
 }
 
 const setupDeckSelection = () => {
@@ -126,23 +126,23 @@ const handleCardClick = event => {
           if (foundCards.length === 10) {
             setTimeout(() => {
               setupDeckSelection()
-            }, 5000)
+            }, 2500)
             playSound('applause')
           }
           else {
             playSound('positive')
           }
-        }, 1000)
+        }, 450)
       }
       else {
         setTimeout(() => {
           playSound('negative')
-        }, 1000)
+        }, 450)
         setTimeout(() => {
           [cardClicked, selectedCard].forEach(card => {
             card.dataset.state = "hidden"
           })
-        }, 3000)
+        }, 1300)
       }
     }
   }

@@ -7,7 +7,7 @@ const DEFAULTS = {
   stars: 0,
   balloons: 0,
   stickers: {},
-  settings: { volume: 0.7, voice: true, balloons: true },
+  settings: { volume: 0.7, voice: true, balloons: true, music: true },
 };
 
 function load() {

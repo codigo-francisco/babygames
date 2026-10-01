@@ -10,7 +10,11 @@
       "license": "MIT (iconos de game-icons.net: CC BY 3.0)",
       "include": ["index.html", "game.js", "pointer.js", "styles.css", "assets", "LICENSE", "README.md"],
       "patches": [
-        { "file": "index.html", "find": "<html lang=\"en\">", "replace": "<html lang=\"es\">" }
+        { "file": "index.html", "find": "<html lang=\"en\">", "replace": "<html lang=\"es\">" },
+        { "file": "game.js", "find": "}, 815)", "replace": "}, 280)" },
+        { "file": "game.js", "find": "}, 1000)", "replace": "}, 450)", "all": true },
+        { "file": "game.js", "find": "}, 3000)", "replace": "}, 1300)" },
+        { "file": "game.js", "find": "}, 5000)", "replace": "}, 2500)" }
       ]
     },
     {
@@ -151,7 +155,8 @@
         { "file": "bubble-shooter-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
         { "file": "bubble-shooter-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
         { "file": "bubble-shooter-example.js", "find": "\"Click to start\"", "replace": "\"Toca para jugar\"" },
-        { "file": "bubble-shooter-example.js", "find": "context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);", "replace": "// BabyGames: burbujas vectoriales, nítidas a cualquier resolución.\n        if (window.drawBabyBubble) { window.drawBabyBubble(context, x, y, level.tilewidth, index); return; }\n        context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);" }
+        { "file": "bubble-shooter-example.js", "find": "context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);", "replace": "// BabyGames: burbujas vectoriales, nítidas a cualquier resolución.\n        if (window.drawBabyBubble) { window.drawBabyBubble(context, x, y, level.tilewidth, index); return; }\n        context.drawImage(bubbleimage, index * 40, 0, 40, 40, x, y, level.tilewidth, level.tileheight);" },
+        { "file": "bubble-shooter-example.js", "find": "function setGameState(newgamestate) {", "replace": "function setGameState(newgamestate) {\n        // BabyGames: sonidos y música según lo que pasa en el juego.\n        if (window.babyBubbles) window.babyBubbles(gamestate, newgamestate, gamestates, cluster, floatingclusters);" }
       ]
     },
     {
@@ -169,7 +174,12 @@
         { "file": "match3-example.js", "find": "\"Score:\"", "replace": "\"Puntos:\"" },
         { "file": "match3-example.js", "find": "\"Game Over!\"", "replace": "\"¡Fin!\"" },
         { "file": "match3-example.js", "regex": true, "find": "var buttons = \\[[\\s\\S]*?\\];", "replace": "var buttons = [];" },
-        { "file": "match3-example.js", "find": "function onMouseDown(e) {", "replace": "function onMouseDown(e) {\n        // BabyGames: sin botones; al acabar, un toque empieza otra partida.\n        if (gameover) { newGame(); return; }" }
+        { "file": "match3-example.js", "find": "function onMouseDown(e) {", "replace": "function onMouseDown(e) {\n        // BabyGames: sin botones; al acabar, un toque empieza otra partida.\n        if (gameover) { newGame(); return; }" },
+        { "file": "match3-example.js", "find": "function mouseSwap(c1, r1, c2, r2) {", "replace": "function mouseSwap(c1, r1, c2, r2) {\n        if (window.babyColors) window.babyColors('swap'); // BabyGames: sonido" },
+        { "file": "match3-example.js", "find": "// Clusters found, remove them", "replace": "if (window.babyColors) window.babyColors('match', clusters.length); // BabyGames: sonido\n                        // Clusters found, remove them" },
+        { "file": "match3-example.js", "find": "// Invalid swap, Rewind swapping animation", "replace": "if (window.babyColors) window.babyColors('wrong'); // BabyGames: sonido\n                        // Invalid swap, Rewind swapping animation" },
+        { "file": "match3-example.js", "find": "gameover = true;", "replace": "gameover = true;\n                if (window.babyColors) window.babyColors('gameover'); // BabyGames: sonido" },
+        { "file": "match3-example.js", "find": "function newGame() {", "replace": "function newGame() {\n        if (window.babyColors) window.babyColors('new'); // BabyGames: música" }
       ]
     },
     {

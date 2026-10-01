@@ -18,16 +18,16 @@ adapta a tablet y a español mediante pequeños parches.
 
 | Menú | Proyecto original | Licencia | Ajustes de BabyGames |
 |---|---|---|---|
-| 🃏 Memoria | [bence-toth/daniel-memory-game](https://github.com/bence-toth/daniel-memory-game) | MIT (iconos CC BY 3.0) | Sin la mano fotográfica que seguía al puntero |
+| 🃏 Memoria | [bence-toth/daniel-memory-game](https://github.com/bence-toth/daniel-memory-game) | MIT (iconos CC BY 3.0) | Sin la mano fotográfica que seguía al puntero; transiciones mucho más rápidas |
 | 🎨 Pintar | [vikrum/kiddopaint](https://github.com/vikrum/kiddopaint) | MIT | Barra sencilla con botones grandes que escalan con la pantalla (lápiz, brocha, sellos, cubo, deshacer, 💣) y 10 colores; se pinta con el dedo (el original no funcionaba en táctil); trazo continuo y sellos grandes; lienzo nuevo en cada partida |
-| 🎹 Piano | [eagnespuerto/librepiano](https://github.com/eagnespuerto/librepiano) | MIT | Solo teclas de colores gigantes; deslizar el dedo toca las teclas seguidas |
-| 🐹 Topos | [JivkoJelev91/Whack-A-Mole](https://github.com/JivkoJelev91/Whack-A-Mole) | MIT | Empieza solo tras una cuenta atrás; el topo tocado se esconde con sonido y ⭐; al acabar (30 s) se anuncia el resultado con un botón 🔄 ¡Otra vez!; topos más lentos |
+| 🎹 Piano | [eagnespuerto/librepiano](https://github.com/eagnespuerto/librepiano) | MIT | Teclas de colores gigantes y 6 instrumentos con botones grandes; deslizar el dedo toca las teclas seguidas |
+| 🐹 Topos | [JivkoJelev91/Whack-A-Mole](https://github.com/JivkoJelev91/Whack-A-Mole) | MIT | Empieza solo tras una cuenta atrás; reloj que cuenta los 30 s hacia atrás; el topo tocado se esconde con sonido y ⭐; al acabar se anuncia el resultado con un botón 🔄 ¡Otra vez!; topos más lentos |
 | 🏢 Torre | [iamkun/tower_game](https://github.com/iamkun/tower_game) | MIT | Empieza sola tras una cuenta atrás; sin botones (al perder, un toque reinicia); textos en español |
 | 🧱 Bloques | [kidseek/tiny-tetris-land](https://github.com/kidseek/tiny-tetris-land) | MIT | Sin botones ni ajustes: arrastrar mueve la pieza y tocar la gira (el original no giraba); letra grande; traducido del chino (textos y voz) |
 | 🧩 Puzle | [playjigsaw/play-jigsaw-puzzles-online](https://github.com/playjigsaw/play-jigsaw-puzzles-online) | MIT | Solo el tablero y las piezas colocadas, 6 piezas; ventana final grande con iconos; al terminar, un toque carga otro dibujo; sin publicidad |
-| 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Apuntar arrastrando el dedo y disparar al soltar; pantalla completa y nítida en alta resolución (burbujas vectoriales) |
-| 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Sin botones: tocar o arrastrar intercambia; al acabar, un toque reinicia; nítido en alta resolución |
-| 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Empieza solo tras una cuenta atrás; tocar en cualquier sitio salta al instante o reinicia; más lento |
+| 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Apuntar arrastrando el dedo y disparar al soltar; pantalla completa y nítida en alta resolución (burbujas vectoriales); música y efectos de sonido |
+| 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Sin botones: tocar o arrastrar intercambia; al acabar, un toque reinicia; nítido en alta resolución; música y efectos de sonido |
+| 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Empieza solo tras una cuenta atrás; tocar en cualquier sitio salta al instante o reinicia; más lento; textos en español ("FIN DEL JUEGO", "MÁX") |
 
 **Todos los juegos son 100 % táctiles**: no necesitan teclado. Se juega tocando o
 arrastrando directamente sobre el juego (solo *Pintar* tiene botones, grandes).
@@ -53,7 +53,7 @@ Los textos y controles escalan con la resolución de la pantalla.
 | Abrir un juego | Tocar su ficha |
 | Volver al menú | **Mantener pulsada la 🏠** medio segundo (así los toques sin querer no sacan del juego) |
 | Ver las pegatinas | Tocar 📒 |
-| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, pantalla completa, créditos, borrar progreso y **Salir** |
+| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
 
 ### Dónde se guardan las cosas
@@ -200,4 +200,5 @@ El juego debe ser HTML5 estático (sin paso de compilación) y funcionar sin int
 - Iconos del juego Memoria: [game-icons.net](https://game-icons.net) (Delapouite, Lorc), CC BY 3.0.
 - Fuente [Fredoka](https://github.com/hafontia/Fredoka-One): The Fredoka Project Authors,
   SIL Open Font License 1.1 (`app/fonts/OFL.txt`).
-- Los sonidos del menú se sintetizan en el propio juego; no usan archivos de terceros.
+- Los sonidos del menú y la música y efectos de Topos, Burbujas y Colores se sintetizan en el
+  propio juego; no usan archivos de terceros.

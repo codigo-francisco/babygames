@@ -1,7 +1,8 @@
 // Topos 100 % táctil:
 // - Empieza solo, tras una cuenta atrás (el botón START está oculto).
 // - Al tocar un topo desaparece al momento, suena y suma un punto.
-// - Al acabar los 30 s se anuncia el resultado con un botón para volver a jugar.
+// - Un reloj cuenta hacia atrás los 30 s; al acabar se anuncia el resultado con
+//   un botón para volver a jugar.
 // El tablero (600x400 px) se escala para ocupar la pantalla.
 (function () {
   var DESIGN_WIDTH = 640;
@@ -24,11 +25,41 @@
   var playing = false;
   var proto = WhackAMole.prototype;
 
+  // Reloj de cuenta atrás junto al marcador; los últimos segundos, en rojo.
+  var GAME_SECONDS = 30;
+  var clock = document.createElement('span');
+  clock.className = 'bg-clock';
+  clock.textContent = '⏱️ ' + GAME_SECONDS;
+  var title = document.querySelector('.title');
+  if (title) title.appendChild(clock);
+  fit();
+  var clockTimer = 0;
+
+  function runClock() {
+    var end = Date.now() + GAME_SECONDS * 1000;
+    var shown = GAME_SECONDS;
+    clearInterval(clockTimer);
+    clock.classList.remove('hurry');
+    clock.textContent = '⏱️ ' + shown;
+    clockTimer = setInterval(function () {
+      var left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+      if (left === shown) return;
+      shown = left;
+      clock.textContent = '⏱️ ' + left;
+      if (left <= 5) {
+        clock.classList.add('hurry');
+        if (left > 0) BabyGames.sound('tick');
+      }
+      if (left === 0) clearInterval(clockTimer);
+    }, 200);
+  }
+
   var startGame = proto.startGame;
   proto.startGame = function (e) {
     game = this;
     playing = true;
     startGame.call(this, e);
+    runClock();
   };
 
   // El original quitaba "up" al topo en vez de a su agujero (y no se escondía).

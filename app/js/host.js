@@ -1,5 +1,5 @@
 import { GAMES } from './catalog.js';
-import { sfx, say, setVolume, setVoice, hasSpanishVoice, unlockAudio } from './sounds.js';
+import { sfx, say, music, setVolume, setVoice, setMusic, hasSpanishVoice, unlockAudio } from './sounds.js';
 import { rewards } from './rewards.js';
 import { createBalloons } from './balloons.js';
 import { burst } from './confetti.js';
@@ -12,9 +12,9 @@ const HOLD_ADULT_MS = 2500;
 
 const $ = (sel) => document.querySelector(sel);
 
-// Los juegos (iframes del mismo origen) usan la voz y los sonidos del anfitrión:
+// Los juegos (iframes del mismo origen) usan la voz, los sonidos y la música del anfitrión:
 // así respetan el volumen y la voz del Rincón de mayores (ver shared/game-inject.js).
-window.BabyGamesHost = { say, sfx };
+window.BabyGamesHost = { say, sfx, music };
 
 // ---- Bubu, la mascota ------------------------------------------------------
 
@@ -266,6 +266,7 @@ function closeGame() {
   const game = current;
   current = null;
   frame.src = 'about:blank';
+  music.stop();
   sfx.back();
   refreshBadges();
   updateStars();
@@ -372,11 +373,13 @@ const panel = $('#adult-panel');
 const volumeInput = $('#set-volume');
 const voiceInput = $('#set-voice');
 const balloonsInput = $('#set-balloons');
+const musicInput = $('#set-music');
 
 function openPanel() {
   const s = rewards.settings;
   volumeInput.value = Math.round(s.volume * 100);
   balloonsInput.checked = s.balloons;
+  musicInput.checked = s.music;
   const spanish = hasSpanishVoice();
   voiceInput.checked = s.voice && spanish;
   voiceInput.disabled = !spanish;
@@ -414,6 +417,11 @@ voiceInput.addEventListener('change', () => {
 
 balloonsInput.addEventListener('change', () => {
   rewards.setSetting('balloons', balloonsInput.checked);
+});
+
+musicInput.addEventListener('change', () => {
+  setMusic(musicInput.checked);
+  rewards.setSetting('music', musicInput.checked);
 });
 
 $('#btn-fullscreen').addEventListener('click', toggleFullscreen);
@@ -486,6 +494,7 @@ document.addEventListener('keydown', (e) => {
 function init() {
   setVolume(rewards.settings.volume);
   setVoice(rewards.settings.voice);
+  setMusic(rewards.settings.music);
   document.querySelectorAll('[data-mascot]').forEach((el) => {
     el.innerHTML = mascotSVG();
   });

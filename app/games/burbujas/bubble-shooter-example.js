@@ -246,6 +246,8 @@ window.onload = function() {
     }
     
     function setGameState(newgamestate) {
+        // BabyGames: sonidos y música según lo que pasa en el juego.
+        if (window.babyBubbles) window.babyBubbles(gamestate, newgamestate, gamestates, cluster, floatingclusters);
         gamestate = newgamestate;
         
         animationstate = 0;
