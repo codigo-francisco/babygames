@@ -1,7 +1,8 @@
 ﻿<#
 .SYNOPSIS
   Genera src\BabyGames\app.ico (la cara de Bubu, igual que app\img\icon.svg)
-  dibujándolo con System.Drawing en varias tallas.
+  dibujándolo con System.Drawing en varias tallas, y los iconos de Android en
+  src\BabyGames.Android\Resources\mipmap-*.
 #>
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -14,19 +15,24 @@ function New-Color([string]$hex, [int]$alpha = 255) {
 }
 
 # Dibuja el icono en un lienzo de 200x200 unidades (las del SVG) escalado a $size.
-function New-IconBitmap([int]$size) {
+# -Foreground: solo Bubu, sin fondo y centrado en la zona segura del icono adaptativo de Android.
+function New-IconBitmap([int]$size, [switch]$Foreground) {
     $bmp = New-Object System.Drawing.Bitmap $size, $size
     $g = [System.Drawing.Graphics]::FromImage($bmp)
     $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
     $g.ScaleTransform($size / 200.0, $size / 200.0)
 
-    # Fondo: cuadrado redondeado azul cielo.
-    $bg = New-Object System.Drawing.Drawing2D.GraphicsPath
-    $r = 88
-    $bg.AddArc(4, 4, $r, $r, 180, 90); $bg.AddArc(196 - $r, 4, $r, $r, 270, 90)
-    $bg.AddArc(196 - $r, 196 - $r, $r, $r, 0, 90); $bg.AddArc(4, 196 - $r, $r, $r, 90, 90)
-    $bg.CloseFigure()
-    $g.FillPath((New-Object System.Drawing.SolidBrush (New-Color '#6ec3ff')), $bg)
+    if ($Foreground) {
+        $g.TranslateTransform(100, 100); $g.ScaleTransform(0.74, 0.74); $g.TranslateTransform(-100, -108)
+    } else {
+        # Fondo: cuadrado redondeado azul cielo.
+        $bg = New-Object System.Drawing.Drawing2D.GraphicsPath
+        $r = 88
+        $bg.AddArc(4, 4, $r, $r, 180, 90); $bg.AddArc(196 - $r, 4, $r, $r, 270, 90)
+        $bg.AddArc(196 - $r, 196 - $r, $r, $r, 0, 90); $bg.AddArc(4, 196 - $r, $r, $r, 90, 90)
+        $bg.CloseFigure()
+        $g.FillPath((New-Object System.Drawing.SolidBrush (New-Color '#6ec3ff')), $bg)
+    }
 
     # Cuerpo con degradado radial amarillo.
     $body = New-Object System.Drawing.Drawing2D.GraphicsPath
@@ -87,3 +93,16 @@ $w.Flush()
 New-Item -ItemType Directory -Force (Split-Path -Parent $ico) | Out-Null
 [System.IO.File]::WriteAllBytes($ico, $out.ToArray())
 Write-Host "Icono creado: $ico"
+
+# Android: icono clásico (48 dp) y capa delantera del icono adaptativo (108 dp) por densidad.
+$res = Join-Path $root 'src\BabyGames.Android\Resources'
+$densities = [ordered]@{ mdpi = 1.0; hdpi = 1.5; xhdpi = 2.0; xxhdpi = 3.0; xxxhdpi = 4.0 }
+foreach ($d in $densities.Keys) {
+    $dir = Join-Path $res "mipmap-$d"
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    $bmp = New-IconBitmap ([int](48 * $densities[$d]))
+    $bmp.Save((Join-Path $dir 'ic_launcher.png'), [System.Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
+    $bmp = New-IconBitmap ([int](108 * $densities[$d])) -Foreground
+    $bmp.Save((Join-Path $dir 'ic_launcher_foreground.png'), [System.Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
+}
+Write-Host "Iconos de Android creados en: $res"

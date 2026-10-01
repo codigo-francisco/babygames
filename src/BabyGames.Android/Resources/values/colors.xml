@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Azul cielo del fondo del juego (app/css/host.css). -->
+  <color name="sky">#6EC3FF</color>
+  <color name="ic_launcher_background">#6EC3FF</color>
+</resources>

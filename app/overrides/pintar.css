@@ -3,8 +3,11 @@
    las opciones de la herramienta (tamaños, brochas, sellos), en medio el lienzo
    y abajo los colores. */
 :root {
-  --tool: clamp(64px, 13vmin, 200px);
   --gap: clamp(4px, 0.8vmin, 12px);
+  /* Hueco para la 🏠 del anfitrión, arriba a la izquierda (mismo tamaño que en host.css). */
+  --home-space: calc(clamp(64px, 9vmin, 128px) + clamp(10px, 1.5vmin, 24px));
+  /* En pantallas bajas (móvil en horizontal) las 6 herramientas encogen para caber bajo la 🏠. */
+  --tool: min(clamp(64px, 13vmin, 200px), calc((100vh - var(--home-space) - var(--gap) * 7) / 6));
   --bar: #eef3f8;
 }
 
@@ -31,6 +34,7 @@ body {
   width: auto;
   height: 100vh;
   padding: var(--gap);
+  padding-top: var(--home-space);
   box-sizing: border-box;
   background: var(--bar);
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- El azul cielo llega también junto a la cámara; MainActivity aparta el juego de ella. -->
+  <style name="BabyGamesTheme" parent="BabyGamesTheme.Base">
+    <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+  </style>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- La actividad se declara en MainActivity.cs ([Activity]). Sin permiso INTERNET: el juego va
+     dentro de la APK y BabyGames no puede salir a la red. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Dino vibra un poco al chocar. -->
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+  <!-- Android 11+: necesario para usar el motor de voz del sistema (Bubu habla). -->
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.TTS_SERVICE" />
+    </intent>
+  </queries>
+
+  <application
+      android:label="BabyGames"
+      android:icon="@mipmap/ic_launcher"
+      android:allowBackup="false"
+      android:supportsRtl="false"
+      android:theme="@style/BabyGamesTheme" />
+</manifest>

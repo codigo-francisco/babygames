@@ -1,5 +1,5 @@
 import { GAMES } from './catalog.js';
-import { sfx, say, music, setVolume, setVoice, setMusic, hasSpanishVoice, unlockAudio } from './sounds.js';
+import { sfx, say, music, setVolume, setVoice, setMusic, hasSpanishVoice, unlockAudio, pauseAudio, resumeAudio } from './sounds.js';
 import { rewards } from './rewards.js';
 import { createBalloons } from './balloons.js';
 import { burst } from './confetti.js';
@@ -383,7 +383,7 @@ function openPanel() {
   const spanish = hasSpanishVoice();
   voiceInput.checked = s.voice && spanish;
   voiceInput.disabled = !spanish;
-  $('#voice-note').textContent = spanish ? '' : 'No hay ninguna voz en español instalada en Windows.';
+  $('#voice-note').textContent = spanish ? '' : 'No hay ninguna voz en español instalada en este dispositivo.';
   $('#credits').hidden = true;
   resetArmed = false;
   $('#btn-reset').textContent = '♻️ Borrar progreso';
@@ -487,6 +487,25 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     grid.firstElementChild?.focus();
   }
+});
+
+// ---- Botón Atrás de Android ---------------------------------------------------------
+// La app de Android llama a esto con Atrás. A diferencia de Esc, nunca cierra el
+// juego (para eso hay que mantener pulsada la 🏠) ni sale de BabyGames.
+
+window.BabyGamesBack = () => {
+  if (!panel.hidden) closePanel();
+  else if (!celebration.hidden) endCelebration();
+  else if (currentScreen === 'album') $('#btn-album-back').click();
+};
+
+// ---- Segundo plano ------------------------------------------------------------------
+// Al salir de la app (o minimizarla) se congela el sonido, también la música de los
+// juegos que la toman del anfitrión (Torre para la suya en overrides/torre.js).
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseAudio();
+  else resumeAudio();
 });
 
 // ---- Arranque ------------------------------------------------------------------

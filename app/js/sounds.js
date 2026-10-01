@@ -3,6 +3,7 @@
 let ctx = null;
 let master = null;
 let volume = 0.7;
+let paused = false; // la app está en segundo plano (pauseAudio)
 
 function audio() {
   if (!ctx) {
@@ -13,7 +14,7 @@ function audio() {
     master.gain.value = volume;
     master.connect(ctx.destination);
   }
-  if (ctx.state === 'suspended') ctx.resume();
+  if (ctx.state === 'suspended' && !paused) ctx.resume();
   return ctx;
 }
 
@@ -247,4 +248,17 @@ export function say(text) {
 
 export function unlockAudio() {
   audio();
+}
+
+// La app pasa a segundo plano: se congela todo el sonido (la música sigue donde
+// estaba al volver) y Bubu se calla.
+export function pauseAudio() {
+  paused = true;
+  if (ctx && ctx.state === 'running') ctx.suspend();
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+export function resumeAudio() {
+  paused = false;
+  if (ctx && ctx.state === 'suspended') ctx.resume();
 }

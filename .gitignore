@@ -4,6 +4,9 @@
 [Oo]bj/
 *.pdb
 
+# ---- Clave de firma de Android (la crea tools/build-android.ps1; guárdala aparte) ----
+src/BabyGames.Android/signing/
+
 # ---- Caché de repos clonados por tools/fetch-games.ps1 ----
 tools/.cache/
 

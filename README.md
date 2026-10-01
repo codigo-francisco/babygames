@@ -1,6 +1,7 @@
 # BabyGames 🎈
 
-Juego para peques de **2 a 5 años**, pensado para **tablets táctiles con Windows 11**.
+Juego para peques de **2 a 5 años**, pensado para **tablets táctiles con Windows 11 o Android**
+(también funciona en móviles Android, siempre en horizontal).
 
 Es un "juego de juegos": la mascota **Bubu** recibe al niño y, desde un menú en
 cuadrícula con fichas grandes, se abren **10 juegos de código abierto** sacados de
@@ -8,7 +9,7 @@ GitHub. El propio menú también es un juego:
 
 - 🎈 **Globos** que suben por la pantalla y se explotan al tocarlos (cada 10 globos → ⭐).
 - 📒 **Álbum de pegatinas**: jugar 20 segundos a un juego desbloquea su pegatina y da una ⭐.
-- 🗣️ **Bubu habla** en español (si Windows tiene una voz en español instalada).
+- 🗣️ **Bubu habla** en español (si el dispositivo tiene una voz en español instalada).
 - 🔇 **Sin internet**: todo funciona sin conexión y la app bloquea cualquier enlace externo.
 
 ## Los 10 juegos
@@ -44,6 +45,15 @@ Los textos y controles escalan con la resolución de la pantalla.
   permisos de administrador en `%LOCALAPPDATA%\Programs\BabyGames` y crea accesos directos
   en el Escritorio y en el menú Inicio. Se desinstala desde *Configuración → Aplicaciones*.
 - **Portable:** descomprime `dist\BabyGames-portable.zip` y abre `BabyGames.exe`.
+- **Android (tablet o móvil, Android 7 o superior):** copia `dist\BabyGames.apk` al
+  dispositivo (cable USB, Drive, correo…) y ábrelo desde *Archivos*.
+  - La primera vez Android pide permiso para *instalar apps desconocidas* desde esa app:
+    actívalo. Si Play Protect avisa de que es una app desconocida, elige
+    *Más detalles → Instalar de todas formas*.
+  - Para actualizar, instala la APK nueva encima: se conserva el progreso.
+  - **Consejo:** activa *Fijar aplicación* (Ajustes → Seguridad → Más ajustes de
+    seguridad → Fijar aplicación). Así el peque no puede salir de BabyGames con los
+    gestos ni con el botón de inicio.
 
 ### Controles
 
@@ -55,12 +65,13 @@ Los textos y controles escalan con la resolución de la pantalla.
 | Ver las pegatinas | Tocar 📒 |
 | Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
+| Botón Atrás (Android) | Cierra el Rincón de mayores o el álbum. **No** cierra el juego ni sale de BabyGames (los gestos sin querer son muy habituales) |
 
 ### Dónde se guardan las cosas
 
 | Qué | Dónde |
 |---|---|
-| Progreso (estrellas, pegatinas, ajustes) | `%LOCALAPPDATA%\BabyGames` (se borra al desinstalar) |
+| Progreso (estrellas, pegatinas, ajustes) | Windows: `%LOCALAPPDATA%\BabyGames`. Android: datos de la app. En los dos se borra al desinstalar |
 
 ## Requisitos
 
@@ -69,13 +80,19 @@ Los textos y controles escalan con la resolución de la pantalla.
   (incluido en Windows 11) y .NET Framework 4.8.
 - Para la voz de Bubu: una voz de Windows en español
   (*Configuración → Hora e idioma → Voz → Agregar voces*). Sin ella, el juego funciona igual, pero en silencio.
+- **Android 7 o superior** con *Android System WebView* actualizado (se actualiza desde
+  Google Play). Para la voz de Bubu: el motor de voz del sistema con español (*Ajustes →
+  Sistema → Idiomas → Salida de texto a voz*; normalmente ya viene *Speech Services by Google*).
+- En Android 12 o anterior puede que algunos emojis nuevos (🫧 en la ficha de Burbujas, 🪣 y
+  🪕 en Pintar y Piano) se vean como un cuadrado.
 
 ## Cómo funciona
 
 ```
-BabyGames.exe (C#, WinForms)
- └─ WebView2 (motor de Edge) a pantalla completa
-     └─ https://babygames.local/  →  carpeta app\ (sin servidor, sin puertos)
+BabyGames.exe (C#, WinForms)                  BabyGames.apk (C#, .NET for Android)
+ └─ WebView2 (motor de Edge)                   └─ WebView de Android, en horizontal
+     └─ https://babygames.local/                   └─ https://appassets.androidplatform.net/app/
+                    \_____________ la misma carpeta app\ (sin servidor) _____________/
          ├─ index.html            menú, globos, álbum, rincón de mayores
          └─ <iframe> games/<id>/  el juego elegido
               + shared/game-inject.css|js ajustes comunes (táctil, sin zoom, sin selección…)
@@ -86,6 +103,14 @@ BabyGames.exe (C#, WinForms)
   **cancela cualquier navegación, ventana o petición a otro dominio**. También desactiva
   el menú contextual, el zoom, los gestos del navegador y las herramientas de desarrollo.
 - La web avisa al `.exe` con `window.chrome.webview.postMessage('salir' | 'pantalla-completa')`.
+- En Android, `MainActivity.cs` hace lo mismo: sirve `app\` desde dentro de la APK con
+  `WebViewAssetLoader`, bloquea todo lo demás (la app ni siquiera tiene permiso de
+  internet), la pone a pantalla completa y aparta el juego de la cámara del móvil.
+  - La web llama a la app con `window.BabyGamesAndroid` (`exit()`, `toggleFullscreen()`)
+    y el botón Atrás llama a `window.BabyGamesBack()` (en `host.js`).
+  - El WebView de Android no trae voz (`speechSynthesis`), así que `Assets/speech-shim.js`
+    la imita con el motor de voz del sistema en la app y en todos los juegos.
+- Al salir de la app (o minimizarla) se para el sonido y la música; al volver, siguen.
 - Los juegos no se editan a mano: `tools\fetch-games.ps1` los clona, copia solo lo
   necesario, aplica los parches de `games.json` y enlaza en su HTML los archivos
   `shared/` y `overrides/`.
@@ -102,20 +127,23 @@ app/                     Juego web (lo que se ve)
   js/balloons.js         Minijuego de globos
   js/rewards.js          Estrellas, pegatinas y ajustes (localStorage)
   js/confetti.js         Confeti de las celebraciones
-  js/bridge.js           Mensajes hacia BabyGames.exe
+  js/bridge.js           Mensajes hacia BabyGames.exe o la app de Android
   shared/                CSS y JS comunes inyectados en todos los juegos (táctil, "¡Toca para jugar!",
                          cuenta atrás, pantalla de fin, canvas nítido, voz y sonidos del menú)
   overrides/<id>.css|js  Ajustes de cada juego
   fonts/                 Fuente Fredoka (SIL OFL 1.1)
   games/<id>/            Juegos ya parcheados (los genera fetch-games.ps1)
-src/BabyGames/           App nativa: Program.cs, MainForm.cs, app.ico
+src/BabyGames/           App de Windows: Program.cs, MainForm.cs, app.ico
+src/BabyGames.Android/   App de Android: MainActivity.cs (WebView), AndroidBridge.cs, Speech.cs (voz),
+                         Assets/speech-shim.js, AndroidManifest.xml, Resources/ (iconos, tema)
 installer/BabyGames.iss  Instalador (Inno Setup 6)
 tools/
   games.json             Repos, commits, archivos y parches de cada juego
   patches/               Traducciones (p. ej. bloques.es.json, chino → español)
   fetch-games.ps1        Descarga y parchea los juegos
   build.ps1              Compila el .exe, el zip portable y el instalador
-  make-icon.ps1          Dibuja src/BabyGames/app.ico
+  build-android.ps1      Compila dist/BabyGames.apk (y la instala por adb con -Install)
+  make-icon.ps1          Dibuja src/BabyGames/app.ico y los iconos de Android
   dev-server.py          Servidor local sin caché para probar app/ en el navegador
 ```
 
@@ -139,7 +167,40 @@ Genera en `dist\`: la carpeta `BabyGames\`, `BabyGames-portable.zip` y `BabyGame
 | `-Fetch` | Vuelve a descargar y parchear los juegos antes de compilar |
 | `-SkipInstaller` | No genera el instalador (no hace falta Inno Setup) |
 
-La versión se cambia en `<Version>` de `src/BabyGames/BabyGames.csproj`.
+La versión se cambia en `<Version>` de `src/BabyGames/BabyGames.csproj` (vale también para Android).
+
+### Android
+
+Necesitas Visual Studio 2022 o posterior con la carga de trabajo
+*Desarrollo de .NET Multi-platform App UI*: trae el SDK de .NET con `android`, el Android
+SDK y el JDK (`build-android.ps1` los encuentra solos; si no, define `ANDROID_HOME` y `JAVA_HOME`).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\build-android.ps1
+```
+
+Genera `dist\BabyGames.apk` (tablets y móviles de 32 y 64 bits). Con `-Install` además la
+instala y la abre en el emulador o en el dispositivo conectado por USB (con la *depuración
+USB* activada); si hay varios, elige uno con la variable `ANDROID_SERIAL`.
+
+> **Guarda la clave de firma.** La primera compilación crea
+> `src\BabyGames.Android\signing\` (no va a git). Las actualizaciones de la app tienen que
+> firmarse con esa misma clave: si se pierde, hay que desinstalar BabyGames (y se pierde
+> el progreso) antes de instalar la versión nueva.
+
+**Emulador** (para probar sin dispositivo). El SDK de Visual Studio está en *Program Files* y
+no se puede escribir, así que el emulador va en un SDK del usuario:
+
+```powershell
+$env:JAVA_HOME = (Get-ChildItem "$env:ProgramFiles\Android\openjdk" -Directory)[0].FullName
+$sdk = "$env:LOCALAPPDATA\Android\Sdk"
+& "${env:ProgramFiles(x86)}\Android\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat" --sdk_root=$sdk emulator platform-tools cmdline-tools`;latest "system-images;android-35;google_apis_playstore;x86_64"
+$env:ANDROID_HOME = $sdk
+& "$sdk\cmdline-tools\latest\bin\avdmanager.bat" create avd -n BabyGames_Tablet -d pixel_tablet -k "system-images;android-35;google_apis_playstore;x86_64"
+& "$sdk\emulator\emulator.exe" -avd BabyGames_Tablet
+```
+
+Los errores de JavaScript de la app salen en `adb logcat -s BabyGames`.
 
 ### Probar la parte web en un navegador
 
@@ -188,7 +249,8 @@ El juego debe ser HTML5 estático (sin paso de compilación) y funcionar sin int
 | Problema | Solución |
 |---|---|
 | "Falta el componente Microsoft Edge WebView2 Runtime" | Instálalo desde la página de Microsoft que ofrece el propio mensaje |
-| Bubu no habla | Instala una voz en español en Windows y revisa que la voz esté activada en el Rincón de mayores |
+| Bubu no habla | Instala una voz en español en Windows (en Android, el motor de voz del sistema con español) y revisa que la voz esté activada en el Rincón de mayores |
+| Android: "No se ha instalado la aplicación" al actualizar | La APK nueva está firmada con otra clave: desinstala BabyGames y vuelve a instalar (ver *Guarda la clave de firma*) |
 | No hay sonido | Revisa el volumen del Rincón de mayores y el de Windows |
 | Quiero salir de la pantalla completa | Rincón de mayores → *Pantalla completa* |
 | `fetch-games.ps1` dice "parche no encontrado" | El commit o el parche de `games.json` no coinciden; revisa ese juego |

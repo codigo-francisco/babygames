@@ -84,4 +84,19 @@
     if (counting || !started) return;
     if (visible('#modal')) document.querySelector('.js-reload').click();
   });
+
+  // Al salir de la app se para la música (son <audio> sueltos, fuera de la página)
+  // y al volver sigue donde iba.
+  var silenced = [];
+  document.addEventListener('visibilitychange', function () {
+    var audio = window.game && window.game.assetsObj && window.game.assetsObj.audio;
+    if (!audio) return;
+    if (document.hidden) {
+      silenced = Object.keys(audio).map(function (k) { return audio[k]; }).filter(function (a) { return !a.paused; });
+      silenced.forEach(function (a) { a.pause(); });
+    } else {
+      silenced.forEach(function (a) { a.play().catch(function () {}); });
+      silenced = [];
+    }
+  });
 })();

@@ -1,18 +1,25 @@
-// Comunicación con BabyGames.exe (WebView2). En un navegador normal (pruebas)
-// los mensajes se ignoran y se usan alternativas web.
+// Comunicación con la app nativa: BabyGames.exe (WebView2, Windows) o la app de
+// Android (window.BabyGamesAndroid, ver src/BabyGames.Android/AndroidBridge.cs).
+// En un navegador normal (pruebas) se usan alternativas web.
 
 const webview = window.chrome && window.chrome.webview;
+const android = window.BabyGamesAndroid;
 
-export const isNative = !!webview;
+export const isNative = !!(webview || android);
 
 export function exitApp() {
   if (webview) webview.postMessage('salir');
+  else if (android) android.exit();
   else window.close();
 }
 
 export function toggleFullscreen() {
   if (webview) {
     webview.postMessage('pantalla-completa');
+    return;
+  }
+  if (android) {
+    android.toggleFullscreen();
     return;
   }
   if (document.fullscreenElement) document.exitFullscreen();

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- BabyGames para Android: el mismo juego web (app\) que BabyGames.exe, en un WebView a pantalla
+       completa. Se compila con tools\build-android.ps1, que genera dist\BabyGames.apk. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <!-- Android 7 o superior. -->
+    <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- No "BabyGames.Android": taparía los espacios de nombres Android.* dentro del proyecto. -->
+    <RootNamespace>BabyGames.Droid</RootNamespace>
+    <AssemblyName>BabyGames</AssemblyName>
+    <ApplicationId>com.babygames.app</ApplicationId>
+    <!-- build-android.ps1 las calcula a partir de <Version> de src\BabyGames\BabyGames.csproj. -->
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationVersion>10000</ApplicationVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <!-- Una sola APK para tablets y móviles de 64 y 32 bits, y para el emulador del PC. -->
+    <RuntimeIdentifiers>android-arm64;android-arm;android-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.13.0.1" />
+    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.19.0.1" />
+    <PackageReference Include="Xamarin.AndroidX.WebKit" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- El juego web (app\) va dentro de la APK, en assets/app/. -->
+    <AndroidAsset Include="..\..\app\**\*" Link="Assets\app\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
