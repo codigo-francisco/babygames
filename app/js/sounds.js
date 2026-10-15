@@ -42,10 +42,10 @@ function tone({ freq = 440, to = null, type = 'sine', dur = 0.15, gain = 0.3, de
   osc.stop(t0 + dur + 0.05);
 }
 
-function noise({ dur = 0.12, gain = 0.25, from = 3000, to = 600, delay = 0 }) {
+function noise({ dur = 0.12, gain = 0.25, from = 3000, to = 600, delay = 0, at = null, out = null }) {
   const ac = audio();
   if (!ac) return;
-  const t0 = ac.currentTime + delay;
+  const t0 = at ?? ac.currentTime + delay;
   const len = Math.floor(ac.sampleRate * dur);
   const buf = ac.createBuffer(1, len, ac.sampleRate);
   const data = buf.getChannelData(0);
@@ -59,9 +59,105 @@ function noise({ dur = 0.12, gain = 0.25, from = 3000, to = 600, delay = 0 }) {
   const g = ac.createGain();
   g.gain.setValueAtTime(gain, t0);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  src.connect(filter).connect(g).connect(master);
+  src.connect(filter).connect(g).connect(out || master);
   src.start(t0);
 }
+
+// ---- Sonidos de animales (estilo dibujos animados) ------------------------
+// Una "voz" sintetizada: oscilador -> dos filtros de formante (las vocales) ->
+// envolvente. Las curvas son listas de [fracción de la duración, valor].
+function curve(param, points, t0, dur) {
+  param.setValueAtTime(points[0][1], t0);
+  for (let i = 1; i < points.length; i++) param.linearRampToValueAtTime(points[i][1], t0 + points[i][0] * dur);
+}
+
+function voc({ delay = 0, dur = 0.4, f0, formants, wave = 'sawtooth', q = 6, gain = 0.4, attack = 0.03, wobble = null, vibrato = null, out = null }) {
+  const ac = audio();
+  if (!ac) return;
+  const t0 = ac.currentTime + delay;
+  const osc = ac.createOscillator();
+  osc.type = wave;
+  curve(osc.frequency, f0, t0, dur);
+  if (vibrato) {
+    const lfo = ac.createOscillator();
+    const depth = ac.createGain();
+    lfo.frequency.value = vibrato.rate;
+    depth.gain.value = vibrato.depth;
+    lfo.connect(depth).connect(osc.frequency);
+    lfo.start(t0);
+    lfo.stop(t0 + dur + 0.1);
+  }
+  const env = ac.createGain();
+  env.gain.setValueAtTime(0.0001, t0);
+  env.gain.exponentialRampToValueAtTime(gain, t0 + attack);
+  env.gain.setValueAtTime(gain, t0 + dur * 0.7);
+  env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  // Ronquido/croar: el volumen tiembla rápido.
+  let sink = env;
+  if (wobble) {
+    const am = ac.createGain();
+    am.gain.value = 1 - wobble.depth;
+    const lfo = ac.createOscillator();
+    const depth = ac.createGain();
+    lfo.frequency.value = wobble.rate;
+    depth.gain.value = wobble.depth;
+    lfo.connect(depth).connect(am.gain);
+    lfo.start(t0);
+    lfo.stop(t0 + dur + 0.1);
+    am.connect(env);
+    sink = am;
+  }
+  formants.forEach((points, i) => {
+    const f = ac.createBiquadFilter();
+    f.type = 'bandpass';
+    f.Q.value = q;
+    curve(f.frequency, points, t0, dur);
+    const g = ac.createGain();
+    g.gain.value = i === 0 ? 1.6 : 0.9;
+    osc.connect(f).connect(g).connect(sink);
+  });
+  env.connect(out || master);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.1);
+}
+
+const ANIMAL_SOUNDS = {
+  perro() {
+    [0, 0.32].forEach((d) => {
+      noise({ dur: 0.05, gain: 0.25, from: 1800, to: 900, delay: d });
+      voc({ delay: d, dur: 0.2, f0: [[0, 420], [0.3, 620], [1, 330]], formants: [[[0, 650], [0.4, 900], [1, 500]], [[0, 1300], [0.4, 1600], [1, 1000]]], q: 5, gain: 0.55, attack: 0.012 });
+    });
+  },
+  gato() {
+    voc({ dur: 0.8, f0: [[0, 520], [0.35, 760], [1, 480]], formants: [[[0, 320], [0.3, 900], [0.75, 700], [1, 380]], [[0, 2300], [0.3, 1500], [0.75, 1100], [1, 800]]], q: 7, gain: 0.45, attack: 0.06, vibrato: { rate: 6, depth: 12 } });
+  },
+  cerdo() {
+    [0, 0.3].forEach((d) => {
+      noise({ dur: 0.08, gain: 0.2, from: 500, to: 250, delay: d });
+      voc({ delay: d + 0.03, dur: 0.22, f0: [[0, 280], [0.4, 420], [1, 250]], wave: 'square', formants: [[[0, 520], [1, 450]], [[0, 1600], [1, 1400]]], q: 10, gain: 0.5, attack: 0.02 });
+    });
+  },
+  vaca() {
+    voc({ dur: 1.3, f0: [[0, 115], [0.4, 150], [1, 105]], formants: [[[0, 300], [0.25, 650], [1, 380]], [[0, 800], [0.25, 1050], [1, 700]]], q: 4, gain: 0.6, attack: 0.15, vibrato: { rate: 5, depth: 3 } });
+  },
+  leon() {
+    noise({ dur: 0.9, gain: 0.12, from: 400, to: 150 });
+    voc({ dur: 1.0, f0: [[0, 95], [0.3, 160], [1, 80]], formants: [[[0, 400], [0.3, 700], [1, 350]], [[0, 900], [1, 700]]], q: 3, gain: 0.55, attack: 0.1, wobble: { rate: 28, depth: 0.5 } });
+  },
+  rana() {
+    [0, 0.38].forEach((d) => {
+      voc({ delay: d, dur: 0.28, f0: [[0, 95], [1, 120]], wave: 'square', formants: [[[0, 450], [1, 380]], [[0, 1200], [1, 1000]]], q: 5, gain: 0.55, attack: 0.01, wobble: { rate: 45, depth: 0.9 } });
+    });
+  },
+  oso() {
+    voc({ dur: 0.7, f0: [[0, 85], [0.4, 120], [1, 75]], formants: [[[0, 380], [0.4, 600], [1, 330]], [[0, 800], [1, 650]]], q: 3, gain: 0.55, attack: 0.08, wobble: { rate: 22, depth: 0.45 } });
+  },
+  pollito() {
+    [0, 0.2, 0.42].forEach((d) => {
+      voc({ delay: d, dur: 0.13, f0: [[0, 2600], [0.5, 3500], [1, 3000]], wave: 'sine', formants: [[[0, 3000], [1, 3200]]], q: 1, gain: 0.35, attack: 0.01 });
+    });
+  },
+};
 
 // Escala pentatónica: cualquier combinación suena bien.
 const PENTA = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5, 1174.66, 1318.51];
@@ -125,6 +221,19 @@ export const sfx = {
     tone({ freq: PENTA[Math.floor(Math.random() * PENTA.length)], type: 'sine', dur: 0.25, gain: 0.18, delay: 0.05 });
   },
   step() { tone({ freq: 500 + Math.random() * 200, type: 'triangle', dur: 0.06, gain: 0.12 }); },
+  // Carrera: silbato de salida y aplausos del público en la meta.
+  whistle() {
+    voc({ dur: 0.5, f0: [[0, 2100], [0.2, 2300], [1, 2250]], wave: 'sine', formants: [[[0, 2200], [1, 2200]]], q: 1, gain: 0.3, attack: 0.02, wobble: { rate: 32, depth: 0.6 } });
+  },
+  cheer() {
+    for (let i = 0; i < 18; i++) noise({ dur: 0.05, gain: 0.18, from: 2500 + Math.random() * 1500, to: 1200, delay: i * 0.07 + Math.random() * 0.04 });
+    voc({ dur: 1.2, f0: [[0, 400], [0.5, 520], [1, 380]], formants: [[[0, 700], [1, 600]], [[0, 1200], [1, 1000]]], q: 2, gain: 0.12, attack: 0.2, vibrato: { rate: 7, depth: 25 } });
+  },
+  // Sonido del animal (perro, gato, cerdo, vaca, leon, rana, oso, pollito).
+  animal(id) {
+    const play = ANIMAL_SOUNDS[id];
+    if (play) play();
+  },
 };
 
 // ---- Música de los juegos ------------------------------------------------
@@ -168,16 +277,43 @@ const TUNES = {
     ],
     bass: [-12, -15, -20, -12],
   },
-  carrera: {
+  // Carrera: tres canciones alegres con batería; cada carrera suena una (ver VARIANTS).
+  // drums: un carácter por corchea — k bombo, s palmada, h platillo, c "cloc" de cascos.
+  carrera_galope: {
+    bpm: 150,
+    wave: 'square',
+    melody: [
+      12, 12, 12, null, 12, 12, 12, null, 12, 12, 16, 19, 16, null, 12, null,
+      14, 14, 14, null, 14, 14, 14, null, 14, 14, 17, 21, 19, null, null, null,
+      19, 19, 19, null, 19, 21, 19, 17, 16, null, 14, null, 12, null, 16, null,
+      14, 14, 16, 14, 12, null, 7, null, 12, null, null, null, null, null, null, null,
+    ],
+    bass: [-12, -12, -10, -10, -5, -15, -10, -12],
+    drums: 'kcckckcckcckkcch',
+  },
+  carrera_circo: {
+    bpm: 132,
+    wave: 'triangle',
+    melody: [
+      19, null, 18, 19, 21, 19, 16, null, 17, null, 16, 17, 19, 17, 14, null,
+      12, 14, 16, 17, 19, null, 21, null, 19, 16, 14, 12, 12, null, null, null,
+      24, null, 23, 24, 26, 24, 21, null, 22, null, 21, 22, 24, 22, 19, null,
+      17, 19, 21, 22, 24, null, 26, null, 24, 21, 19, 17, 12, null, null, null,
+    ],
+    bass: [-12, -5, -10, -5, -7, -12, -10, -17],
+    drums: 'k.s.k.s.k.s.kks.',
+  },
+  carrera_fiesta: {
     bpm: 140,
     wave: 'square',
     melody: [
-      12, 16, 19, 16, 12, 16, 19, 24,
-      21, 19, 16, 19, 21, null, 19, null,
-      12, 16, 19, 16, 12, 16, 19, 24,
-      21, 19, 16, 14, 12, null, null, null,
+      12, 16, 19, 24, 21, 19, 16, 19, 17, 21, 24, 21, 19, null, null, null,
+      16, 19, 23, 26, 24, 21, 19, 16, 14, 17, 21, 17, 12, null, null, null,
+      12, 16, 19, 24, 21, 19, 16, 19, 17, 21, 24, 21, 19, null, 16, null,
+      14, null, 17, null, 19, null, 23, null, 24, null, null, null, null, null, null, null,
     ],
-    bass: [-12, -20, -15, -17],
+    bass: [-12, -15, -7, -12, -12, -15, -10, -5],
+    drums: 'k.hsk.hskkhsk.hs',
   },
   calma: {
     bpm: 84,
@@ -200,6 +336,27 @@ let tune = null;
 let step = 0;
 let nextTime = 0;
 
+// Batería sintetizada para las canciones que la tienen.
+function drum(kind, at) {
+  const out = musicGain;
+  if (kind === 'k') tone({ freq: 150, to: 45, type: 'sine', dur: 0.18, gain: 0.5, at, out });
+  else if (kind === 's') noise({ dur: 0.12, gain: 0.22, from: 2200, to: 1200, at, out });
+  else if (kind === 'h') noise({ dur: 0.04, gain: 0.12, from: 9000, to: 7000, at, out });
+  else if (kind === 'c') tone({ freq: 900 + Math.random() * 150, to: 650, type: 'triangle', dur: 0.05, gain: 0.22, at, out });
+}
+
+// Nombres con varias canciones: cada vez suena una distinta.
+const VARIANTS = { carrera: ['carrera_galope', 'carrera_circo', 'carrera_fiesta'] };
+const lastVariant = {};
+
+function pickTune(name) {
+  const list = VARIANTS[name];
+  if (!list) return name;
+  const options = list.filter((v) => v !== lastVariant[name]);
+  lastVariant[name] = options[Math.floor(Math.random() * options.length)];
+  return lastVariant[name];
+}
+
 function scheduleMusic() {
   const stepDur = 60 / tune.bpm / 2;
   while (nextTime < ctx.currentTime + 0.15) {
@@ -212,6 +369,7 @@ function scheduleMusic() {
       const bass = tune.bass[Math.floor(i / 8) % tune.bass.length];
       tone({ freq: NOTE(bass), type: 'triangle', dur: stepDur * 3, gain: 0.16, at: nextTime, out: musicGain });
     }
+    if (tune.drums) drum(tune.drums[step % tune.drums.length], nextTime);
     nextTime += stepDur;
     step++;
   }
@@ -220,6 +378,7 @@ function scheduleMusic() {
 export const music = {
   play(name) {
     music.stop();
+    name = pickTune(name);
     if (!musicOn || !TUNES[name]) return;
     const ac = audio();
     if (!ac) return;
@@ -280,10 +439,34 @@ export function hasSpanishVoice() {
 
 // Solo habla si hay una voz en español instalada (una voz inglesa leyendo
 // español confunde más que ayuda).
+// Una frase nueva no corta la que se está diciendo: espera a que acabe. Si llegan
+// muchas seguidas (toques rápidos) solo se guarda la última, y se olvida si tiene
+// que esperar demasiado.
+const SAY_MAX_WAIT_MS = 5000;
+let pendingSay = null;
+let sayTimer = 0;
+
 export function say(text) {
   if (!voiceOn || !spanishVoice || !('speechSynthesis' in window)) return;
   const synth = window.speechSynthesis;
-  synth.cancel();
+  if (!synth.speaking) {
+    speakNow(text);
+    return;
+  }
+  pendingSay = { text, at: Date.now() };
+  if (sayTimer) return;
+  sayTimer = setInterval(() => {
+    if (synth.speaking) return;
+    clearInterval(sayTimer);
+    sayTimer = 0;
+    const next = pendingSay;
+    pendingSay = null;
+    if (next && voiceOn && !paused && Date.now() - next.at < SAY_MAX_WAIT_MS) speakNow(next.text);
+  }, 120);
+}
+
+function speakNow(text) {
+  const synth = window.speechSynthesis;
   const u = new SpeechSynthesisUtterance(text);
   u.voice = spanishVoice;
   u.lang = spanishVoice.lang;
@@ -302,6 +485,7 @@ export function unlockAudio() {
 export function pauseAudio() {
   paused = true;
   if (ctx && ctx.state === 'running') ctx.suspend();
+  pendingSay = null;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 

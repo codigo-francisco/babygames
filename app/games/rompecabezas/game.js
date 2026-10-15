@@ -165,12 +165,13 @@
       BabyGames.sound('fanfare');
       A.sparkle(L.bx + L.bw / 2, L.by + L.bh / 2, 28);
       var name = A.named(animal);
-      BabyGames.say('¡Muy bien! ¡Es ' + name + '! ' + animal.sound.charAt(0).toUpperCase() + animal.sound.slice(1) + '.');
+      setTimeout(function () { BabyGames.sound('animal', animal.id); }, 750);
+      setTimeout(function () { BabyGames.say('¡Muy bien! ¡Es ' + name + '!'); }, 2000);
     }, 350);
     setTimeout(function () {
       round++;
       start();
-    }, 3800);
+    }, 4500);
   }
 
   window.addEventListener('resize', function () { if (pieces.length) layout(); });

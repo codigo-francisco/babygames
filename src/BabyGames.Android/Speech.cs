@@ -33,6 +33,11 @@ namespace BabyGames.Droid
                 Log.Warn(MainActivity.LogTag, "No hay motor de voz en el dispositivo.");
                 return;
             }
+            // Suena como parte del juego (mismo volumen que la música y los efectos).
+            tts.SetAudioAttributes(new Android.Media.AudioAttributes.Builder()
+                .SetUsage(Android.Media.AudioUsageKind.Game)
+                .SetContentType(Android.Media.AudioContentType.Speech)
+                .Build());
             foreach (string tag in Spanish)
             {
                 Locale locale = Locale.ForLanguageTag(tag);
@@ -52,8 +57,11 @@ namespace BabyGames.Droid
             tts.SetPitch(pitch);
             var args = new Bundle();
             args.PutFloat(TextToSpeech.Engine.KeyParamVolume, Math.Clamp(volume, 0f, 1f));
-            tts.Speak(text, QueueMode.Flush, args, "bubu");
+            // En cola: una frase no corta a la anterior (para callar a Bubu está Stop()).
+            tts.Speak(text, QueueMode.Add, args, "bubu");
         }
+
+        public bool IsSpeaking => tts.IsSpeaking;
 
         public void Stop() => tts.Stop();
 

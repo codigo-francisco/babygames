@@ -274,6 +274,11 @@ El juego debe ser HTML5 estático (sin paso de compilación) y funcionar sin int
 
 ## Licencias y créditos
 
+- **BabyGames** © 2026 Francisco González Hernández, bajo licencia
+  [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.es) (ver [`LICENSE`](LICENSE)):
+  se puede copiar, compartir y modificar citando al autor, pero **no con fines comerciales**.
+  Cubre el juego anfitrión, los 4 juegos de animales, las apps de Windows y Android y las
+  herramientas; no cubre las partes de terceros de abajo.
 - Cada juego conserva su licencia original en `app/games/<id>/LICENSE` (y `NOTICE`
   cuando existe); la lista completa aparece en *Rincón de mayores → Créditos y licencias*.
 - Iconos del juego Memoria: [game-icons.net](https://game-icons.net) (Delapouite, Lorc), CC BY 3.0.

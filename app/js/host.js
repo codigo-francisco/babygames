@@ -466,6 +466,8 @@ $('#btn-credits').addEventListener('click', async () => {
       github.com/${g.repo} · ${m.license || ''} ${m.commit ? `<code>${m.commit.slice(0, 7)}</code>` : ''}</li>`;
   }).join('');
   box.innerHTML = `
+    <h3>BabyGames</h3>
+    <p>© 2026 Francisco González Hernández. Licencia CC BY-NC 4.0: se puede copiar, compartir y modificar citando al autor, pero no con fines comerciales. No cubre los juegos y recursos de terceros de abajo, que mantienen su propia licencia.</p>
     <h3>Juegos</h3><ul>${items}</ul>
     <h3>Otros recursos</h3>
     <ul>

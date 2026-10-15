@@ -11,8 +11,16 @@
     return window.Runner && window.Runner.instance_;
   }
 
-  function mouse(type) {
-    document.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
+  // Salto: se llama directamente al juego como si se pulsara Espacio. Así vale en
+  // Windows y en Android (en Android, el original solo escucha sus propios toques
+  // sobre el lienzo y no hace caso a eventos de ratón).
+  function key(down) {
+    var r = runner();
+    if (!r) return;
+    // target no puede ser null: el original compara e.target != this.detailsButton (undefined).
+    var e = { type: down ? 'keydown' : 'keyup', keyCode: 32, target: document, currentTarget: document, preventDefault: function () {} };
+    if (down) r.onKeyDown(e);
+    else r.onKeyUp(e);
   }
 
   // El original se pausa al perder el foco ('blur'), y dentro de BabyGames eso pasa
@@ -37,14 +45,14 @@
       r.tRex.reset();
       r.play();
     }
-    mouse('mousedown');
+    key(true);
   }, { capture: true, passive: false });
 
   window.addEventListener('touchend', function (e) {
     if (!runner()) return;
     e.preventDefault();
     e.stopImmediatePropagation();
-    mouse('mouseup');
+    key(false);
   }, { capture: true, passive: false });
 
   // ---- Textos en español ----------------------------------------------------
@@ -115,8 +123,8 @@
     };
   }
 
-  // Arranque: el primer "salto" pone el juego en marcha (MOUSEDOWN lo admite
-  // gracias al parche de games.json).
+  // Arranque: el primer "salto" (Espacio) pone el juego en marcha tras la cuenta
+  // atrás.
   window.addEventListener('load', function () {
     var r = runner();
     if (r && r.distanceMeter && r.spriteDef) {
@@ -127,8 +135,8 @@
       BabyGames.countdown(function () {
         if (!runner()) return;
         started = true;
-        mouse('mousedown');
-        setTimeout(function () { mouse('mouseup'); }, 80);
+        key(true);
+        setTimeout(function () { key(false); }, 80);
         var hint = BabyGames.tapHint('¡Toca para saltar!');
         setTimeout(hint.hide, 3500);
       });

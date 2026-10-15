@@ -43,6 +43,9 @@ namespace BabyGames.Droid
         public void Speak(string text, double rate, double pitch, double volume) =>
             speech.Speak(text, (float)rate, (float)pitch, (float)volume);
 
+        [JavascriptInterface, Export("isSpeaking")]
+        public bool IsSpeaking() => speech.IsSpeaking;
+
         [JavascriptInterface, Export("stop")]
         public void Stop() => speech.Stop();
     }

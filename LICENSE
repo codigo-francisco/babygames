@@ -1,0 +1,40 @@
+BabyGames
+Copyright (c) 2026 Francisco González Hernández. Algunos derechos reservados.
+
+Francisco González Hernández es el autor de BabyGames: el juego anfitrión
+(menú, Bubu, globos, álbum de pegatinas, Rincón de mayores), los juegos propios
+Rompecabezas, Colorear, Granja y Carrera, los dibujos de animales, los sonidos y
+la música sintetizados, los ajustes de los juegos (app/overrides, app/shared),
+las apps de Windows y Android, el instalador y las herramientas de compilación.
+
+Todo ello se publica bajo la licencia Creative Commons
+Reconocimiento-NoComercial 4.0 Internacional (CC BY-NC 4.0):
+https://creativecommons.org/licenses/by-nc/4.0/legalcode.es
+
+En resumen (el texto legal completo es el del enlace anterior), puedes:
+
+  - Copiar y redistribuir BabyGames en cualquier medio o formato.
+  - Modificarlo y crear obras derivadas a partir de él.
+
+siempre que:
+
+  - Reconocimiento: cites al autor (Francisco González Hernández), enlaces a
+    esta licencia e indiques si has hecho cambios.
+  - NoComercial: no lo uses con fines comerciales ni lucrativos (por ejemplo,
+    venderlo, cobrar por descargarlo o incluirlo en un producto o servicio de
+    pago, o ganar dinero con publicidad dentro de él).
+
+Para cualquier uso comercial hace falta el permiso por escrito del autor.
+
+-------------------------------------------------------------------------------
+Partes de terceros (NO están cubiertas por esta licencia)
+-------------------------------------------------------------------------------
+
+Estas partes conservan su propia licencia, que hay que respetar al copiarlas:
+
+  - Los 10 juegos descargados de GitHub (app/games/<juego>/, listados en
+    tools/games.json): cada uno con su licencia original en
+    app/games/<juego>/LICENSE (y NOTICE cuando existe), en su mayoría MIT.
+  - Iconos del juego Memoria: game-icons.net (Delapouite, Lorc), CC BY 3.0.
+  - Fuente Fredoka: The Fredoka Project Authors, SIL Open Font License 1.1
+    (app/fonts/OFL.txt).

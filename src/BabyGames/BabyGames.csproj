@@ -14,7 +14,8 @@
     <Version>1.0.0</Version>
     <Product>BabyGames</Product>
     <Description>Juegos para peques de 2 a 5 años</Description>
-    <Copyright>BabyGames</Copyright>
+    <Authors>Francisco González Hernández</Authors>
+    <Copyright>© 2026 Francisco González Hernández. CC BY-NC 4.0</Copyright>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -28,6 +29,8 @@
     <EmbeddedResource Include="app.ico" LogicalName="BabyGames.app.ico" />
     <!-- El juego web (app\) se copia junto al .exe. -->
     <Content Include="..\..\app\**\*" LinkBase="app" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Licencia de BabyGames (CC BY-NC 4.0) junto al .exe y en el instalador. -->
+    <Content Include="..\..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 // Granja: "¿Dónde está el perro?". Seis animales en el prado; al tocar el que
 // se pide, salta, hace su sonido y sale otra pregunta. Si se toca otro, ese
-// animal dice quién es (sin castigo). La pregunta se ve con su dibujo, así
+// animal hace su sonido (sin castigo). La pregunta se ve con su dibujo, así
 // funciona también sin voz.
 (function () {
   var A = window.BabyAnimals;
@@ -54,18 +54,20 @@
   function tap(spot, e) {
     var pic = spot.el.querySelector('.pic');
     talk(spot);
+    // Cada animal suena con su sonido de verdad (sintetizado), no con la voz de Bubu.
+    BabyGames.sound('animal', spot.animal.id);
     if (busy || spot.animal !== wanted) {
       animate(pic, 'wiggle');
-      BabyGames.sound('boing');
-      if (!busy) BabyGames.say(cap(A.named(spot.animal)) + '. ¡' + cap(spot.animal.sound) + '!');
       return;
     }
     busy = true;
     hits++;
     animate(pic, 'hop');
     spot.el.classList.add('right');
-    BabyGames.sound('star');
-    BabyGames.say('¡Muy bien! ' + cap(A.named(spot.animal)) + ' hace ' + spot.animal.sound + '.');
+    setTimeout(function () {
+      BabyGames.sound('star');
+      BabyGames.say('¡Muy bien!');
+    }, 1100);
     A.sparkle(e.clientX, e.clientY, 16);
     ask.innerHTML = '<span class="bubble">¡Muy bien! ⭐</span>';
     setTimeout(function () {
@@ -73,7 +75,7 @@
       // Cada 5 aciertos cambian los animales del prado.
       if (hits % 5 === 0) build();
       question();
-    }, 2200);
+    }, 2800);
   }
 
   build();

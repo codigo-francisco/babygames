@@ -32,7 +32,7 @@
       c.addEventListener('pointerdown', function (e) {
         e.preventDefault();
         if (state !== 'pick') return;
-        BabyGames.sound('boing');
+        BabyGames.sound('animal', animal.id);
         BabyGames.say('¡' + cap(A.named(animal)) + '! ¡A correr!');
         setup(four, animal);
       });
@@ -68,7 +68,8 @@
 
   function go() {
     state = 'run';
-    BabyGames.music('carrera');
+    BabyGames.sound('whistle');
+    BabyGames.music('carrera'); // una de las tres canciones de carrera, cada vez otra
     runners.forEach(function (r) { r.body.classList.add('run'); });
     last = performance.now();
     raf = requestAnimationFrame(tick);
@@ -108,6 +109,7 @@
     r.lane.appendChild(badge);
     if (r === me) {
       r.place = finishedCount;
+      BabyGames.sound('cheer');
       BabyGames.sound(finishedCount === 1 ? 'star' : 'pop');
       var b = r.el.getBoundingClientRect();
       A.sparkle(b.left + b.width / 2, b.top + b.height / 2, 18);

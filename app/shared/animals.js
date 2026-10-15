@@ -201,5 +201,5 @@
     }
   }
 
-  window.BabyAnimals = { list: ANIMALS, svg: svg, byId: byId, named: named, shuffle: shuffle, sparkle: sparkle };
+  window.BabyAnimals = { ink: INK, list: ANIMALS, svg: svg, byId: byId, named: named, shuffle: shuffle, sparkle: sparkle };
 })();

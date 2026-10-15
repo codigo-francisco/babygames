@@ -28,7 +28,8 @@
   var listeners = [];
   var synth = {
     pending: false,
-    speaking: false,
+    // app/js/sounds.js lo mira para no cortar una frase con la siguiente.
+    get speaking() { return !!(native.isSpeaking && native.isSpeaking()); },
     paused: false,
     onvoiceschanged: null,
     getVoices: voices,
