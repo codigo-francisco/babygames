@@ -111,6 +111,20 @@ export const sfx = {
   sad() {
     [4, 2, 0].forEach((n, i) => tone({ freq: PENTA[n], type: 'triangle', dur: 0.3, gain: 0.2, delay: i * 0.22 }));
   },
+  // Juegos de animales: salto, pieza encajada, bote de pintura y pasito de carrera.
+  boing() {
+    tone({ freq: 220, to: 660, type: 'sine', dur: 0.18, gain: 0.25 });
+    tone({ freq: 660, to: 330, type: 'sine', dur: 0.2, gain: 0.15, delay: 0.16 });
+  },
+  snap() {
+    noise({ dur: 0.05, gain: 0.3, from: 3000, to: 900 });
+    tone({ freq: PENTA[5], type: 'triangle', dur: 0.2, gain: 0.22, delay: 0.03 });
+  },
+  paint() {
+    noise({ dur: 0.18, gain: 0.14, from: 800, to: 300 });
+    tone({ freq: PENTA[Math.floor(Math.random() * PENTA.length)], type: 'sine', dur: 0.25, gain: 0.18, delay: 0.05 });
+  },
+  step() { tone({ freq: 500 + Math.random() * 200, type: 'triangle', dur: 0.06, gain: 0.12 }); },
 };
 
 // ---- Música de los juegos ------------------------------------------------
@@ -142,6 +156,39 @@ const TUNES = {
       16, null, 14, null, 12, null, null, null,
     ],
     bass: [-12, -20, -15, -17],
+  },
+  granja: {
+    bpm: 100,
+    wave: 'triangle',
+    melody: [
+      12, null, 12, null, 12, null, 7, null,
+      9, null, 9, null, 7, null, null, null,
+      16, null, 16, null, 14, null, 14, null,
+      12, null, null, null, null, null, null, null,
+    ],
+    bass: [-12, -15, -20, -12],
+  },
+  carrera: {
+    bpm: 140,
+    wave: 'square',
+    melody: [
+      12, 16, 19, 16, 12, 16, 19, 24,
+      21, 19, 16, 19, 21, null, 19, null,
+      12, 16, 19, 16, 12, 16, 19, 24,
+      21, 19, 16, 14, 12, null, null, null,
+    ],
+    bass: [-12, -20, -15, -17],
+  },
+  calma: {
+    bpm: 84,
+    wave: 'sine',
+    melody: [
+      16, null, 19, null, 21, null, 19, null,
+      16, null, 14, null, 12, null, null, null,
+      14, null, 16, null, 19, null, 16, null,
+      14, null, 12, null, 9, null, null, null,
+    ],
+    bass: [-12, -15, -20, -17],
   },
 };
 

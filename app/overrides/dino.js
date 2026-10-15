@@ -15,13 +15,29 @@
     document.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
   }
 
+  // El original se pausa al perder el foco ('blur'), y dentro de BabyGames eso pasa
+  // con cualquier toque fuera del juego (la 🏠, un aviso del sistema…). Como un toque
+  // con el dedo no le devuelve el foco, se quedaba pausado y ya no saltaba. Aquí solo
+  // se pausa si la app pasa de verdad a segundo plano (visibilitychange).
+  window.addEventListener('blur', function (e) { e.stopImmediatePropagation(); }, true);
+
+  var started = false; // tras la cuenta atrás
+
   window.addEventListener('touchstart', function (e) {
     var r = runner();
-    if (!r || !r.playing && !r.crashed) return; // durante la cuenta atrás
+    if (!r || !started) return; // durante la cuenta atrás
     e.preventDefault();
     e.stopImmediatePropagation();
-    if (r.crashed) r.restart();
-    else mouse('mousedown');
+    if (r.crashed) {
+      r.restart();
+      return;
+    }
+    if (!r.playing) {
+      // Pausado (p. ej. al volver de segundo plano): sigue la partida.
+      r.tRex.reset();
+      r.play();
+    }
+    mouse('mousedown');
   }, { capture: true, passive: false });
 
   window.addEventListener('touchend', function (e) {
@@ -110,6 +126,7 @@
     setTimeout(function () {
       BabyGames.countdown(function () {
         if (!runner()) return;
+        started = true;
         mouse('mousedown');
         setTimeout(function () { mouse('mouseup'); }, 80);
         var hint = BabyGames.tapHint('¡Toca para saltar!');

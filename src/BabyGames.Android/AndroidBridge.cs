@@ -20,7 +20,17 @@ namespace BabyGames.Droid
         }
 
         [JavascriptInterface, Export("exit")]
-        public void Exit() => activity.RunOnUiThread(activity.FinishAndRemoveTask);
+        public void Exit() => activity.RunOnUiThread(activity.Exit);
+
+        // Fijar aplicación (ver MainActivity.Pin): el peque no puede salir con gestos ni botones.
+        [JavascriptInterface, Export("pin")]
+        public void Pin() => activity.RunOnUiThread(activity.Pin);
+
+        [JavascriptInterface, Export("unpin")]
+        public void Unpin() => activity.RunOnUiThread(activity.Unpin);
+
+        [JavascriptInterface, Export("isPinned")]
+        public bool IsPinned() => activity.IsPinned;
 
         [JavascriptInterface, Export("toggleFullscreen")]
         public void ToggleFullscreen() => activity.RunOnUiThread(activity.ToggleFullScreen);

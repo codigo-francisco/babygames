@@ -25,3 +25,13 @@ export function toggleFullscreen() {
   if (document.fullscreenElement) document.exitFullscreen();
   else document.documentElement.requestFullscreen?.().catch(() => {});
 }
+
+// "Fijar aplicación" de Android: el peque no puede salir con los gestos del borde
+// ni con los botones del sistema. En Windows y en el navegador no hace nada.
+export const canPin = !!(android && android.pin);
+
+export function setPinned(on) {
+  if (!canPin) return;
+  if (on) android.pin();
+  else android.unpin();
+}

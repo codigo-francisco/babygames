@@ -1,0 +1,65 @@
+body {
+  display: flex;
+  flex-direction: column;
+  background: #fff3e0;
+  background-image: radial-gradient(#ffe0b2 1.2vmin, transparent 1.3vmin);
+  background-size: 7vmin 7vmin;
+}
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4vw;
+  padding: 3vh 4vw 1vh 12vmin;
+}
+
+.paper {
+  height: 100%;
+  aspect-ratio: 1;
+  max-width: 60vw;
+  padding: 2.5vmin;
+  background: #fff;
+  border: 0.8vmin solid #ffcc80;
+  border-radius: 4vmin;
+  box-shadow: 0 1.2vmin 0 rgba(0, 0, 0, 0.08);
+}
+
+.paper [data-part] {
+  cursor: pointer;
+  transition: fill 0.25s;
+}
+
+.arrow {
+  flex: none;
+  width: 14vmin;
+  height: 14vmin;
+  font-size: 6vmin;
+  background: #7c4dff;
+}
+
+.palette {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+  padding: 1vh 2vw 3vh;
+}
+
+.swatch {
+  width: min(12vmin, 9vw);
+  height: min(12vmin, 9vw);
+  border: 0.6vmin solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.8vmin 0 rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: scale 0.15s, translate 0.15s;
+}
+
+.swatch.on {
+  scale: 1.25;
+  translate: 0 -1.5vmin;
+  border-color: #37474f;
+}

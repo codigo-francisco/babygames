@@ -72,7 +72,7 @@ namespace BabyGames.Droid
             root.AddView(web, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent));
             SetContentView(root);
             WindowCompat.SetDecorFitsSystemWindows(Window, false);
-            ViewCompat.SetOnApplyWindowInsetsListener(root, new SafeAreaPadding());
+            ViewCompat.SetOnApplyWindowInsetsListener(root, new SafeAreaPadding(this));
             ApplyFullScreen();
 
             OnBackPressedDispatcher.AddCallback(this, new BackToGame(web));
@@ -118,6 +118,84 @@ namespace BabyGames.Droid
         {
             fullScreen = !fullScreen;
             ApplyFullScreen();
+        }
+
+        // "Fijar aplicación" (screen pinning): mientras está fijada, ni los gestos del borde ni los
+        // botones de inicio/recientes sacan al peque de BabyGames, y no se puede bajar la barra de
+        // notificaciones. Android pide confirmarlo al abrir la app; si se rechaza o se suelta con el
+        // gesto de Android, se vuelve a pedir (ver CheckPin). Solo se suelta desde el Rincón de mayores.
+        internal void Pin()
+        {
+            keepPinned = true;
+            WatchPin();
+            if (IsPinned) return;
+            try
+            {
+                StartLockTask();
+            }
+            catch (Java.Lang.Exception e)
+            {
+                Log.Warn(LogTag, "No se pudo fijar la aplicación: " + e.Message);
+            }
+        }
+
+        internal void Unpin()
+        {
+            keepPinned = false;
+            if (!IsPinned) return;
+            try
+            {
+                StopLockTask();
+            }
+            catch (Java.Lang.Exception e)
+            {
+                Log.Warn(LogTag, "No se pudo soltar la aplicación: " + e.Message);
+            }
+        }
+
+        // La app solo se cierra desde el Rincón de mayores (Unpin/Exit). Si deja de estar fijada
+        // de otra forma (se rechazó el aviso, o se soltó con el gesto largo de Android), se vuelve
+        // a pedir al momento. Mientras el aviso está en pantalla la ventana no tiene el foco y no
+        // se repite.
+        private bool keepPinned;
+        private bool watching;
+        private const int PinCheckMs = 2500;
+
+        private void WatchPin()
+        {
+            if (watching) return;
+            watching = true;
+            web.PostDelayed(CheckPin, PinCheckMs);
+        }
+
+        private void CheckPin()
+        {
+            if (!keepPinned || IsFinishing || IsDestroyed)
+            {
+                watching = false;
+                return;
+            }
+            if (HasWindowFocus && !IsPinned)
+            {
+                try
+                {
+                    StartLockTask();
+                }
+                catch (Java.Lang.Exception e)
+                {
+                    Log.Warn(LogTag, "No se pudo fijar la aplicación: " + e.Message);
+                }
+            }
+            web.PostDelayed(CheckPin, PinCheckMs);
+        }
+
+        internal bool IsPinned =>
+            ((ActivityManager)GetSystemService(ActivityService)).LockTaskModeState != LockTaskMode.None;
+
+        internal void Exit()
+        {
+            Unpin();
+            FinishAndRemoveTask();
         }
 
         // Pantalla completa "inmersiva": las barras del sistema aparecen un momento al deslizar desde el borde.
@@ -233,10 +311,33 @@ namespace BabyGames.Droid
                 web.EvaluateJavascript("window.BabyGamesBack && window.BabyGamesBack()", null);
         }
 
+        // Si las barras del sistema se quedan a la vista (algunos móviles no las esconden solas
+        // tras el gesto del borde), se vuelven a ocultar en un momento.
+        private void RehideBarsSoon()
+        {
+            if (!fullScreen || rehidePending) return;
+            rehidePending = true;
+            web.PostDelayed(() =>
+            {
+                rehidePending = false;
+                ApplyFullScreen();
+            }, 1500);
+        }
+
+        private bool rehidePending;
+
         private sealed class SafeAreaPadding : Java.Lang.Object, IOnApplyWindowInsetsListener
         {
+            private readonly MainActivity activity;
+
+            public SafeAreaPadding(MainActivity activity)
+            {
+                this.activity = activity;
+            }
+
             public WindowInsetsCompat OnApplyWindowInsets(View view, WindowInsetsCompat insets)
             {
+                if (insets.IsVisible(WindowInsetsCompat.Type.SystemBars())) activity.RehideBarsSoon();
                 AndroidX.Core.Graphics.Insets safe = insets.GetInsets(
                     WindowInsetsCompat.Type.SystemBars() | WindowInsetsCompat.Type.DisplayCutout());
                 view.SetPadding(safe.Left, safe.Top, safe.Right, safe.Bottom);

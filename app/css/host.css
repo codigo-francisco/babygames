@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
   font-family: 'Fredoka';
   src: url('../fonts/Fredoka.ttf') format('truetype');
   font-weight: 300 700;
@@ -335,16 +335,35 @@ button:focus-visible {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 3vmin;
   padding: 3vmin 4vmin 4vmin;
 }
 
+/* En vertical no caben 14 fichas sin aplastarlas: fichas con su proporción
+   (2 columnas en móvil, 3 en tablet) y el menú se desplaza con el dedo. */
 @media (max-aspect-ratio: 1/1) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(42vw, 220px), 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    align-content: start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    touch-action: pan-y;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .grid .tile {
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+    touch-action: pan-y;
   }
 }
 
@@ -388,13 +407,14 @@ button:focus-visible {
 }
 
 .tile-emoji {
-  font-size: min(14vmin, 9vw);
+  font-size: min(13vmin, 8vw);
   line-height: 1;
   filter: drop-shadow(0 0.8vmin 0 rgba(0, 0, 0, 0.15));
 }
 
 .tile-name {
-  font-size: min(5vmin, 3.4vw);
+  font-size: min(5vmin, 2.6vw, calc(17vw / var(--len, 6)));
+  white-space: nowrap;
   font-weight: 700;
   color: #fff;
   text-shadow: 0 0.4vmin 0 rgba(0, 0, 0, 0.25);
@@ -420,7 +440,7 @@ button:focus-visible {
   }
 
   .tile-name {
-    font-size: min(3.2vh, 5.5vw);
+    font-size: min(3.2vh, 5.5vw, calc(38vw / var(--len, 6)));
   }
 }
 
@@ -501,7 +521,7 @@ button:focus-visible {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 3vmin;
   padding: 4vmin;
@@ -513,8 +533,19 @@ button:focus-visible {
 
 @media (max-aspect-ratio: 1/1) {
   .album {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(28vw, 160px), 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    align-content: start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    touch-action: pan-y;
+  }
+
+  .album-slot {
+    touch-action: pan-y;
   }
 }
 
@@ -528,7 +559,7 @@ button:focus-visible {
 }
 
 .sticker {
-  --size: min(22vmin, 14vw);
+  --size: min(20vmin, 10vw);
   position: relative;
   display: grid;
   place-items: center;
@@ -559,14 +590,19 @@ button:focus-visible {
 }
 
 .album-name {
-  font-size: 4vmin;
+  font-size: min(4vmin, 2.2vw, calc(16vw / var(--len, 6)));
+  white-space: nowrap;
   font-weight: 700;
   color: #6d4c41;
 }
 
 @media (max-aspect-ratio: 1/1) {
   .sticker {
-    --size: min(14vh, 30vw);
+    --size: min(14vh, 22vw);
+  }
+
+  .album-name {
+    font-size: min(3vh, 4.5vw, calc(34vw / var(--len, 6)));
   }
 }
 

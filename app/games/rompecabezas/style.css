@@ -1,0 +1,74 @@
+body {
+  background: linear-gradient(135deg, #b9f6ca, #80deea);
+}
+
+.board,
+.tray,
+.piece {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.board {
+  background: #fff;
+  border: 0.8vmin solid #fff;
+  border-radius: 2vmin;
+  box-shadow: 0 1.2vmin 0 rgba(0, 0, 0, 0.12), 0 0 0 0.5vmin #4db6ac;
+  overflow: hidden;
+}
+
+.guide {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  opacity: 0.22;
+  filter: grayscale(0.4);
+}
+
+.slots {
+  position: absolute;
+  inset: 0;
+  display: grid;
+}
+
+.slots div {
+  border: 0.3vmin dashed rgba(0, 0, 0, 0.18);
+}
+
+.board.done {
+  animation: done-pop 0.7s ease-out;
+}
+
+@keyframes done-pop {
+  0%, 100% { scale: 1; }
+  40% { scale: 1.06; }
+}
+
+.tray {
+  background: rgba(255, 255, 255, 0.35);
+  border: 0.6vmin dashed rgba(255, 255, 255, 0.9);
+  border-radius: 3vmin;
+}
+
+.piece {
+  border-radius: 1vmin;
+  box-shadow: 0 0 0 0.35vmin #fff, 0 0.8vmin 1.2vmin rgba(0, 0, 0, 0.25);
+  transform-origin: 0 0;
+  transition: transform 0.3s ease-out;
+  cursor: grab;
+  touch-action: none;
+}
+
+.piece.drag {
+  z-index: 20;
+  transition: none;
+  box-shadow: 0 0 0 0.5vmin #ffd600, 0 1.6vmin 2.4vmin rgba(0, 0, 0, 0.3);
+}
+
+.piece.placed {
+  z-index: 1;
+  box-shadow: none;
+  border-radius: 0;
+  cursor: default;
+}

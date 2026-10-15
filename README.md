@@ -4,15 +4,15 @@ Juego para peques de **2 a 5 años**, pensado para **tablets táctiles con Windo
 (también funciona en móviles Android, siempre en horizontal).
 
 Es un "juego de juegos": la mascota **Bubu** recibe al niño y, desde un menú en
-cuadrícula con fichas grandes, se abren **10 juegos de código abierto** sacados de
-GitHub. El propio menú también es un juego:
+cuadrícula con fichas grandes, se abren **14 juegos**: 10 de código abierto sacados de
+GitHub y 4 de animales hechos para BabyGames. El propio menú también es un juego:
 
 - 🎈 **Globos** que suben por la pantalla y se explotan al tocarlos (cada 10 globos → ⭐).
 - 📒 **Álbum de pegatinas**: jugar 20 segundos a un juego desbloquea su pegatina y da una ⭐.
 - 🗣️ **Bubu habla** en español (si el dispositivo tiene una voz en español instalada).
 - 🔇 **Sin internet**: todo funciona sin conexión y la app bloquea cualquier enlace externo.
 
-## Los 10 juegos
+## Los 14 juegos
 
 Cada juego se descarga en un commit fijo (ver [`tools/games.json`](tools/games.json)) y se
 adapta a tablet y a español mediante pequeños parches.
@@ -29,6 +29,18 @@ adapta a tablet y a español mediante pequeños parches.
 | 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Apuntar arrastrando el dedo y disparar al soltar; pantalla completa y nítida en alta resolución (burbujas vectoriales); música y efectos de sonido |
 | 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Sin botones: tocar o arrastrar intercambia; al acabar, un toque reinicia; nítido en alta resolución; música y efectos de sonido |
 | 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Empieza solo tras una cuenta atrás; tocar en cualquier sitio salta al instante o reinicia; más lento; textos en español ("FIN DEL JUEGO", "MÁX") |
+
+### 4 juegos propios de animales
+
+Escritos para BabyGames (sin código de terceros). Comparten los dibujos de
+[`app/shared/animals.js`](app/shared/animals.js): perro, gato, cerdo, vaca, león, rana, oso y pollito.
+
+| Menú | Cómo se juega |
+|---|---|
+| 🦁 Rompecabezas | Se arrastran las piezas de la bandeja al tablero (encajan solas si se sueltan cerca). Los dos primeros tienen 4 piezas y luego 6; al acabar, el animal habla y sale otro |
+| 🖍️ Colorear | Se elige un color abajo y se toca una parte del dibujo para pintarla; las flechas cambian de animal. Con todo pintado hay celebración |
+| 🐮 Granja | "¿Dónde está el perro?" (con su dibujo, para quien aún no lee): al tocar el animal correcto salta y hace su sonido; si se toca otro, dice quién es |
+| 🏁 Carrera | Se elige animal y, tras la cuenta atrás, cada toque en la pantalla lo hace correr más. El tuyo también avanza solo, así que siempre se llega a la meta |
 
 **Todos los juegos son 100 % táctiles**: no necesitan teclado. Se juega tocando o
 arrastrando directamente sobre el juego (solo *Pintar* tiene botones, grandes).
@@ -51,9 +63,14 @@ Los textos y controles escalan con la resolución de la pantalla.
     actívalo. Si Play Protect avisa de que es una app desconocida, elige
     *Más detalles → Instalar de todas formas*.
   - Para actualizar, instala la APK nueva encima: se conserva el progreso.
-  - **Consejo:** activa *Fijar aplicación* (Ajustes → Seguridad → Más ajustes de
-    seguridad → Fijar aplicación). Así el peque no puede salir de BabyGames con los
-    gestos ni con el botón de inicio.
+  - **Solo se cierra desde el Rincón de mayores:** al abrirse, BabyGames pide a Android que
+    la **fije** (*Fijar aplicación*): acepta el aviso (*Entendido* / *Got it*). Mientras está
+    fijada, ni deslizar desde el borde ni los botones de inicio o recientes sacan del juego,
+    ni se puede bajar la barra de notificaciones. Si se rechaza el aviso o se suelta con el
+    gesto de Android (deslizar hacia arriba y mantener, o *Atrás* + *Recientes*), BabyGames
+    vuelve a pedirlo a los 2–3 segundos. Para salir: Rincón de mayores → *Salir de BabyGames*.
+    Se puede desactivar en el Rincón de mayores → *📌 Fijar BabyGames*. Si las barras del
+    sistema se quedan a la vista tras un gesto, se esconden solas en un momento.
 
 ### Controles
 
@@ -63,7 +80,7 @@ Los textos y controles escalan con la resolución de la pantalla.
 | Abrir un juego | Tocar su ficha |
 | Volver al menú | **Mantener pulsada la 🏠** medio segundo (así los toques sin querer no sacan del juego) |
 | Ver las pegatinas | Tocar 📒 |
-| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, pantalla completa, créditos, borrar progreso y **Salir** |
+| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, fijar la app (Android), pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
 | Botón Atrás (Android) | Cierra el Rincón de mayores o el álbum. **No** cierra el juego ni sale de BabyGames (los gestos sin querer son muy habituales) |
 
@@ -122,7 +139,7 @@ app/                     Juego web (lo que se ve)
   index.html             Pantallas del anfitrión
   css/host.css           Estilos
   js/host.js             Lógica: menú, abrir/cerrar juegos, pegatinas, rincón de mayores
-  js/catalog.js          Las 10 fichas del menú (nombre, emoji, colores, frase de Bubu)
+  js/catalog.js          Las 14 fichas del menú (nombre, emoji, colores, frase de Bubu)
   js/sounds.js           Efectos sintetizados con WebAudio y voz
   js/balloons.js         Minijuego de globos
   js/rewards.js          Estrellas, pegatinas y ajustes (localStorage)

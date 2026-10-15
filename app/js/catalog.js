@@ -1,7 +1,29 @@
-// Los 10 juegos del menú. `entry` es relativo a app/. Los ajustes propios de
+// Los 14 juegos del menú. `entry` es relativo a app/. Los ajustes propios de
 // cada juego están en app/overrides/<id>.css y .js (los enlaza fetch-games.ps1).
 // `home: 'right'` pone el botón de la casita a la derecha si a la izquierda estorba.
 export const GAMES = [
+  // Juegos propios de BabyGames (no se descargan: viven en app/games/<id>/ y
+  // comparten los dibujos de app/shared/animals.js).
+  {
+    id: 'rompecabezas', name: 'Rompecabezas', emoji: '🦁', say: '¡Rompecabezas de animales!',
+    colors: ['#ffcc80', '#ef6c00'], entry: 'games/rompecabezas/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'colorear', name: 'Colorear', emoji: '🖍️', say: '¡A colorear animales!',
+    colors: ['#ea80fc', '#aa00ff'], entry: 'games/colorear/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'granja', name: 'Granja', emoji: '🐮', say: '¡La granja! ¿Dónde están los animales?',
+    colors: ['#a5d6a7', '#2e7d32'], entry: 'games/granja/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'carrera', name: 'Carrera', emoji: '🏁', say: '¡Una carrera de animales!',
+    colors: ['#ffab91', '#e53935'], entry: 'games/carrera/index.html',
+    author: 'BabyGames', repo: null,
+  },
   {
     id: 'memoria', name: 'Memoria', emoji: '🃏', say: '¡Memoria! Busca las parejas.',
     colors: ['#ff8a80', '#ff5277'], entry: 'games/memoria/index.html',

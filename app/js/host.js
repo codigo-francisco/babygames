@@ -3,7 +3,7 @@ import { sfx, say, music, setVolume, setVoice, setMusic, hasSpanishVoice, unlock
 import { rewards } from './rewards.js';
 import { createBalloons } from './balloons.js';
 import { burst } from './confetti.js';
-import { exitApp, toggleFullscreen } from './bridge.js';
+import { exitApp, toggleFullscreen, canPin, setPinned } from './bridge.js';
 
 // Segundos de juego para ganar una estrella (y la pegatina del juego).
 const PLAY_SECONDS = 20;
@@ -164,7 +164,7 @@ function renderGrid() {
     tile.setAttribute('aria-label', game.name);
     tile.innerHTML = `
       <span class="tile-emoji" aria-hidden="true">${game.emoji}</span>
-      <span class="tile-name">${game.name}</span>
+      <span class="tile-name" style="--len:${game.name.length}">${game.name}</span>
       <span class="tile-badge" aria-hidden="true" ${rewards.hasSticker(game.id) ? '' : 'hidden'}>⭐</span>`;
     tile.addEventListener('click', () => launch(game, tile));
     grid.appendChild(tile);
@@ -339,7 +339,7 @@ function renderAlbum() {
             style="--c1:${game.colors[0]};--c2:${game.colors[1]};--r:${(i % 2 ? 1 : -1) * (3 + (i % 4) * 2)}deg">
         <span>${game.emoji}</span>
       </span>
-      <span class="album-name">${game.name}</span>`;
+      <span class="album-name" style="--len:${game.name.length}">${game.name}</span>`;
     slot.addEventListener('click', () => {
       wiggle(slot.querySelector('.sticker'));
       if (unlocked) {
@@ -374,12 +374,15 @@ const volumeInput = $('#set-volume');
 const voiceInput = $('#set-voice');
 const balloonsInput = $('#set-balloons');
 const musicInput = $('#set-music');
+const pinInput = $('#set-pin');
+$('#row-pin').hidden = !canPin;
 
 function openPanel() {
   const s = rewards.settings;
   volumeInput.value = Math.round(s.volume * 100);
   balloonsInput.checked = s.balloons;
   musicInput.checked = s.music;
+  pinInput.checked = s.pin;
   const spanish = hasSpanishVoice();
   voiceInput.checked = s.voice && spanish;
   voiceInput.disabled = !spanish;
@@ -424,6 +427,11 @@ musicInput.addEventListener('change', () => {
   rewards.setSetting('music', musicInput.checked);
 });
 
+pinInput.addEventListener('change', () => {
+  rewards.setSetting('pin', pinInput.checked);
+  setPinned(pinInput.checked);
+});
+
 $('#btn-fullscreen').addEventListener('click', toggleFullscreen);
 $('#btn-exit').addEventListener('click', exitApp);
 
@@ -453,6 +461,7 @@ $('#btn-credits').addEventListener('click', async () => {
   }
   const items = GAMES.map((g) => {
     const m = meta.find((x) => x.id === g.id) || {};
+    if (!g.repo) return `<li><b>${g.emoji} ${g.name}</b> — juego propio de BabyGames</li>`;
     return `<li><b>${g.emoji} ${g.name}</b> — ${g.author}<br>
       github.com/${g.repo} · ${m.license || ''} ${m.commit ? `<code>${m.commit.slice(0, 7)}</code>` : ''}</li>`;
   }).join('');
@@ -514,6 +523,8 @@ function init() {
   setVolume(rewards.settings.volume);
   setVoice(rewards.settings.voice);
   setMusic(rewards.settings.music);
+  // Android: la app se fija nada más abrirse; solo se sale desde el Rincón de mayores.
+  if (rewards.settings.pin) setPinned(true);
   document.querySelectorAll('[data-mascot]').forEach((el) => {
     el.innerHTML = mascotSVG();
   });
