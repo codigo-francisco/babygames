@@ -7,7 +7,7 @@ Es un "juego de juegos": la mascota **Bubu** recibe al niño y, desde un menú e
 cuadrícula con fichas grandes, se abren **29 juegos**: 10 de código abierto sacados de
 GitHub y 19 hechos para BabyGames (15 de ellos pensados para los más pequeños, de unos 2 años,
 y 10 de esos dedicados a los colores y las formas).
-Desde el Rincón de mayores se puede elegir qué juegos aparecen en el menú. El propio menú también es un juego:
+Desde el Rincón de mayores (menú aparte *🎮 Juegos del menú*) se puede elegir qué juegos aparecen en el menú. El propio menú también es un juego:
 
 - 🎈 **Globos** que suben por la pantalla y se explotan al tocarlos (cada 10 globos → ⭐).
 - 📒 **Álbum de pegatinas**: jugar 20 segundos a un juego desbloquea su pegatina y da una ⭐.
@@ -115,9 +115,9 @@ Los textos y controles escalan con la resolución de la pantalla.
 | Abrir un juego | Tocar su ficha |
 | Volver al menú | **Mantener pulsada la 🏠** medio segundo (así los toques sin querer no sacan del juego) |
 | Ver las pegatinas | Tocar 📒 |
-| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, **qué juegos salen en el menú** (siempre queda al menos uno), fijar la app (Android), pantalla completa, créditos, borrar progreso y **Salir** |
+| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, **🎮 Juegos del menú** (menú aparte con un interruptor por juego y «Mostrar todos»; siempre queda al menos uno), fijar la app (Android), pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
-| Botón Atrás (Android) | Cierra el Rincón de mayores o el álbum. **No** cierra el juego ni sale de BabyGames (los gestos sin querer son muy habituales) |
+| Botón Atrás (Android) | Cierra el Rincón de mayores o el álbum (desde *Juegos del menú* vuelve al Rincón). **No** cierra el juego ni sale de BabyGames (los gestos sin querer son muy habituales) |
 
 ### Dónde se guardan las cosas
 

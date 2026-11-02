@@ -409,7 +409,7 @@ function openPanel() {
   voiceInput.checked = s.voice && spanish;
   voiceInput.disabled = !spanish;
   $('#voice-note').textContent = spanish ? '' : 'No hay ninguna voz en español instalada en este dispositivo.';
-  renderGameSwitches();
+  updateGamesNote();
   $('#credits').hidden = true;
   resetArmed = false;
   $('#btn-reset').textContent = '♻️ Borrar progreso';
@@ -428,9 +428,51 @@ panel.addEventListener('pointerdown', (e) => {
   if (e.target === panel) closePanel();
 });
 
+// ---- Juegos del menú: menú aparte, se abre desde el Rincón de mayores. ----------
 // Interruptores para mostrar u ocultar cada juego del menú. El último visible no se
 // puede apagar, para que el menú nunca se quede vacío.
+const gamesPanel = $('#games-panel');
 const gameSwitches = $('#set-games');
+
+function updateGamesNote() {
+  const shown = GAMES.length - rewards.settings.hidden.length;
+  $('#games-note').textContent = shown === GAMES.length
+    ? `Se ven los ${GAMES.length} juegos`
+    : `Se ven ${shown} de ${GAMES.length} juegos`;
+}
+
+function openGames() {
+  renderGameSwitches();
+  panel.hidden = true;
+  gamesPanel.hidden = false;
+  gamesPanel.querySelector('.panel').scrollTop = 0;
+}
+
+// Volver al Rincón de mayores.
+function backFromGames() {
+  gamesPanel.hidden = true;
+  updateGamesNote();
+  panel.hidden = false;
+}
+
+function closeGames() {
+  gamesPanel.hidden = true;
+  closePanel();
+}
+
+$('#btn-games').addEventListener('click', openGames);
+$('#games-back').addEventListener('click', backFromGames);
+$('#btn-games-done').addEventListener('click', backFromGames);
+$('#games-close').addEventListener('click', closeGames);
+gamesPanel.addEventListener('pointerdown', (e) => {
+  if (e.target === gamesPanel) closeGames();
+});
+$('#btn-games-all').addEventListener('click', () => {
+  rewards.setSetting('hidden', []);
+  gameSwitches.querySelectorAll('input').forEach((i) => { i.checked = true; });
+  renderGrid();
+  lockLastSwitch();
+});
 
 function renderGameSwitches() {
   const hidden = rewards.settings.hidden;
@@ -540,7 +582,8 @@ $('#btn-credits').addEventListener('click', async () => {
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (!panel.hidden) closePanel();
+    if (!gamesPanel.hidden) backFromGames();
+    else if (!panel.hidden) closePanel();
     else if (!celebration.hidden) endCelebration();
     else if (currentScreen === 'game') closeGame();
     else if (currentScreen === 'album') show('menu');
@@ -551,7 +594,7 @@ document.addEventListener('keydown', (e) => {
     startPlaying();
     return;
   }
-  if (currentScreen === 'menu' && panel.hidden && e.key.startsWith('Arrow') && !grid.contains(document.activeElement)) {
+  if (currentScreen === 'menu' && panel.hidden && gamesPanel.hidden && e.key.startsWith('Arrow') && !grid.contains(document.activeElement)) {
     e.preventDefault();
     grid.firstElementChild?.focus();
   }
@@ -562,7 +605,8 @@ document.addEventListener('keydown', (e) => {
 // juego (para eso hay que mantener pulsada la 🏠) ni sale de BabyGames.
 
 window.BabyGamesBack = () => {
-  if (!panel.hidden) closePanel();
+  if (!gamesPanel.hidden) backFromGames();
+  else if (!panel.hidden) closePanel();
   else if (!celebration.hidden) endCelebration();
   else if (currentScreen === 'album') $('#btn-album-back').click();
 };

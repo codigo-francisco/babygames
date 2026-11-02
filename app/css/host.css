@@ -831,16 +831,43 @@ button:focus-visible {
   opacity: 0.4;
 }
 
-.panel-section h3 {
-  margin: 0.9em 0 0.5em;
-  font-size: 1em;
+/* Fila del Rincón que abre otro menú (Juegos del menú). */
+.panel-link {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #eceff1;
+  cursor: pointer;
 }
 
-.panel-section h3 small {
-  display: block;
-  font-weight: 400;
+.panel-link .chevron {
+  font-size: 1.8em;
+  line-height: 1;
+  color: #90a4ae;
+}
+
+.panel.wide {
+  width: min(94vw, 56em);
+}
+
+.panel-header h2 + .round-btn,
+.panel-header .round-btn + h2 {
+  margin-inline: 0.5em;
+}
+
+.panel.wide .panel-header h2 {
+  flex: 1;
+  text-align: center;
+}
+
+.panel-note {
+  margin: 0 0 0.4em;
   color: #78909c;
-  font-size: 0.78em;
+  font-size: 0.85em;
+  text-align: center;
 }
 
 .game-switches {

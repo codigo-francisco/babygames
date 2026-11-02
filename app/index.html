@@ -102,10 +102,10 @@
         <input id="set-pin" type="checkbox" class="switch">
       </label>
 
-      <div class="panel-section">
-        <h3>🎮 Juegos del menú <small>Apaga los que aún sean difíciles. Siempre queda al menos uno.</small></h3>
-        <div id="set-games" class="game-switches"></div>
-      </div>
+      <button id="btn-games" class="panel-row panel-link" type="button">
+        <span>🎮 Juegos del menú <small id="games-note"></small></span>
+        <span class="chevron" aria-hidden="true">›</span>
+      </button>
 
       <div class="panel-actions">
         <button id="btn-fullscreen" class="pill" type="button">⛶ Pantalla completa</button>
@@ -115,6 +115,23 @@
       </div>
 
       <div id="credits" class="credits" hidden></div>
+    </div>
+  </div>
+
+  <!-- Juegos del menú (se abre desde el Rincón de mayores) -->
+  <div id="games-panel" class="overlay" hidden>
+    <div class="panel wide" role="dialog" aria-modal="true" aria-labelledby="games-title">
+      <header class="panel-header">
+        <button id="games-back" class="round-btn small" type="button" aria-label="Volver al Rincón de mayores">‹</button>
+        <h2 id="games-title">🎮 Juegos del menú</h2>
+        <button id="games-close" class="round-btn small" type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <p class="panel-note">Apaga los que aún sean difíciles. Siempre queda al menos uno.</p>
+      <div id="set-games" class="game-switches"></div>
+      <div class="panel-actions">
+        <button id="btn-games-all" class="pill" type="button">👀 Mostrar todos</button>
+        <button id="btn-games-done" class="pill" type="button">✅ Listo</button>
+      </div>
     </div>
   </div>
 
