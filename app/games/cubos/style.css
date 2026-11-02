@@ -1,0 +1,77 @@
+body {
+  background: linear-gradient(#e0f7fa, #b2ebf2 60%, #a5d6a7 60%, #81c784);
+}
+
+/* Donde aparece la pelota que hay que guardar */
+.spot {
+  position: fixed;
+  left: 50%;
+  top: 30vh;
+  translate: -50% -50%;
+  width: min(24vmin, 20vw);
+  aspect-ratio: 1;
+}
+
+.ball {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  filter: drop-shadow(0 1vmin 0 rgba(0, 0, 0, 0.15));
+  animation: ball-in 0.4s cubic-bezier(.3, 1.6, .6, 1);
+}
+
+@keyframes ball-in {
+  from { scale: 0; }
+}
+
+.buckets {
+  position: fixed;
+  left: 8vw;
+  right: 8vw;
+  bottom: 10vh;
+  height: 38vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+}
+
+.bucket {
+  position: relative;
+  width: min(30vmin, 24vw);
+  aspect-ratio: 120 / 110;
+}
+
+.bucket svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Pelotas ya guardadas, asomando por arriba del cubo */
+.bucket .pile {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: -6%;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.bucket .pile span {
+  width: 30%;
+  aspect-ratio: 1;
+  margin: -4% -2%;
+  animation: ball-in 0.4s cubic-bezier(.3, 1.6, .6, 1);
+}
+
+.bucket.hint {
+  animation: hint 0.5s ease-in-out 3;
+}
+
+.bucket.wiggle {
+  animation: wiggle 0.35s ease-in-out 2;
+}

@@ -1,0 +1,53 @@
+body {
+  background: linear-gradient(#0d1b3e, #283593 75%, #3949ab);
+}
+
+/* Estrellitas fijas del cielo */
+.stars {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle, #fff 0 0.25vmin, transparent 0.35vmin) 0 0 / 17vmin 13vmin,
+    radial-gradient(circle, #fff9c4 0 0.2vmin, transparent 0.3vmin) 8vmin 6vmin / 23vmin 19vmin;
+  opacity: 0.7;
+}
+
+.ask .bubble {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Cohete que sube hasta donde se ha tocado */
+.rocket {
+  position: fixed;
+  width: 2.4vmin;
+  height: 6vmin;
+  border-radius: 1.2vmin;
+  translate: -50% -50%;
+  background: linear-gradient(#fff, var(--c));
+  box-shadow: 0 2vmin 2vmin var(--c);
+  transition: top 0.55s ease-out;
+  pointer-events: none;
+}
+
+/* Trocitos del fuego artificial: formas pequeñas que salen volando */
+.spark {
+  position: fixed;
+  width: var(--s);
+  height: var(--s);
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: spark 1.3s ease-out forwards;
+}
+
+@keyframes spark {
+  0% { transform: translate(0, 0) scale(0.3) rotate(0); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1) rotate(var(--r)); opacity: 0; }
+}

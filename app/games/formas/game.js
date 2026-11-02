@@ -6,13 +6,7 @@
   var A = window.BabyAnimals;
   var board = document.getElementById('board');
   var tray = document.getElementById('tray');
-  var SHAPES = [
-    { id: 'circulo', name: 'el círculo', color: '#ef5350', d: 'M50 6 A44 44 0 1 1 49.9 6 Z' },
-    { id: 'cuadrado', name: 'el cuadrado', color: '#42a5f5', d: 'M10 10 H90 V90 H10 Z' },
-    { id: 'triangulo', name: 'el triángulo', color: '#66bb6a', d: 'M50 6 L95 90 H5 Z' },
-    { id: 'estrella', name: 'la estrella', color: '#ffca28', d: 'M50 4 L62 37 L97 37 L69 58 L79 93 L50 72 L21 93 L31 58 L3 37 L38 37 Z' },
-    { id: 'corazon', name: 'el corazón', color: '#ec407a', d: 'M50 92 C10 64 2 42 8 26 C16 6 42 6 50 26 C58 6 84 6 92 26 C98 42 90 64 50 92 Z' },
-  ];
+  var SHAPES = window.BabyShapes.shapes;
   var pieces = [];
   var placed = 0;
 

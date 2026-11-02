@@ -410,13 +410,14 @@ button:focus-visible {
 }
 
 .tile-emoji {
-  font-size: min(13vmin, 8vw);
+  /* --emoji y --name dependen de cuántas filas tiene el menú (ver renderGrid). */
+  font-size: min(var(--emoji, 13vmin), calc(56vw / var(--cols, 7)));
   line-height: 1;
   filter: drop-shadow(0 0.8vmin 0 rgba(0, 0, 0, 0.15));
 }
 
 .tile-name {
-  font-size: min(5vmin, 2.6vw, calc(17vw / var(--len, 6)));
+  font-size: min(var(--name, 5vmin), calc(18.2vw / var(--cols, 7)), calc(120vw / var(--cols, 7) / var(--len, 6)));
   white-space: nowrap;
   font-weight: 700;
   color: #fff;
@@ -524,10 +525,12 @@ button:focus-visible {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  /* Filas y columnas según cuántos juegos están visibles (ver renderAlbum). */
+  grid-template-columns: repeat(var(--cols, 7), 1fr);
+  grid-template-rows: repeat(var(--rows, 2), 1fr);
   gap: 3vmin;
   padding: 4vmin;
+  padding-inline: calc(4vmin + var(--spare, 0) * 50% / var(--total, 7));
   margin: 2vmin 4vmin 4vmin;
   background: #fff8e1;
   border: 1vmin dashed #ffcc80;
@@ -562,7 +565,7 @@ button:focus-visible {
 }
 
 .sticker {
-  --size: min(20vmin, 10vw);
+  --size: min(var(--sticker, 20vmin), calc(70vw / var(--cols, 7)));
   position: relative;
   display: grid;
   place-items: center;
@@ -593,7 +596,7 @@ button:focus-visible {
 }
 
 .album-name {
-  font-size: min(4vmin, 2.2vw, calc(16vw / var(--len, 6)));
+  font-size: min(var(--name, 4vmin), calc(15.4vw / var(--cols, 7)), calc(112vw / var(--cols, 7) / var(--len, 6)));
   white-space: nowrap;
   font-weight: 700;
   color: #6d4c41;

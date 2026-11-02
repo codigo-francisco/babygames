@@ -1,11 +1,12 @@
-// Los 19 juegos del menú (el Rincón de mayores puede ocultar algunos). `entry` es relativo a app/. Los ajustes propios de
+// Los 29 juegos del menú (el Rincón de mayores puede ocultar algunos). `entry` es relativo a app/. Los ajustes propios de
 // cada juego están en app/overrides/<id>.css y .js (los enlaza fetch-games.ps1).
 // `home: 'right'` pone el botón de la casita a la derecha si a la izquierda estorba.
 export const GAMES = [
   // Juegos propios de BabyGames (no se descargan: viven en app/games/<id>/ y
   // comparten los dibujos de app/shared/animals.js).
-  // Los cinco primeros, pensados para los más pequeños (unos 2 años): un toque,
-  // una reacción, sin fallos ni prisas.
+  // Los quince primeros, pensados para los más pequeños (unos 2 años): un toque,
+  // una reacción, sin fallos ni prisas. Los diez últimos de ellos son de colores y
+  // formas (comparten app/shared/shapes.js).
   {
     id: 'pompas', name: 'Pompas', emoji: '🧼', say: '¡Pompas de jabón! Explótalas.',
     colors: ['#b3e5fc', '#4fc3f7'], entry: 'games/pompas/index.html',
@@ -29,6 +30,56 @@ export const GAMES = [
   {
     id: 'vehiculos', name: 'Vehículos', emoji: '🚗', say: '¡Coches, trenes y aviones!',
     colors: ['#fff176', '#fbc02d'], entry: 'games/vehiculos/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'quecolor', name: '¿Qué color?', emoji: '🔴', say: '¿Qué color? ¡Busca el color!',
+    colors: ['#ffcdd2', '#e53935'], entry: 'games/quecolor/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'queforma', name: '¿Qué forma?', emoji: '🔺', say: '¿Qué forma? ¡Busca la forma!',
+    colors: ['#bbdefb', '#1976d2'], entry: 'games/queforma/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'iguales', name: 'Iguales', emoji: '🧦', say: '¡Busca las parejas iguales!',
+    colors: ['#e1bee7', '#8e24aa'], entry: 'games/iguales/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'tamanos', name: 'Tamaños', emoji: '🪆', say: '¡Grande y pequeño!',
+    colors: ['#c8e6c9', '#388e3c'], entry: 'games/tamanos/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'cubos', name: 'Cubos', emoji: '🪣', say: '¡Cada pelota a su cubo!',
+    colors: ['#b2ebf2', '#0097a7'], entry: 'games/cubos/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'mezclar', name: 'Mezclar', emoji: '🧪', say: '¡A mezclar colores!',
+    colors: ['#ffe0b2', '#f57c00'], entry: 'games/mezclar/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'luces', name: 'Luces', emoji: '💡', say: '¡Enciende las luces de colores!',
+    colors: ['#90a4ae', '#37474f'], entry: 'games/luces/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'fuegos', name: 'Fuegos', emoji: '🎆', say: '¡Fuegos artificiales de colores!',
+    colors: ['#9fa8da', '#283593'], entry: 'games/fuegos/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'collar', name: 'Collar', emoji: '📿', say: '¡Haz un collar de colores!',
+    colors: ['#f8bbd0', '#d81b60'], entry: 'games/collar/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'magia', name: 'Magia', emoji: '✨', say: '¡Magia de colores y formas!',
+    colors: ['#d1c4e9', '#5e35b1'], entry: 'games/magia/index.html',
     author: 'BabyGames', repo: null,
   },
   {

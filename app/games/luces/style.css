@@ -1,0 +1,32 @@
+body {
+  background: radial-gradient(circle at 50% 40%, #37474f, #1a2327);
+}
+
+.ask .bubble {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lights {
+  position: fixed;
+  left: 10vw;
+  right: 10vw;
+  top: 17vh;
+  bottom: 12vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 3vmin 5vw;
+  place-items: center;
+}
+
+.light {
+  width: min(28vmin, 22vw);
+  aspect-ratio: 1;
+  cursor: pointer;
+  touch-action: none;
+  transition: filter 0.3s;
+}
+
+.light.on {
+  filter: drop-shadow(0 0 3vmin var(--glow)) drop-shadow(0 0 1vmin var(--glow));
+}

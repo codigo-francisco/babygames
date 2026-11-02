@@ -151,18 +151,26 @@ const grid = $('#grid');
 const starCount = $('#star-count');
 let launching = false;
 
+// Reparte n fichas en horizontal: 1 fila con pocas, 2 hasta 14, 3 hasta 24 y 4 con
+// más. Nunca menos de 4 columnas, para que con pocas fichas no sean enormes (se
+// centran). Devuelve el número de filas.
+function fitGrid(el, n) {
+  const rows = n <= 4 ? 1 : n <= 14 ? 2 : n <= 24 ? 3 : 4;
+  const used = Math.ceil(n / rows);
+  const cols = Math.max(4, used);
+  el.style.setProperty('--rows', rows);
+  el.style.setProperty('--cols', used);
+  el.style.setProperty('--total', cols);
+  el.style.setProperty('--spare', cols - used);
+  return rows;
+}
+
 function renderGrid() {
   grid.innerHTML = '';
   const games = visibleGames(rewards.settings.hidden);
-  // En horizontal: 1 fila con pocos juegos, 2 hasta 14 y 3 con más. Nunca menos
-  // de 4 columnas, para que con pocos juegos las fichas no sean enormes (se centran).
-  const rows = games.length <= 4 ? 1 : games.length <= 14 ? 2 : 3;
-  const used = Math.ceil(games.length / rows);
-  const cols = Math.max(4, used);
-  grid.style.setProperty('--rows', rows);
-  grid.style.setProperty('--cols', used);
-  grid.style.setProperty('--total', cols);
-  grid.style.setProperty('--spare', cols - used);
+  const rows = fitGrid(grid, games.length);
+  grid.style.setProperty('--emoji', ['20vmin', '13vmin', '10vmin', '8.5vmin'][rows - 1]);
+  grid.style.setProperty('--name', ['6vmin', '5vmin', '3.6vmin', '3vmin'][rows - 1]);
   games.forEach((game, i) => {
     const tile = document.createElement('button');
     tile.type = 'button';
@@ -339,6 +347,9 @@ function renderAlbum() {
   const album = $('#album');
   album.innerHTML = '';
   const games = visibleGames(rewards.settings.hidden);
+  const rows = fitGrid(album, games.length);
+  album.style.setProperty('--sticker', ['26vmin', '20vmin', '14vmin', '10vmin'][rows - 1]);
+  album.style.setProperty('--name', ['5vmin', '4vmin', '3vmin', '2.4vmin'][rows - 1]);
   games.forEach((game, i) => {
     const unlocked = rewards.hasSticker(game.id);
     const slot = document.createElement('button');

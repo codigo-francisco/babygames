@@ -4,8 +4,9 @@ Juego para peques de **2 a 5 años**, pensado para **tablets táctiles con Windo
 (también funciona en móviles Android, siempre en horizontal).
 
 Es un "juego de juegos": la mascota **Bubu** recibe al niño y, desde un menú en
-cuadrícula con fichas grandes, se abren **19 juegos**: 10 de código abierto sacados de
-GitHub y 9 hechos para BabyGames (5 de ellos pensados para los más pequeños, de unos 2 años).
+cuadrícula con fichas grandes, se abren **29 juegos**: 10 de código abierto sacados de
+GitHub y 19 hechos para BabyGames (15 de ellos pensados para los más pequeños, de unos 2 años,
+y 10 de esos dedicados a los colores y las formas).
 Desde el Rincón de mayores se puede elegir qué juegos aparecen en el menú. El propio menú también es un juego:
 
 - 🎈 **Globos** que suben por la pantalla y se explotan al tocarlos (cada 10 globos → ⭐).
@@ -13,7 +14,7 @@ Desde el Rincón de mayores se puede elegir qué juegos aparecen en el menú. El
 - 🗣️ **Bubu habla** en español (si el dispositivo tiene una voz en español instalada).
 - 🔇 **Sin internet**: todo funciona sin conexión y la app bloquea cualquier enlace externo.
 
-## Los 19 juegos
+## Los 29 juegos
 
 Cada juego se descarga en un commit fijo (ver [`tools/games.json`](tools/games.json)) y se
 adapta a tablet y a español mediante pequeños parches.
@@ -43,6 +44,26 @@ sin fallos ni prisas. Cada partida es corta y termina con el cartel *🔄 ¡Otra
 | 🔷 Formas | Se arrastran tres formas (círculo, cuadrado, triángulo, estrella, corazón) a sus huecos del tablero; basta con acercarlas. Tocar una forma dice su nombre y hace brillar su hueco |
 | 🛁 Baño | Un animal lleno de barro: se frota con el dedo (la esponja) y sale espuma hasta dejarlo limpio. 3 animales = fin |
 | 🚗 Vehículos | Coche, tren, avión, barco y camión de bomberos: al tocar uno hace su sonido, se dice su nombre y se va de viaje. Con los cinco, fin |
+
+### 10 juegos de colores y formas (unos 2 años)
+
+También escritos para BabyGames, sin animales: comparten los colores (rojo, azul, amarillo,
+verde, naranja, morado y rosa) y las formas (círculo, cuadrado, triángulo, estrella y corazón)
+de [`app/shared/shapes.js`](app/shared/shapes.js). Mismas reglas: sin fallos, partidas cortas y
+*🔄 ¡Otra vez!* al final.
+
+| Menú | Cómo se juega |
+|---|---|
+| 🔴 ¿Qué color? | "¿Dónde está el rojo?" (con una muestra del color): se toca entre tres formas iguales de distinto color. 6 aciertos |
+| 🔺 ¿Qué forma? | "¿Dónde está la estrella?" (con su silueta): se toca entre tres formas del mismo color. 6 aciertos |
+| 🧦 Iguales | Arriba una forma de un color; abajo tres y solo una es igual (las otras cambian de color o de forma). 6 aciertos |
+| 🪆 Tamaños | La misma forma en grande y en pequeño: "¿Cuál es el grande?" o "¿Cuál es el pequeño?". 6 aciertos |
+| 🪣 Cubos | Se arrastra cada pelota al cubo de su color (basta con acercarla). 6 pelotas |
+| 🧪 Mezclar | Se tocan dos botes de pintura y se mezclan en el cuenco: rojo y amarillo hacen naranja, azul y amarillo verde, rojo y azul morado. 4 mezclas |
+| 💡 Luces | Seis formas apagadas en la oscuridad; cada toque enciende una con su color y una nota. Todas encendidas = fin |
+| 🎆 Fuegos | Al tocar el cielo de noche sube un cohete y estalla en formas de un color. 10 fuegos |
+| 📿 Collar | Un collar que se repite (rojo, azul, rojo, azul…) con un hueco: se toca la cuenta que sigue. Primero cambian los colores y luego las formas. 4 collares |
+| ✨ Magia | Al mover el dedo salen formas de colores que suenan y se desvanecen (vale con varios dedos). 80 formas |
 
 ### 4 juegos propios de animales
 
@@ -153,7 +174,7 @@ app/                     Juego web (lo que se ve)
   index.html             Pantallas del anfitrión
   css/host.css           Estilos
   js/host.js             Lógica: menú, abrir/cerrar juegos, pegatinas, rincón de mayores
-  js/catalog.js          Las 19 fichas del menú (nombre, emoji, colores, frase de Bubu)
+  js/catalog.js          Las 29 fichas del menú (nombre, emoji, colores, frase de Bubu)
   js/sounds.js           Efectos sintetizados con WebAudio y voz
   js/balloons.js         Minijuego de globos
   js/rewards.js          Estrellas, pegatinas y ajustes (localStorage)

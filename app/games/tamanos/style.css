@@ -1,0 +1,9 @@
+body {
+  background: linear-gradient(#e8f5e9, #c8e6c9);
+}
+
+/* La opción grande y la pequeña (el tamaño lo pone game.js) */
+.board .choice {
+  width: auto;
+  height: auto;
+}

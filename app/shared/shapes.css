@@ -1,0 +1,103 @@
+/* Estilos comunes de los juegos de colores y formas. Se carga después de
+   animals.css (fuente, bocadillo .bubble y animaciones hop/wiggle). */
+.bg-shape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Pregunta arriba, en un bocadillo */
+.ask {
+  position: fixed;
+  top: 3vh;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ask .swatch {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  border: 0.1em solid #fff;
+  border-radius: 50%;
+}
+
+.ask .mini {
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  margin: -0.2em 0;
+}
+
+/* Marcador: una bolita por paso de la partida */
+.dots {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  display: flex;
+  gap: 1.4vmin;
+  pointer-events: none;
+}
+
+.dots span {
+  width: 4.6vmin;
+  height: 4.6vmin;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  border: 0.5vmin solid #fff;
+  transition: background 0.3s, scale 0.3s;
+}
+
+.dots span.on {
+  background: #ffca28;
+  scale: 1.2;
+}
+
+/* Opciones grandes para tocar (juegos de preguntas) */
+.board {
+  position: fixed;
+  left: 6vw;
+  right: 6vw;
+  top: 19vh;
+  bottom: 13vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.choice {
+  display: grid;
+  place-items: center;
+  width: min(34vmin, 27vw);
+  aspect-ratio: 1;
+  cursor: pointer;
+  touch-action: none;
+  filter: drop-shadow(0 1.2vmin 0 rgba(0, 0, 0, 0.15));
+}
+
+.choice.right {
+  filter: drop-shadow(0 0 3vmin #fff59d) drop-shadow(0 1.2vmin 0 rgba(0, 0, 0, 0.15));
+}
+
+/* Piezas que se arrastran (shapes.js: draggable) */
+.drag {
+  z-index: 10;
+  scale: 1.08;
+}
+
+.back {
+  transition: transform 0.35s cubic-bezier(.3, 1.4, .6, 1);
+}
+
+.hint {
+  animation: hint 0.5s ease-in-out 3;
+}
+
+@keyframes hint {
+  50% { scale: 1.12; filter: drop-shadow(0 0 2vmin #fff59d); }
+}

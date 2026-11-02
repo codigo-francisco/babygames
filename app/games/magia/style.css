@@ -1,0 +1,28 @@
+body {
+  background: radial-gradient(circle at 50% 40%, #ffffff, #ede7f6);
+}
+
+.paper {
+  position: fixed;
+  inset: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Cada forma que deja el dedo: aparece, gira un poco y se desvanece */
+.stamp {
+  position: fixed;
+  width: var(--s);
+  height: var(--s);
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: stamp 2.4s ease-out forwards;
+}
+
+@keyframes stamp {
+  0% { scale: 0; rotate: 0deg; }
+  12% { scale: 1.2; }
+  25% { scale: 1; }
+  75% { opacity: 1; }
+  100% { scale: 0.8; rotate: var(--r); opacity: 0; }
+}

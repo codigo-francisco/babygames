@@ -1,0 +1,91 @@
+body {
+  background: linear-gradient(#fffde7, #fff3e0);
+}
+
+/* Tres botes de pintura arriba */
+.pots {
+  position: fixed;
+  left: 14vw;
+  right: 14vw;
+  top: 17vh;
+  height: 32vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.pot {
+  width: min(24vmin, 20vw);
+  aspect-ratio: 100 / 110;
+  cursor: pointer;
+  touch-action: none;
+  transform-origin: 50% 90%;
+  transition: rotate 0.25s;
+  filter: drop-shadow(0 1vmin 0 rgba(0, 0, 0, 0.15));
+}
+
+.pot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pot.pour {
+  rotate: 25deg;
+}
+
+/* Gota que cae del bote al cuenco */
+.drop {
+  position: fixed;
+  z-index: 3;
+  width: 6vmin;
+  height: 8vmin;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  translate: -50% -50%;
+  transition: left 0.5s ease-in, top 0.5s ease-in;
+  pointer-events: none;
+}
+
+/* Cuenco con la mezcla */
+.bowl {
+  position: fixed;
+  left: 50%;
+  bottom: 11vh;
+  translate: -50% 0;
+  width: min(44vmin, 36vw);
+  height: min(24vmin, 20vw);
+  border: 1vmin solid #3b3b4f;
+  border-top-width: 0.6vmin;
+  border-radius: 10% 10% 50% 50% / 20% 20% 80% 80%;
+  background: #eceff1;
+  overflow: hidden;
+}
+
+.bowl .paint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  background: var(--paint, transparent);
+  transition: height 0.5s, background 0.8s;
+}
+
+.bowl .paint.half {
+  height: 45%;
+}
+
+.bowl .paint.full {
+  height: 80%;
+}
+
+/* Remolino mientras se mezclan los dos colores */
+.bowl .paint.swirl {
+  background: conic-gradient(var(--a), var(--b), var(--a), var(--b), var(--a));
+  animation: swirl 0.9s linear;
+}
+
+@keyframes swirl {
+  to { filter: hue-rotate(20deg); }
+}
