@@ -335,13 +335,16 @@ button:focus-visible {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  /* Filas y columnas según cuántos juegos están visibles (ver renderGrid). */
+  grid-template-columns: repeat(var(--cols, 7), 1fr);
+  grid-template-rows: repeat(var(--rows, 2), 1fr);
   gap: 3vmin;
   padding: 3vmin 4vmin 4vmin;
+  /* Columnas sobrantes (pocos juegos visibles): margen a los lados para centrar. */
+  padding-inline: calc(4vmin + var(--spare, 0) * 50% / var(--total, 7));
 }
 
-/* En vertical no caben 14 fichas sin aplastarlas: fichas con su proporción
+/* En vertical no caben todas las fichas sin aplastarlas: fichas con su proporción
    (2 columnas en móvil, 3 en tablet) y el menú se desplaza con el dedo. */
 @media (max-aspect-ratio: 1/1) {
   .grid {
@@ -823,6 +826,28 @@ button:focus-visible {
 
 .switch:disabled {
   opacity: 0.4;
+}
+
+.panel-section h3 {
+  margin: 0.9em 0 0.5em;
+  font-size: 1em;
+}
+
+.panel-section h3 small {
+  display: block;
+  font-weight: 400;
+  color: #78909c;
+  font-size: 0.78em;
+}
+
+.game-switches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
+  gap: 0.2em 1.2em;
+}
+
+.game-switches .panel-row {
+  padding: 0.5em 0;
 }
 
 .panel-actions {

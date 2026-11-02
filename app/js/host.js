@@ -1,4 +1,4 @@
-import { GAMES } from './catalog.js';
+import { GAMES, visibleGames } from './catalog.js';
 import { sfx, say, music, setVolume, setVoice, setMusic, hasSpanishVoice, unlockAudio, pauseAudio, resumeAudio } from './sounds.js';
 import { rewards } from './rewards.js';
 import { createBalloons } from './balloons.js';
@@ -153,7 +153,17 @@ let launching = false;
 
 function renderGrid() {
   grid.innerHTML = '';
-  GAMES.forEach((game, i) => {
+  const games = visibleGames(rewards.settings.hidden);
+  // En horizontal: 1 fila con pocos juegos, 2 hasta 14 y 3 con más. Nunca menos
+  // de 4 columnas, para que con pocos juegos las fichas no sean enormes (se centran).
+  const rows = games.length <= 4 ? 1 : games.length <= 14 ? 2 : 3;
+  const used = Math.ceil(games.length / rows);
+  const cols = Math.max(4, used);
+  grid.style.setProperty('--rows', rows);
+  grid.style.setProperty('--cols', used);
+  grid.style.setProperty('--total', cols);
+  grid.style.setProperty('--spare', cols - used);
+  games.forEach((game, i) => {
     const tile = document.createElement('button');
     tile.type = 'button';
     tile.className = 'tile';
@@ -328,7 +338,8 @@ celebration.addEventListener('pointerdown', endCelebration);
 function renderAlbum() {
   const album = $('#album');
   album.innerHTML = '';
-  GAMES.forEach((game, i) => {
+  const games = visibleGames(rewards.settings.hidden);
+  games.forEach((game, i) => {
     const unlocked = rewards.hasSticker(game.id);
     const slot = document.createElement('button');
     slot.type = 'button';
@@ -352,7 +363,7 @@ function renderAlbum() {
     });
     album.appendChild(slot);
   });
-  $('#album-count').textContent = `${rewards.stickerCount()} / ${GAMES.length}`;
+  $('#album-count').textContent = `${games.filter((g) => rewards.hasSticker(g.id)).length} / ${games.length}`;
 }
 
 $('#btn-album').addEventListener('click', () => {
@@ -387,6 +398,7 @@ function openPanel() {
   voiceInput.checked = s.voice && spanish;
   voiceInput.disabled = !spanish;
   $('#voice-note').textContent = spanish ? '' : 'No hay ninguna voz en español instalada en este dispositivo.';
+  renderGameSwitches();
   $('#credits').hidden = true;
   resetArmed = false;
   $('#btn-reset').textContent = '♻️ Borrar progreso';
@@ -404,6 +416,40 @@ $('#panel-close').addEventListener('click', closePanel);
 panel.addEventListener('pointerdown', (e) => {
   if (e.target === panel) closePanel();
 });
+
+// Interruptores para mostrar u ocultar cada juego del menú. El último visible no se
+// puede apagar, para que el menú nunca se quede vacío.
+const gameSwitches = $('#set-games');
+
+function renderGameSwitches() {
+  const hidden = rewards.settings.hidden;
+  gameSwitches.innerHTML = '';
+  GAMES.forEach((game) => {
+    const row = document.createElement('label');
+    row.className = 'panel-row';
+    row.innerHTML = `<span>${game.emoji} ${game.name}</span>`;
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.className = 'switch';
+    input.checked = !hidden.includes(game.id);
+    // La lista no se rehace al cambiar: así no se pierde un toque rápido.
+    input.addEventListener('change', () => {
+      const rest = rewards.settings.hidden.filter((id) => id !== game.id);
+      rewards.setSetting('hidden', input.checked ? rest : [...rest, game.id]);
+      renderGrid();
+      lockLastSwitch();
+    });
+    row.appendChild(input);
+    gameSwitches.appendChild(row);
+  });
+  lockLastSwitch();
+}
+
+function lockLastSwitch() {
+  const inputs = [...gameSwitches.querySelectorAll('input')];
+  const lastOne = inputs.filter((i) => i.checked).length === 1;
+  inputs.forEach((i) => { i.disabled = lastOne && i.checked; });
+}
 
 volumeInput.addEventListener('input', () => {
   const v = volumeInput.value / 100;

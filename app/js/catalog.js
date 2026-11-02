@@ -1,9 +1,36 @@
-// Los 14 juegos del menú. `entry` es relativo a app/. Los ajustes propios de
+// Los 19 juegos del menú (el Rincón de mayores puede ocultar algunos). `entry` es relativo a app/. Los ajustes propios de
 // cada juego están en app/overrides/<id>.css y .js (los enlaza fetch-games.ps1).
 // `home: 'right'` pone el botón de la casita a la derecha si a la izquierda estorba.
 export const GAMES = [
   // Juegos propios de BabyGames (no se descargan: viven en app/games/<id>/ y
   // comparten los dibujos de app/shared/animals.js).
+  // Los cinco primeros, pensados para los más pequeños (unos 2 años): un toque,
+  // una reacción, sin fallos ni prisas.
+  {
+    id: 'pompas', name: 'Pompas', emoji: '🧼', say: '¡Pompas de jabón! Explótalas.',
+    colors: ['#b3e5fc', '#4fc3f7'], entry: 'games/pompas/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'cucu', name: 'Cucú', emoji: '🙈', say: '¡Cucú! ¿Quién se esconde?',
+    colors: ['#c8e6c9', '#43a047'], entry: 'games/cucu/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'formas', name: 'Formas', emoji: '🔷', say: '¡Formas! Pon cada una en su casita.',
+    colors: ['#90caf9', '#1e88e5'], entry: 'games/formas/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'bano', name: 'Baño', emoji: '🛁', say: '¡A bañar a los animales!',
+    colors: ['#80deea', '#00acc1'], entry: 'games/bano/index.html',
+    author: 'BabyGames', repo: null,
+  },
+  {
+    id: 'vehiculos', name: 'Vehículos', emoji: '🚗', say: '¡Coches, trenes y aviones!',
+    colors: ['#fff176', '#fbc02d'], entry: 'games/vehiculos/index.html',
+    author: 'BabyGames', repo: null,
+  },
   {
     id: 'rompecabezas', name: 'Rompecabezas', emoji: '🦁', say: '¡Rompecabezas de animales!',
     colors: ['#ffcc80', '#ef6c00'], entry: 'games/rompecabezas/index.html',
@@ -77,3 +104,6 @@ export const GAMES = [
 ];
 
 export const gameById = (id) => GAMES.find((g) => g.id === id);
+
+// Los juegos del menú, sin los que se han ocultado en el Rincón de mayores.
+export const visibleGames = (hidden = []) => GAMES.filter((g) => !hidden.includes(g.id));

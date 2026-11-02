@@ -1,0 +1,121 @@
+body {
+  background: #e0f7fa;
+}
+
+/* Azulejos del baño */
+.tiles {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0.4vmin, transparent 0.4vmin) 0 0 / 12vmin 12vmin,
+    linear-gradient(rgba(255, 255, 255, 0.8) 0.4vmin, transparent 0.4vmin) 0 0 / 12vmin 12vmin,
+    linear-gradient(#b2ebf2, #80deea);
+}
+
+/* Bañera con espuma por delante del animal */
+.tub {
+  position: fixed;
+  left: 18vw;
+  right: 18vw;
+  bottom: 0;
+  height: 24vh;
+  z-index: 3;
+  border-radius: 6vmin 6vmin 0 0;
+  background:
+    radial-gradient(circle at 10% 0, #fff 0 5vmin, transparent 5.2vmin),
+    radial-gradient(circle at 30% 0, #fff 0 6vmin, transparent 6.2vmin),
+    radial-gradient(circle at 55% 0, #fff 0 5vmin, transparent 5.2vmin),
+    radial-gradient(circle at 78% 0, #fff 0 6vmin, transparent 6.2vmin),
+    radial-gradient(circle at 95% 0, #fff 0 4vmin, transparent 4.2vmin),
+    linear-gradient(#fafafa, #cfd8dc);
+  border: 0.8vmin solid #fff;
+  box-shadow: 0 -1vmin 0 rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+}
+
+.stage {
+  position: fixed;
+  left: 50%;
+  bottom: 17vh;
+  width: min(66vh, 58vw);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  z-index: 2;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.pic,
+.mud {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mud {
+  pointer-events: none;
+}
+
+.pic.hop {
+  animation: hop 0.6s ease-in-out 2;
+}
+
+.ask {
+  position: fixed;
+  top: 3vh;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.dots {
+  position: fixed;
+  top: 4vh;
+  right: 4vw;
+  z-index: 5;
+  display: flex;
+  gap: 1.4vmin;
+  pointer-events: none;
+}
+
+.dots span {
+  width: 5vmin;
+  height: 5vmin;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  border: 0.5vmin solid #fff;
+  transition: background 0.3s, scale 0.3s;
+}
+
+.dots span.on {
+  background: #00acc1;
+  scale: 1.2;
+}
+
+.sponge {
+  position: fixed;
+  z-index: 6;
+  font-size: 14vmin;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* Burbujitas de espuma que salen al frotar */
+.foam {
+  position: fixed;
+  z-index: 4;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 20%, rgba(255, 255, 255, 0.5) 60%, rgba(178, 235, 242, 0.6));
+  border: 0.3vmin solid rgba(255, 255, 255, 0.9);
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: foam 1s ease-out forwards;
+}
+
+@keyframes foam {
+  to { transform: translate(var(--dx), -12vmin); opacity: 0; }
+}

@@ -4,15 +4,16 @@ Juego para peques de **2 a 5 años**, pensado para **tablets táctiles con Windo
 (también funciona en móviles Android, siempre en horizontal).
 
 Es un "juego de juegos": la mascota **Bubu** recibe al niño y, desde un menú en
-cuadrícula con fichas grandes, se abren **14 juegos**: 10 de código abierto sacados de
-GitHub y 4 de animales hechos para BabyGames. El propio menú también es un juego:
+cuadrícula con fichas grandes, se abren **19 juegos**: 10 de código abierto sacados de
+GitHub y 9 hechos para BabyGames (5 de ellos pensados para los más pequeños, de unos 2 años).
+Desde el Rincón de mayores se puede elegir qué juegos aparecen en el menú. El propio menú también es un juego:
 
 - 🎈 **Globos** que suben por la pantalla y se explotan al tocarlos (cada 10 globos → ⭐).
 - 📒 **Álbum de pegatinas**: jugar 20 segundos a un juego desbloquea su pegatina y da una ⭐.
 - 🗣️ **Bubu habla** en español (si el dispositivo tiene una voz en español instalada).
 - 🔇 **Sin internet**: todo funciona sin conexión y la app bloquea cualquier enlace externo.
 
-## Los 14 juegos
+## Los 19 juegos
 
 Cada juego se descarga en un commit fijo (ver [`tools/games.json`](tools/games.json)) y se
 adapta a tablet y a español mediante pequeños parches.
@@ -29,6 +30,19 @@ adapta a tablet y a español mediante pequeños parches.
 | 🫧 Burbujas | [rembound/Bubble-Shooter-HTML5](https://github.com/rembound/Bubble-Shooter-HTML5) | MIT | Apuntar arrastrando el dedo y disparar al soltar; pantalla completa y nítida en alta resolución (burbujas vectoriales); música y efectos de sonido |
 | 🌈 Colores | [rembound/Match-3-Game-HTML5](https://github.com/rembound/Match-3-Game-HTML5) | MIT | Sin botones: tocar o arrastrar intercambia; al acabar, un toque reinicia; nítido en alta resolución; música y efectos de sonido |
 | 🦖 Dino | [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner) | BSD-3-Clause | Empieza solo tras una cuenta atrás; tocar en cualquier sitio salta al instante o reinicia; más lento; textos en español ("FIN DEL JUEGO", "MÁX") |
+
+### 5 juegos para los más pequeños (unos 2 años)
+
+Escritos para BabyGames: objetos enormes, un toque = una reacción (sonido, animación y voz),
+sin fallos ni prisas. Cada partida es corta y termina con el cartel *🔄 ¡Otra vez!*.
+
+| Menú | Cómo se juega |
+|---|---|
+| 🧼 Pompas | Pompas de jabón que suben despacio; se explotan tocándolas (vale con varios dedos). Algunas llevan un animal que sale saltando y hace su sonido. 15 pompas = fin |
+| 🙈 Cucú | Cuatro arbustos con un animal detrás de cada uno: al tocar uno, el animal asoma ("¡Cucú! ¡El gato!") y hace su sonido. Siempre hay alguien. 6 animales = fin |
+| 🔷 Formas | Se arrastran tres formas (círculo, cuadrado, triángulo, estrella, corazón) a sus huecos del tablero; basta con acercarlas. Tocar una forma dice su nombre y hace brillar su hueco |
+| 🛁 Baño | Un animal lleno de barro: se frota con el dedo (la esponja) y sale espuma hasta dejarlo limpio. 3 animales = fin |
+| 🚗 Vehículos | Coche, tren, avión, barco y camión de bomberos: al tocar uno hace su sonido, se dice su nombre y se va de viaje. Con los cinco, fin |
 
 ### 4 juegos propios de animales
 
@@ -80,7 +94,7 @@ Los textos y controles escalan con la resolución de la pantalla.
 | Abrir un juego | Tocar su ficha |
 | Volver al menú | **Mantener pulsada la 🏠** medio segundo (así los toques sin querer no sacan del juego) |
 | Ver las pegatinas | Tocar 📒 |
-| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, fijar la app (Android), pantalla completa, créditos, borrar progreso y **Salir** |
+| Rincón de mayores | **Mantener pulsado el 🔒** 2,5 segundos → volumen, voz, globos, música de los juegos, **qué juegos salen en el menú** (siempre queda al menos uno), fijar la app (Android), pantalla completa, créditos, borrar progreso y **Salir** |
 | Con teclado (PC) | Flechas + Intro para elegir, `Esc` para volver |
 | Botón Atrás (Android) | Cierra el Rincón de mayores o el álbum. **No** cierra el juego ni sale de BabyGames (los gestos sin querer son muy habituales) |
 
@@ -139,7 +153,7 @@ app/                     Juego web (lo que se ve)
   index.html             Pantallas del anfitrión
   css/host.css           Estilos
   js/host.js             Lógica: menú, abrir/cerrar juegos, pegatinas, rincón de mayores
-  js/catalog.js          Las 14 fichas del menú (nombre, emoji, colores, frase de Bubu)
+  js/catalog.js          Las 19 fichas del menú (nombre, emoji, colores, frase de Bubu)
   js/sounds.js           Efectos sintetizados con WebAudio y voz
   js/balloons.js         Minijuego de globos
   js/rewards.js          Estrellas, pegatinas y ajustes (localStorage)

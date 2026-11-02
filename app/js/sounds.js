@@ -159,6 +159,35 @@ const ANIMAL_SOUNDS = {
   },
 };
 
+// Sonidos de vehículos (de juguete, cortos y suaves).
+const VEHICLE_SOUNDS = {
+  // "¡Pi, piii!": claxon de dos notas.
+  coche() {
+    [[0, 0.14], [0.2, 0.32]].forEach(([d, dur]) => {
+      tone({ freq: 440, type: 'square', dur, gain: 0.08, delay: d });
+      tone({ freq: 554, type: 'square', dur, gain: 0.06, delay: d });
+    });
+  },
+  // "Chu-chuuu": silbato de vapor y traqueteo.
+  tren() {
+    [0, 0.35].forEach((d, i) => voc({ delay: d, dur: i ? 0.7 : 0.3, f0: [[0, 520], [1, 500]], wave: 'sawtooth', formants: [[[0, 1300], [1, 1200]], [[0, 2400], [1, 2300]]], q: 4, gain: 0.25, attack: 0.04 }));
+    for (let i = 0; i < 8; i++) noise({ dur: 0.06, gain: 0.12, from: 900, to: 300, delay: 1.1 + i * 0.14 });
+  },
+  // Motor de avión que pasa: ruido que sube y baja.
+  avion() {
+    noise({ dur: 1.4, gain: 0.25, from: 300, to: 1600 });
+    tone({ freq: 180, to: 120, type: 'sawtooth', dur: 1.3, gain: 0.05 });
+  },
+  // Sirena grave de barco.
+  barco() {
+    voc({ dur: 1.1, f0: [[0, 150], [0.1, 165], [1, 160]], formants: [[[0, 400], [1, 400]], [[0, 800], [1, 800]]], q: 3, gain: 0.45, attack: 0.08 });
+  },
+  // "Ni-no, ni-no" del camión de bomberos.
+  bomberos() {
+    [0, 1, 2, 3].forEach((i) => tone({ freq: i % 2 ? 660 : 880, type: 'triangle', dur: 0.32, gain: 0.16, delay: i * 0.34 }));
+  },
+};
+
 // Escala pentatónica: cualquier combinación suena bien.
 const PENTA = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5, 1174.66, 1318.51];
 
@@ -228,6 +257,26 @@ export const sfx = {
   cheer() {
     for (let i = 0; i < 18; i++) noise({ dur: 0.05, gain: 0.18, from: 2500 + Math.random() * 1500, to: 1200, delay: i * 0.07 + Math.random() * 0.04 });
     voc({ dur: 1.2, f0: [[0, 400], [0.5, 520], [1, 380]], formants: [[[0, 700], [1, 600]], [[0, 1200], [1, 1000]]], q: 2, gain: 0.12, attack: 0.2, vibrato: { rate: 7, depth: 25 } });
+  },
+  // Cucú: cortina que se abre y "¡tachán!" del animal escondido.
+  peek() {
+    noise({ dur: 0.25, gain: 0.12, from: 500, to: 2500 });
+    tone({ freq: PENTA[2], type: 'triangle', dur: 0.15, gain: 0.2, delay: 0.12 });
+    tone({ freq: PENTA[5], type: 'triangle', dur: 0.3, gain: 0.2, delay: 0.24 });
+  },
+  // Baño: frotar con espuma y chapuzón al quedar limpio.
+  scrub() {
+    noise({ dur: 0.12, gain: 0.08, from: 1800 + Math.random() * 1500, to: 900 });
+    if (Math.random() < 0.4) tone({ freq: 900 + Math.random() * 900, to: 1600, type: 'sine', dur: 0.08, gain: 0.08 });
+  },
+  splash() {
+    noise({ dur: 0.5, gain: 0.3, from: 1200, to: 300 });
+    [0, 1, 2, 3, 4].forEach((i) => tone({ freq: 600 + Math.random() * 900, to: 1500, type: 'sine', dur: 0.1, gain: 0.1, delay: 0.1 + i * 0.07 }));
+  },
+  // Vehículos: coche, tren, avion, barco, bomberos.
+  vehicle(id) {
+    const play = VEHICLE_SOUNDS[id];
+    if (play) play();
   },
   // Sonido del animal (perro, gato, cerdo, vaca, leon, rana, oso, pollito).
   animal(id) {
@@ -314,6 +363,28 @@ const TUNES = {
     ],
     bass: [-12, -15, -7, -12, -12, -15, -10, -5],
     drums: 'k.hsk.hskkhsk.hs',
+  },
+  pompas: {
+    bpm: 90,
+    wave: 'sine',
+    melody: [
+      24, null, 19, null, 21, null, 16, null,
+      19, null, 16, 14, 12, null, null, null,
+      14, null, 16, null, 19, null, 21, null,
+      19, null, 16, null, 14, null, null, null,
+    ],
+    bass: [-12, -15, -17, -20],
+  },
+  vehiculos: {
+    bpm: 120,
+    wave: 'triangle',
+    melody: [
+      12, null, 16, null, 19, 19, 19, null,
+      21, null, 19, null, 16, null, null, null,
+      14, null, 17, null, 21, 21, 21, null,
+      19, null, 16, null, 12, null, null, null,
+    ],
+    bass: [-12, -12, -10, -12],
   },
   calma: {
     bpm: 84,

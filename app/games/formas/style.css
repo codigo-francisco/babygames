@@ -1,0 +1,77 @@
+body {
+  background: linear-gradient(#fff8e1, #ffe0b2);
+}
+
+/* Tablero de madera con los huecos (arriba) y bandeja con las piezas (abajo). */
+.board,
+.tray {
+  position: fixed;
+  left: 12vw;
+  right: 12vw;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+}
+
+.board {
+  top: 5vh;
+  height: 44vh;
+  background: linear-gradient(#d7a86e, #b9824a);
+  border: 1vmin solid #8d5a2b;
+  border-radius: 4vmin;
+  box-shadow: 0 1.2vmin 0 #6d4422;
+}
+
+.tray {
+  top: 55vh;
+  height: 40vh;
+}
+
+.hole,
+.piece {
+  width: min(30vmin, 22vw);
+  aspect-ratio: 1;
+}
+
+.hole svg,
+.piece svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hole.hint {
+  animation: hint 0.5s ease-in-out 3;
+}
+
+@keyframes hint {
+  50% { scale: 1.12; filter: drop-shadow(0 0 2vmin #fff59d); }
+}
+
+.piece {
+  position: relative;
+  z-index: 2;
+  cursor: grab;
+  touch-action: none;
+  filter: drop-shadow(0 1.2vmin 0 rgba(0, 0, 0, 0.18));
+}
+
+.piece.drag {
+  z-index: 10;
+  scale: 1.08;
+  cursor: grabbing;
+  filter: drop-shadow(0 2.5vmin 1vmin rgba(0, 0, 0, 0.25));
+}
+
+/* Al soltar: vuelve a la bandeja o se mete en su hueco, con un rebote. */
+.piece.back,
+.piece.done {
+  transition: transform 0.35s cubic-bezier(.3, 1.4, .6, 1);
+}
+
+.piece.done {
+  z-index: 1;
+  pointer-events: none;
+  filter: none;
+}

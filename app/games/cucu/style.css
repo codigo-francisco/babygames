@@ -1,0 +1,138 @@
+body {
+  background: linear-gradient(#90caf9, #e3f2fd 60%);
+}
+
+.sun {
+  position: fixed;
+  top: 4vmin;
+  right: 6vmin;
+  width: 14vmin;
+  height: 14vmin;
+  border-radius: 50%;
+  background: radial-gradient(#fff59d, #ffca28);
+  box-shadow: 0 0 6vmin #ffe082;
+}
+
+.ground {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30vh;
+  background: linear-gradient(#9ccc65, #689f38);
+}
+
+.ask {
+  position: fixed;
+  top: 3vh;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.dots {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  display: flex;
+  gap: 1.4vmin;
+  pointer-events: none;
+}
+
+.dots span {
+  width: 5vmin;
+  height: 5vmin;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: 0.5vmin solid #fff;
+  transition: background 0.3s, scale 0.3s;
+}
+
+.dots span.on {
+  background: #ffca28;
+  scale: 1.2;
+}
+
+.garden {
+  position: fixed;
+  left: 3vw;
+  right: 3vw;
+  top: 22vh;
+  bottom: 13vh;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3vw;
+}
+
+.hide {
+  position: relative;
+  cursor: pointer;
+}
+
+/* El animal está detrás del arbusto, más abajo; al abrirse sube. */
+.hide .pic {
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  width: min(100%, 38vh);
+  aspect-ratio: 1;
+  translate: -50% 40%;
+  opacity: 0;
+  transition: translate 0.35s cubic-bezier(.3, 1.6, .6, 1), opacity 0.2s;
+  pointer-events: none;
+}
+
+.hide.open .pic {
+  translate: -50% -20%;
+  opacity: 1;
+}
+
+.bush {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62%;
+  transition: translate 0.35s ease-out;
+  pointer-events: none;
+}
+
+.bush svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hide.open .bush {
+  translate: 0 22%;
+}
+
+.hide.shake .bush {
+  animation: wiggle 0.3s ease-in-out 2;
+}
+
+.hide .say {
+  position: absolute;
+  top: -4%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 3;
+  padding: 0.1em 0.5em;
+  font-size: clamp(16px, 5vmin, 60px);
+  font-weight: 700;
+  white-space: nowrap;
+  color: #37474f;
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 0.12em 0 rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.hide.open .say {
+  opacity: 1;
+}
