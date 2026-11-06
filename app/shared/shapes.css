@@ -80,6 +80,20 @@
   filter: drop-shadow(0 1.2vmin 0 rgba(0, 0, 0, 0.15));
 }
 
+/* Equivocada: se apaga y ya no se puede tocar */
+.choice.off {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* La muestra del color se ve grande para quien aún no sabe leer */
+.ask .swatch.big {
+  width: 1.7em;
+  height: 1.7em;
+  margin: -0.4em 0.1em;
+  vertical-align: middle;
+}
+
 .choice.right {
   filter: drop-shadow(0 0 3vmin #fff59d) drop-shadow(0 1.2vmin 0 rgba(0, 0, 0, 0.15));
 }

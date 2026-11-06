@@ -19,7 +19,7 @@
       var shape = S.random(S.shapes);
       var colors = A.shuffle([target].concat(S.pick(S.colors, 2, [target])));
       return {
-        ask: '<span class="bubble">¿Dónde está el <span class="swatch" style="background:' + target.hex + '"></span> ' + target.name + '?</span>',
+        ask: '<span class="bubble">¿Dónde está el <span class="swatch big" style="background:' + target.hex + '"></span> ' + target.name + '?</span>',
         say: '¿Dónde está el ' + target.name + '?',
         praise: '¡Muy bien! ¡El ' + target.name + '!',
         options: colors.map(function (c) {

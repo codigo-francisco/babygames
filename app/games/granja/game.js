@@ -11,6 +11,8 @@
   var busy = false;
   var lastWanted = null;
   var hits = 0;
+  var misses = 0;
+  var idle = null;
 
   function build() {
     field.innerHTML = '';
@@ -49,7 +51,36 @@
     ask.innerHTML = '<span class="bubble">¿Dónde está <span class="mini">' + A.svg(wanted) + '</span>?</span>';
     BabyGames.say('¿Dónde está ' + A.named(wanted) + '?');
     busy = false;
+    misses = 0;
+    wait();
   }
+
+  // Ayuda para quien aún no entiende la pregunta: Bubu la repite y el animal
+  // pedido salta solo (a los 7 s sin tocar, o tras dos fallos).
+  function hint() {
+    spots.forEach(function (s) {
+      if (s.animal === wanted) animate(s.el.querySelector('.pic'), 'hop');
+    });
+  }
+
+  function wait() {
+    clearTimeout(idle);
+    idle = setTimeout(function () {
+      if (busy) return;
+      BabyGames.say('¿Dónde está ' + A.named(wanted) + '?');
+      hint();
+      wait();
+    }, 7000);
+  }
+
+  ask.style.pointerEvents = 'auto';
+  ask.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    if (busy || !wanted) return;
+    BabyGames.say('¿Dónde está ' + A.named(wanted) + '?');
+    hint();
+    wait();
+  });
 
   function tap(spot, e) {
     var pic = spot.el.querySelector('.pic');
@@ -58,8 +89,11 @@
     BabyGames.sound('animal', spot.animal.id);
     if (busy || spot.animal !== wanted) {
       animate(pic, 'wiggle');
+      if (!busy && ++misses >= 2) setTimeout(hint, 1500);
+      if (!busy) wait();
       return;
     }
+    clearTimeout(idle);
     busy = true;
     hits++;
     animate(pic, 'hop');

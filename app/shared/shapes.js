@@ -77,9 +77,34 @@
     var progress;
     var done = 0;
     var busy = true;
+    var current = null;
+    var rightEl = null;
+    var misses = 0;
+    var idle = null;
+
+    // Ayuda para quien aún no entiende la pregunta: la buena late sola.
+    function hint() {
+      if (!rightEl) return;
+      rightEl.classList.remove('hint');
+      void rightEl.offsetWidth;
+      rightEl.classList.add('hint');
+    }
+
+    // Si pasa un rato sin tocar, Bubu repite la pregunta y señala la buena.
+    function wait() {
+      clearTimeout(idle);
+      idle = setTimeout(function () {
+        if (busy) return;
+        if (current && current.say) BabyGames.say(current.say);
+        hint();
+        wait();
+      }, 7000);
+    }
 
     function next() {
       var r = opts.round(done);
+      current = r;
+      misses = 0;
       opts.ask.innerHTML = r.ask;
       opts.board.innerHTML = '';
       r.options.forEach(function (o) {
@@ -87,6 +112,7 @@
         el.className = 'choice';
         el.innerHTML = o.html;
         if (o.style) el.setAttribute('style', o.style);
+        if (o.right) rightEl = el;
         el.addEventListener('pointerdown', function (e) {
           e.preventDefault();
           tap(r, o, el, e);
@@ -95,7 +121,18 @@
       });
       if (r.say) BabyGames.say(r.say);
       busy = false;
+      wait();
     }
+
+    // Tocar la pregunta la repite.
+    opts.ask.style.pointerEvents = 'auto';
+    opts.ask.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      if (busy || !current) return;
+      if (current.say) BabyGames.say(current.say);
+      hint();
+      wait();
+    });
 
     function tap(r, o, el, e) {
       if (busy) return;
@@ -103,8 +140,15 @@
         animate(el, 'wiggle');
         BabyGames.sound('boing');
         if (o.say) BabyGames.say(o.say);
+        // Sin castigo: la equivocada se apaga para que queden menos opciones,
+        // y tras el segundo fallo la buena se señala sola.
+        el.classList.add('off');
+        misses++;
+        if (misses >= 2) setTimeout(hint, 1200);
+        wait();
         return;
       }
+      clearTimeout(idle);
       busy = true;
       animate(el, 'hop');
       el.classList.add('right');
