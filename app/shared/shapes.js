@@ -81,6 +81,7 @@
     var rightEl = null;
     var misses = 0;
     var idle = null;
+    var streak = 0;
 
     // Ayuda para quien aún no entiende la pregunta: la buena late sola.
     function hint() {
@@ -105,6 +106,11 @@
       var r = opts.round(done);
       current = r;
       misses = 0;
+      // Empieza fácil: 2 opciones hasta acertar 2 rondas seguidas sin fallar.
+      if (streak < 2 && r.options.length > 2) {
+        var keep = A.shuffle(r.options.filter(function (o) { return !o.right; })).slice(0, 1);
+        r.options = r.options.filter(function (o) { return o.right || keep.indexOf(o) >= 0; });
+      }
       opts.ask.innerHTML = r.ask;
       opts.board.innerHTML = '';
       r.options.forEach(function (o) {
@@ -149,6 +155,7 @@
         return;
       }
       clearTimeout(idle);
+      streak = misses ? 0 : streak + 1;
       busy = true;
       animate(el, 'hop');
       el.classList.add('right');
